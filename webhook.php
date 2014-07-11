@@ -8,9 +8,9 @@ if ( !empty( $body ) ) {
 	
 	$status = $event_json->{'type'};
 	if ( $status == 'charge.pending' ) {
-		$status = 'processing';
+		$status = 'pending';
 	} elseif ( $status == 'charge.success' ) {
-		$status = 'completed';
+		$status = 'processing';
 	}
 	
 	$product_id = $event_json->data->object->payment_details->{'product_id'};
