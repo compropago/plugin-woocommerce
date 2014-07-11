@@ -50,9 +50,9 @@ function request_data_compropago() {
 	$id = $event_json->data->object->{'id'};
     $status = $event_json->{'type'};
 	if ( $status == 'charge.pending' ) {
-		$status = 'processing';
+		$status = 'pending';
 	} elseif ( $status == 'charge.success' ) {
-		$status = 'completed';
+		$status = 'processing';
 	}
     $product_id = $event_json->data->object->payment_details->{'product_id'};
 	compropago_status_function( $product_id, $status );
