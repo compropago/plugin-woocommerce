@@ -36,7 +36,7 @@ Una vez que el cliente genero su intención de pago, dentro del panel de control
 <a name="webhook"></a>
 ## Sincronización con la notificación Webhook
 1. Ir al area de Webhooks en ComproPago https://compropago.com/panel/webhooks
-2. Introducir la dirección: [direcciondetusitio.com]/index.php/mpexpress/webhook/ 
-3. Dar click en el botón "Probar" y verificamos que el servidor de la tienda esta respondiendo, debera aparecer el mensaje de "Order not valid" 
+2. Introducir la dirección: [direcciondetusitio.com]/wp-content/plugins/compropago/webhook.php
+3. Dar click en el botón "Probar" y verificamos que el servidor de la tienda esta respondiendo, debera aparecer el mismo objeto que se envío. 
 
 Una vez completados estos pasos el proceso de instalación queda completado.
