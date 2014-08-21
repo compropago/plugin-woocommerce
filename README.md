@@ -29,7 +29,6 @@ Una vez que el cliente genero su intención de pago, dentro del panel de control
 ## Configurar el plugin
 
 1. Navegar hacia: WooCommerce -> Settings -> Payment Gateways, elegir ComproPago llenar los campos Public_key and Private_key.
-2. Agregar la URL de exito y fallido, para este caso se cambiara en ambos casos solo el nombre de dominio y el directorio raíz donde se instalo Wordpress. Note: La dirección estandar es [direcciondetusitio.com]/index.php/checkout/onepage/success/
 
 ---
 
