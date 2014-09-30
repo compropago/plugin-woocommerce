@@ -354,8 +354,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			$payment_url .= "&customer_email=".$order->billing_email;
 			$payment_url .= "&product_price=".$order->get_total();
 			$payment_url .= "&product_id=".$order_id;
-			$payment_url .= "&product_name=".$product_name;
-			$payment_url .= "&success_url=".$this->get_return_url( $order );
+			$payment_url .= "&product_name=".urlencode($product_name);
+			$payment_url .= "&success_url=".urlencode($this->get_return_url( $order ));
 ?>
 <link rel="stylesheet" type="text/css" href="<?php echo plugins_url('css/jquery.fancybox.css', __FILE__) ?>" media="screen" />
 <script type="text/javascript" src="<?php echo plugins_url('js/jquery.fancybox.pack.js', __FILE__) ?>"></script>
