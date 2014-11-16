@@ -336,7 +336,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$public_key = $this->get_config('public_key');
 		$items = $order->get_items();
 		if ( count( $items ) > 0 ) {
-			echo '<p>'.__('Thank you for your order, please wait to pay with Compropago.', 'woocommerce').'</p>';
+			echo '<p>'.__('¡Gracias por tu compra!', 'woocommerce').'</p>';
 			foreach ( $items as $item ) {
 				if ( is_null( $product_name ) ) {
 					$product_name = $item['name'];
@@ -366,12 +366,12 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	<input type="hidden" name="order" value="<?php echo $order_id ?>" />
 	
 	<div class="left"/>
-		<h3 style="margin: 10px;">Para completar la compra dar click en:</h3>
+		<h3 style="margin: 10px;">Para completar la compra, haz clic en:</h3>
 	</div>
 	<div class="left">
 		<a id="payment_btn" href="#" class=""><img src="<?php echo plugins_url('images/compropago-payment-green-btn.png', __FILE__) ?>" alt="PAGAR"></a>
 	</div>
-	<a class="button cancel" href="<?php echo $order->get_cancel_order_url() ?>"><?php _e('Cancel order &amp; restore cart', 'woocommerce') ?></a>
+	<a class="button cancel" href="<?php echo $order->get_cancel_order_url() ?>"><?php _e('Cancelar pedido', 'woocommerce') ?></a>
 	
 	<script type='text/javascript'><?php
 	echo "var gateway_compropago='".$payment_url."';";
