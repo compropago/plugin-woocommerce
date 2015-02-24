@@ -1,6 +1,6 @@
 # Plugin para WooCommerce
 
-Este modulo provee el servicio de ComproPago para poder generar intensiones de pago dentro de la plataforma WooCommerce.
+Este modulo provee el servicio de ComproPago para poder generar intenciones de pago dentro de la plataforma WooCommerce.
 
 * [Instalación](#install)
 * [¿Cómo trabaja el modulo?](#howto)
@@ -11,7 +11,7 @@ Este modulo provee el servicio de ComproPago para poder generar intensiones de p
 <a name="install"></a>
 ## Instalación:
 
-1. Subir los archivos del plugin hacia el folder “wp-content/plugins/“, o bien usando el instalador de plugins de Wordpress: Plugins -> Añadir nuevo.
+1. Descomprimir y subir el folder de los archivos del plugin hacia el folder “wp-content/plugins/“, o bien usando el instalador de plugins de Wordpress: Plugins -> Añadir nuevo.
 2. Activar el plugin.
 
 ---
@@ -20,9 +20,9 @@ Este modulo provee el servicio de ComproPago para poder generar intensiones de p
 ## ¿Cómo trabaja el modulo?
 Una vez que el cliente sabe que comprar y continua con el proceso de compra entrará a la opción de elegir metodo de pago justo aqui aparece la opción de pagar con ComproPago.
 
-Una vez que el cliente completa su orden de compra iniciara el proceso para generar su intensión de pago, el cliente selecciona el establecimiento y recibe las instrucciones para realizar el pago. 
+Cuando la orden de compra es completada, el cliente inicia el proceso para generar su intención de pago, selecciona el establecimiento y recibe las instrucciones para realizar el pago.
 
-Una vez que el cliente genero su intención de pago, dentro del panel de control de ComproPago la orden se muestra como "PENDIENTE" esto significa que el usuario esta por ir a hacer el deposito.
+Una vez generada la intención de pago, dentro del panel de control de ComproPago la orden se muestra como "PENDIENTE" esto significa que el usuario esta por ir a hacer el deposito.
 
 ---
 <a name="setup"></a>
@@ -34,7 +34,7 @@ Una vez que el cliente genero su intención de pago, dentro del panel de control
 
 <a name="webhook"></a>
 ## Sincronización con la notificación Webhook
-1. Ir al area de Webhooks en ComproPago https://compropago.com/panel/webhooks
+1. Ir al área de Webhooks en ComproPago https://compropago.com/panel/webhooks
 2. Introducir la dirección: [direcciondetusitio.com]/wp-content/plugins/compropago/webhook.php
 3. Dar click en el botón "Probar" y verificamos que el servidor de la tienda esta respondiendo, debera aparecer el mismo objeto que se envío. 
 
