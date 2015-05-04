@@ -44,8 +44,18 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->debug 				= $this->settings['debug'];
 		
 		// Logs
-		if ($this->debug=='yes') $this->log = $woocommerce->logger();
-		
+    if ( 'yes' == $this->debug ) {
+      if ( floatval( $woocommerce->version ) >= 2.1 ) {
+        if ( class_exists( 'WC_Logger' ) ) {
+          $this->log = new WC_Logger();
+        } else {
+            $this->log = WC()->logger();
+        }
+      }else{
+        $this->log = $woocommerce->logger();
+      }
+    }  
+
 		add_action('woocommerce_receipt_compropago', array(&$this, 'receipt_page'));
 		add_action( 'admin_notices', array( &$this, 'ssl_check') );
 		
@@ -361,7 +371,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 <script type="text/javascript" src="<?php echo plugins_url('js/jquery.fancybox.pack.js', __FILE__) ?>"></script>
 
 <form action="<?php echo $this->notify_url ?>" method="post" id="compropago_payment_form">
-	<?php $woocommerce->nonce_field('compropago_payment_submit') ?>
+	<?php wp_nonce_field('compropago_payment_submit') ?>
 	<input type="hidden" name="key" value="<?php echo $order->order_key ?>" />
 	<input type="hidden" name="order" value="<?php echo $order_id ?>" />
 	
@@ -395,7 +405,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 				$this->log->add( 'compropago', __('Post form: ', 'woocommerce') . print_r($_POST, true));
 			}
 			
-			if($woocommerce->verify_nonce('compropago_payment_submit')) {
+			if(wp_verify_nonce('compropago_payment_submit')) {
 				$order_id = $this->get_request('order');
 				$order = new WC_Order( $order_id );
 				
