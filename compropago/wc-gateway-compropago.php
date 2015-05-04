@@ -44,8 +44,18 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->debug 				= $this->settings['debug'];
 		
 		// Logs
-		if ($this->debug=='yes') $this->log = $woocommerce->logger();
-		
+    if ( 'yes' == $this->debug ) {
+      if ( floatval( $woocommerce->version ) >= 2.1 ) {
+        if ( class_exists( 'WC_Logger' ) ) {
+          $this->log = new WC_Logger();
+        } else {
+            $this->log = WC()->logger();
+        }
+      }else{
+        $this->log = $woocommerce->logger();
+      }
+    }  
+
 		add_action('woocommerce_receipt_compropago', array(&$this, 'receipt_page'));
 		add_action( 'admin_notices', array( &$this, 'ssl_check') );
 		
