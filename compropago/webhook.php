@@ -11,6 +11,8 @@ if ( !empty( $body ) ) {
 		$status = 'pending';
 	} elseif ( $status == 'charge.success' ) {
 		$status = 'processing';
+	}elseif ( $status == 'charge.decline' ) {
+		$status = 'refunded';
 	}
 	
 	$product_id = $event_json->data->object->payment_details->{'product_id'};

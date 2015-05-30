@@ -38,7 +38,16 @@ function woocommerce_compropago_init() {
 
 function compropago_status_function ( $order_id, $status = 'processing' ) { 
 	$order = new WC_Order($order_id);
-	$order->update_status( $status );
+	
+
+	
+	if( $status == 'processing' ){
+		$order->payment_complete( $status );		
+	}else{
+		$order->update_status( $status );		
+	}
+	
+
 	return true;
 }
 
