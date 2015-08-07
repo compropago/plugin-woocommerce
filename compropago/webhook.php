@@ -4,6 +4,7 @@ global $wpdb;
 $body = @file_get_contents('php://input'); 
 if ( !empty( $body ) ) {
 	$event_json = json_decode($body);
+	
 	if($event_json->{'api_version'} != '1.0'){
 	    $id = $event_json->{'id'};
 	    $product_id = $event_json->order_info->{'order_id'};
