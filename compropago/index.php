@@ -1,5 +1,11 @@
 <?php
 /*
+ Plugin Name: Compropago Pagos
+ Description: The Compropago payment gateway plugin for WooCommerce, Therefore an SSL certificate is required to ensure your customer credit card details are safe.
+ Version: 1.0.0-dev
+ Author: compropago <contacto@compropago.com>
+ */
+/*
 * Copyright 2015 Compropago. 
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
