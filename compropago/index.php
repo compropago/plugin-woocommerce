@@ -1,6 +1,6 @@
 <?php
 /*
- Plugin Name: Compropago 
+ Plugin Name: ComproPago 
  Plugin URI: https://www.compropago.com/documentacion/plugins
  Description: Recibe pagos en efectivo en tu tienda a traves de la red más grande de puntos de cobro para que tus clientes paguen por tus productos o servicios.
  Version: 1.0.0-dev
@@ -45,7 +45,7 @@ function woocommerce_compropago_init() {
 	/**
 	 * Gateway class
 	 */
-	class WC_Compropago extends WC_Payment_Gateway {
+	class WC_Gateway_Compropago extends WC_Payment_Gateway {
 
 		// Go wild in here
 	}
@@ -53,10 +53,10 @@ function woocommerce_compropago_init() {
 	/**
 	 * Add the Gateway to WooCommerce
 	 **/
-	function woocommerce_add_compropago_gateway($methods) {
-		$methods[] = 'WC_Compropago';
+	function add_compropago_gateway($methods) {
+		$methods[] = 'WC_Gateway_Compropago';
 		return $methods;
 	}
 
-	add_filter('woocommerce_payment_gateways', 'woocommerce_add_compropago_gateway' );
+	add_filter('woocommerce_payment_gateways', 'add_compropago_gateway' );
 }	
