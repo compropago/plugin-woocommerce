@@ -1,11 +1,11 @@
 <?php
 /*
- Plugin Name: Compropago Woocommerce Payment Gateway
- Plugin URI: http://compropago.com/woocommerce
- Description: The Compropago payment gateway plugin for WooCommerce, Therefore an SSL certificate is required to ensure your customer credit card details are safe.
+ Plugin Name: Compropago 
+ Plugin URI: https://www.compropago.com/documentacion/plugins
+ Description: Recibe pagos en efectivo en tu tienda a traves de la red más grande de puntos de cobro para que tus clientes paguen por tus productos o servicios.
  Version: 1.0.0-dev
- Author: compropago <contacto@compropago.com>
- Author URI: http://www.compropago.com/
+ Author: Compropago <contacto@compropago.com>
+ Author URI: https://www.compropago.com/
  */
 /*
 * Copyright 2015 Compropago. 
