@@ -5,3 +5,10 @@
 *.swp
 *.swo
 *~
+.buildpath
+.project
+.settings
+composer.lock
+dev-notes
+.DS_Store
+phpunit.xml
