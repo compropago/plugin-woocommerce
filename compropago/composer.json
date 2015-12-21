@@ -1,0 +1,23 @@
+{
+    "name": "compropago/php-sdk",
+    "type": "library",
+    "description": "PHP SDK for Compropago API",
+    "keywords": ["compropago","pagos internet","payment gateway","Mexico"],
+    "homepage": "https://compropago.com/documentacion/librerias",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Rolando Lucio",
+            "email": "rolando@compropago.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "guzzlehttp/guzzle": "^6.1"
+    },
+    
+    "autoload": {
+        "psr-4": {"Compropago\\": "src/"}      
+    }
+   
+}
