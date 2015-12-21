@@ -1,9 +1,11 @@
 <?php
 /*
- Plugin Name: Compropago Pagos
+ Plugin Name: Compropago Woocommerce Payment Gateway
+ Plugin URI: http://compropago.com/woocommerce
  Description: The Compropago payment gateway plugin for WooCommerce, Therefore an SSL certificate is required to ensure your customer credit card details are safe.
  Version: 1.0.0-dev
  Author: compropago <contacto@compropago.com>
+ Author URI: http://www.compropago.com/
  */
 /*
 * Copyright 2015 Compropago. 
@@ -23,3 +25,38 @@
 /**
  * @author Rolando Lucio <rolando@compropago.com>
  */
+
+
+add_action('plugins_loaded', 'woocommerce_compropago_init', 0);
+
+//load Compropago SDK & dependecies
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ){
+	require __DIR__ . '/vendor/autoload.php';
+}
+	
+
+function woocommerce_compropago_init() {
+	if ( !class_exists( 'WC_Payment_Gateway' ) ) return;
+	/**
+	 * Localisation
+	 */
+	load_plugin_textdomain('wc-gateway-name', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
+
+	/**
+	 * Gateway class
+	 */
+	class WC_Compropago extends WC_Payment_Gateway {
+
+		// Go wild in here
+	}
+
+	/**
+	 * Add the Gateway to WooCommerce
+	 **/
+	function woocommerce_add_compropago_gateway($methods) {
+		$methods[] = 'WC_Compropago';
+		return $methods;
+	}
+
+	add_filter('woocommerce_payment_gateways', 'woocommerce_add_compropago_gateway' );
+}	
