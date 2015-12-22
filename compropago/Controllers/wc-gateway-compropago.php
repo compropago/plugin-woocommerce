@@ -36,6 +36,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->title 		= $this->settings['title'];
 		$this->description 	= $this->settings['description'];
 		$this->showlogo 	= $this->settings['showlogo'];
+		$this->instrucciones 	= $this->settings['instrucciones'];
 		
 		$this->publickey 	= $this->settings['publickey'];
 		$this->privatekey 	= $this->settings['privatekey'];
@@ -86,12 +87,19 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce' ),
 					'default' => "Con ComproPago puedes realizar tu pago en OXXO, 7Eleven y muchas tiendas más",
 			),
+			'instrucciones' => array(
+					'title' => __( 'Texto Selección' ),
+					'type' => 'text',
+					'description' => __( 'El texto que se muestra para invitar a seleccionar una tienda para realizar el pago', 'woocommerce' ),
+					'default' => 'Selecciona una tienda',
+					
+			),
 			'showlogo' => array(
 					'title' => __( 'Estilo', 'woocommerce' ),
 					'label' => __( 'Activar Logos', 'woocommerce' ),
 					'type' => 'checkbox',
 					'description' => __( 'Activa o desactiva los logos de las empresas en donde realizar el pago ', 'woocommerce' ),
-					'default' => 'no'
+					'default' => 'yes'
 			),
 			'publickey' => array(
 					'title' => __( 'Llave Pública' ),
@@ -162,6 +170,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		}
 		$data['providers']=$this->compropagoService->getProviders();
 		$data['showlogo']=$this->showlogo;
+		$data['description']=$this->description;
+		$data['instrucciones']=$this->instrucciones;
 		
 		CP_Views::loadView('proveedores', $data);
 	}

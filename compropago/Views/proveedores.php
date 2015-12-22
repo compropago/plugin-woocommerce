@@ -22,8 +22,11 @@
 
 ?>
 <div id="compropagoWrapper">
-
+<?php echo $data['description'];?>
+<hr class="compropagoHr">
+<b><?php echo $data['instrucciones'];?></b>
 <?php if($data['showlogo']=='yes'){?>
+
 	<ul>
 		<?php foreach ($data['providers'] as $provider){ ?>
 		<li>	
