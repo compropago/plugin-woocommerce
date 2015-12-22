@@ -18,7 +18,11 @@
  * @author Rolando Lucio <rolando@compropago.com>
  */
 class WC_Gateway_Compropago extends WC_Payment_Gateway {
-	// Go wild in here
+	
+	private $compropagoConfig;
+	private $compropagoClient;
+	private $compropagoService;
+	
 	public function __construct(){
 		$this->id='compropago';
 		$this->has_fields=true;
@@ -31,6 +35,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		// Get setting values
 		$this->title 		= $this->settings['title'];
 		$this->description 	= $this->settings['description'];
+		$this->showlogo 	= $this->settings['showlogo'];
 		
 		$this->publickey 	= $this->settings['publickey'];
 		$this->privatekey 	= $this->settings['privatekey'];
@@ -40,8 +45,22 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		//paso despues de selccion de gateway
 		$this->has_fields	= true;
 		
+		
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+		
+		
 	}
+	/**
+	 * @return boolean
+	 */
+	private function isLive(){
+		if($this->modopruebas=='no'){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 	/**
 	 * setup admin page
 	 */
@@ -67,6 +86,13 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce' ),
 					'default' => "Con ComproPago puedes realizar tu pago en OXXO, 7Eleven y muchas tiendas más",
 			),
+			'showlogo' => array(
+					'title' => __( 'Estilo', 'woocommerce' ),
+					'label' => __( 'Activar Logos', 'woocommerce' ),
+					'type' => 'checkbox',
+					'description' => __( 'Activa o desactiva los logos de las empresas donde realizar el pago ', 'woocommerce' ),
+					'default' => 'no'
+			),
 			'publickey' => array(
 					'title' => __( 'Llave Pública' ),
 					'type' => 'text',
@@ -74,7 +100,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'default' => '',
 					'css' => "width: 300px;"
 			),
-			'private' => array(
+			'privatekey' => array(
 					'title' => __( 'Llave Privada' ),
 					'type' => 'text',
 					'description' => __( 'Obten tu llave privada: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
@@ -87,7 +113,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'type' => 'checkbox',
 					'description' => __( 'Al activar el Modo de pruebas <b>es necesario que <span style="color:red;">cambie sus llaves por las de Modo Prueba</span></b>, Obten tus llaves en: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
 					'default' => 'no'
-			),
+			)
 		);
 	}
 	
@@ -119,6 +145,26 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	}
 	
 	public function payment_fields(){
+		if(!class_exists('CP_Views')){
+			require __DIR__ . '/CP_Views.php';
+		}
+		
+		try{
+			$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
+			$this->compropagoClient = new Compropago\Client($this->compropagoConfig);
+			$this->compropagoService = new Compropago\Service($this->compropagoClient);
+			
+			
+		} catch (Exception $e) {
+			wc_add_notice( __('Compropago error:', 'woothemes') . $e->getMessage(), 'error' );
+			return;
+		    
+		}
+		$data['providers']=$this->compropagoService->getProviders();
+		CP_Views::loadView('proveedores', $data);
+	}
+	
+	public function validate_fields() {
 		
 	}
 }
