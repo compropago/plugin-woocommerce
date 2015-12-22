@@ -25,25 +25,26 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->method_title='ComproPago';
 		$this->method_description='Recibe pagos en efectivo en tu tienda a traves de la red más grande de puntos de cobro para que tus clientes paguen por tus productos o servicios.';
 		
-		
-		
-		
 		$this->init_form_fields();
 		$this->init_settings();
 		
 		// Get setting values
-		$this->title 				= $this->settings['title'];
-		$this->description 			= $this->settings['description'];
+		$this->title 		= $this->settings['title'];
+		$this->description 	= $this->settings['description'];
 		
-		$this->publickey 			= $this->settings['publickey'];
-		$this->privatekey 			= $this->settings['privatekey'];
+		$this->publickey 	= $this->settings['publickey'];
+		$this->privatekey 	= $this->settings['privatekey'];
 		
-		$this->modopruebas 			= $this->settings['modopruebas'];
+		$this->modopruebas 	= $this->settings['modopruebas'];
 		
+		//paso despues de selccion de gateway
+		$this->has_fields	= true;
 		
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 	}
-	
+	/**
+	 * setup admin page
+	 */
 	public function init_form_fields(){
 		$this->form_fields=array(
 			'enabled' => array(
@@ -84,9 +85,40 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'title' => __( 'Modo de Pruebas', 'woocommerce' ),
 					'label' => __( 'Activar modo pruebas', 'woocommerce' ),
 					'type' => 'checkbox',
-					'description' => __( 'Al activar el Modo de pruebas, <b>es necesario que cambie sus llaves por las de <span style="color:red;">Modo Prueba</span></b>, Obten tus llaves en: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
+					'description' => __( 'Al activar el Modo de pruebas <b>es necesario que <span style="color:red;">cambie sus llaves por las de Modo Prueba</span></b>, Obten tus llaves en: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
 					'default' => 'no'
 			),
 		);
+	}
+	
+	/**
+	 * handling payment and processing the order
+	 * @param unknown $order_id
+	 * @return array
+	 * @throws Compropago\Exception
+	 * https://docs.woothemes.com/document/payment-gateway-api/
+	 */
+	public function process_payment( $order_id ) {
+		global $woocommerce;
+		$order = new WC_Order( $order_id );
+		
+		// estatus en de la orden onhold, webhook actualizara a confirmacion de pago
+		$order->update_status('on-hold', __( 'Esperando pago por ComproPago', 'woocommerce' ));
+		
+		// Reduce stock levels
+		$order->reduce_order_stock();
+		
+		// Remove cart
+		$woocommerce->cart->empty_cart();
+		
+		// Return thankyou redirect
+		return array(
+				'result' => 'success',
+				'redirect' => $this->get_return_url( $order )
+		);
+	}
+	
+	public function payment_fields(){
+		
 	}
 }
