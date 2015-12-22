@@ -26,7 +26,7 @@
  * @author Rolando Lucio <rolando@compropago.com>
  */
 
-
+//iniciamos el plugin
 add_action('plugins_loaded', 'woocommerce_compropago_init', 0);
 
 //load Compropago SDK & dependecies
