@@ -21,17 +21,25 @@
 
 
 ?>
-
 <div id="compropagoWrapper">
 
-<?php if($data['showlogo']=='no'){?>
-	<select id="compropago" name="paymentP">
+<?php if($data['showlogo']=='yes'){?>
+	<ul>
+		<?php foreach ($data['providers'] as $provider){ ?>
+		<li>	
+			<input id="compropago_<?php echo $provider->internal_name ?>" type="radio" name="compropagoProvider" value="<?php echo $provider->internal_name ?>" image-label="<?php echo $provider->internal_name ?>">
+            <label for="compropago_<?php echo $provider->internal_name ?>" class="compropagoProviderDesc" ">
+            	<img src="<?php echo $provider->image_medium ?>">
+           </label>       		
+        </li>	
+		<?php }?>
+	</ul>
+<?php }else{?>
+	<select name="compropagoProvider">
 	<?php foreach ($data['providers'] as $provider){ ?>
 			<option value="<?php echo $provider->internal_name ?>"><?php echo $provider->name ?></option>		
 	<?php }?>
 	</select>
-<?php }else{?>
-
 <?php }?>	
 	
 </div>

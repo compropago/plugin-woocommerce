@@ -90,7 +90,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'title' => __( 'Estilo', 'woocommerce' ),
 					'label' => __( 'Activar Logos', 'woocommerce' ),
 					'type' => 'checkbox',
-					'description' => __( 'Activa o desactiva los logos de las empresas donde realizar el pago ', 'woocommerce' ),
+					'description' => __( 'Activa o desactiva los logos de las empresas en donde realizar el pago ', 'woocommerce' ),
 					'default' => 'no'
 			),
 			'publickey' => array(
@@ -161,6 +161,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		    
 		}
 		$data['providers']=$this->compropagoService->getProviders();
+		$data['showlogo']=$this->showlogo;
+		
 		CP_Views::loadView('proveedores', $data);
 	}
 	

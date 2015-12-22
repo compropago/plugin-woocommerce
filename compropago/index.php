@@ -33,7 +33,18 @@ add_action('plugins_loaded', 'woocommerce_compropago_init', 0);
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ){
 	require __DIR__ . '/vendor/autoload.php';
 }
-	
+
+
+
+
+/**
+ * css file
+ */
+add_action( 'wp_enqueue_scripts', 'compropago_css' );
+function compropago_css() {
+	wp_register_style( 'prefix-style', plugins_url('assets/compropago.css', __FILE__) );
+	wp_enqueue_style( 'prefix-style' );
+}
 
 function woocommerce_compropago_init() {
 	if ( !class_exists( 'WC_Payment_Gateway' ) ) return;
