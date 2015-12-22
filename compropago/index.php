@@ -44,11 +44,8 @@ function woocommerce_compropago_init() {
 
 	/**
 	 * Gateway class
-	 */
-	class WC_Gateway_Compropago extends WC_Payment_Gateway {
-
-		// Go wild in here
-	}
+	*/
+	require_once 'Controllers/wc-gateway-compropago.php';
 
 	/**
 	 * Add the Gateway to WooCommerce
