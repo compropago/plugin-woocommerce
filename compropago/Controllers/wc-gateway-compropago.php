@@ -23,6 +23,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	private $compropagoClient;
 	private $compropagoService;
 	
+	private $orderProvider;
+	
 	public function __construct(){
 		$this->id='compropago';
 		$this->has_fields=true;
@@ -133,6 +135,17 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	 * https://docs.woothemes.com/document/payment-gateway-api/
 	 */
 	public function process_payment( $order_id ) {
+		/**
+		 $data = array(
+		 'order_id'    		 => 'testorderid',
+		 'order_price'        => '123.45',
+		 'order_name'         => 'Test Order Name',
+		 'customer_name'      => 'Rolando Test',
+		 'customer_email'     => 'rolando@compropago.com',
+		 'payment_type'       => 'OXXO'
+		 );
+		 echo '<pre>'. json_encode( $compropagoService->placeOrder($data) ). '</pre>'; 
+		 **/
 		global $woocommerce;
 		$order = new WC_Order( $order_id );
 		
@@ -176,7 +189,22 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		CP_Views::loadView('proveedores', $data);
 	}
 	
+	/**
+	 * @return true success
+	 * @return null on ErrorException
+	 * @throws WP exception
+	 */
 	public function validate_fields() {
-		
+		if(!isset($_POST['compropagoProvider'])){
+			//se saltaron el formulario?
+			wc_add_notice( __('Compropago error:', 'woothemes') . 'Información Faltante', 'error' );
+			return;
+		}
+		if(empty($_POST['compropagoProvider'])){
+			$this->orderProvider='OXXO';
+		}else{
+			$this->orderProvider=$_POST['compropagoProvider'];
+		}
+		return true;
 	}
 }
