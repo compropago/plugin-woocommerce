@@ -135,19 +135,39 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	 * https://docs.woothemes.com/document/payment-gateway-api/
 	 */
 	public function process_payment( $order_id ) {
-		/**
-		 $data = array(
-		 'order_id'    		 => 'testorderid',
-		 'order_price'        => '123.45',
-		 'order_name'         => 'Test Order Name',
-		 'customer_name'      => 'Rolando Test',
-		 'customer_email'     => 'rolando@compropago.com',
-		 'payment_type'       => 'OXXO'
-		 );
-		 echo '<pre>'. json_encode( $compropagoService->placeOrder($data) ). '</pre>'; 
-		 **/
+		
 		global $woocommerce;
 		$order = new WC_Order( $order_id );
+		
+		
+		 $data = array(
+		 'order_id'    		 => $order_id,
+		 'order_price'       => $order->get_total(),
+		 //'order_name'        => esc_attr(get_bloginfo('name')).'order:'.$order_id,
+		 'order_name'        => 'A nice fancy order name by compropago',
+		 'customer_name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
+		 'customer_email'    => $order->billing_email,
+		 'payment_type'      => $this->orderProvider
+		 );
+		 
+		
+		 
+		
+			
+		    
+			try{
+				$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
+				$this->compropagoClient = new Compropago\Client($this->compropagoConfig);
+				$this->compropagoService = new Compropago\Service($this->compropagoClient);
+				$res=$this->compropagoService->placeOrder($data) ;
+				wc_add_notice( json_encode($res), 'success' );
+			} catch (Exception $e) {
+				wc_add_notice( __('Compropago error:', 'woothemes') . $e->getMessage(), 'error' );
+				return;
+			
+			}
+		
+		
 		
 		// estatus en de la orden onhold, webhook actualizara a confirmacion de pago
 		$order->update_status('on-hold', __( 'Esperando pago por ComproPago', 'woocommerce' ));
@@ -195,12 +215,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	 * @throws WP exception
 	 */
 	public function validate_fields() {
-		if(!isset($_POST['compropagoProvider'])){
-			//se saltaron el formulario?
-			wc_add_notice( __('Compropago error:', 'woothemes') . 'Información Faltante', 'error' );
-			return;
-		}
-		if(empty($_POST['compropagoProvider'])){
+		if(!isset($_POST['compropagoProvider']) || empty($_POST['compropagoProvider'])){
+		
 			$this->orderProvider='OXXO';
 		}else{
 			$this->orderProvider=$_POST['compropagoProvider'];
