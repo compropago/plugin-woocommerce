@@ -25,9 +25,9 @@ class CP_Views{
 	}
 	public static function loadTpl($view,$data){
 		$file=  file_get_contents( __DIR__ . '/../Views/'.$view.'.php'); 
-		//$pattern='/{{(.*)}}/';
-		//$pregarray= preg_grep($pattern, $file);
-		/*preg_match_all($pattern, $file, $matches,PREG_PATTERN_ORDER);
+		$pattern='/{{(.*)}}/';
+		
+		preg_match_all($pattern, $file, $matches,PREG_PATTERN_ORDER);
 		
 		
 		foreach ($matches[1] as $phpvalue ){
@@ -35,7 +35,7 @@ class CP_Views{
 			$result=str_replace('{{'.$phpvalue.'}}', $$phpvalue , $file) ;
 		}
 		
-		return $result;*/
-		return (string)$file;
+		return $result;
+		
 	}
 }

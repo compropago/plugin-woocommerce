@@ -161,7 +161,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 				$this->compropagoService = new Compropago\Service($this->compropagoClient);
 				$res=$this->compropagoService->placeOrder($data) ;
 				
-				$response=CP_Views::loadTpl('recibo', $res);
+				$response=CP_Views::loadTpl('recibo', $res->id);
 				wc_add_notice($response, 'success' );
 				
 			} catch (Exception $e) {
