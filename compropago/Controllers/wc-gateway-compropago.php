@@ -54,17 +54,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		
 	}
 	/**
-	 * @return boolean
-	 */
-	private function isLive(){
-		if($this->modopruebas=='no'){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	/**
 	 * setup admin page
 	 */
 	public function init_form_fields(){
@@ -126,7 +115,16 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			)
 		);
 	}
-	
+	/**
+	 * @return boolean
+	 */
+	private function isLive(){
+		if($this->modopruebas=='no'){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	/**
 	 * handling payment and processing the order
 	 * @param unknown $order_id
@@ -152,7 +150,9 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		 
 		
 		 
-		
+		 if(!class_exists('CP_Views')){
+		 	require __DIR__ . '/CP_Views.php';
+		 }
 			
 		    
 			try{
@@ -160,7 +160,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 				$this->compropagoClient = new Compropago\Client($this->compropagoConfig);
 				$this->compropagoService = new Compropago\Service($this->compropagoClient);
 				$res=$this->compropagoService->placeOrder($data) ;
-				wc_add_notice( json_encode($res), 'success' );
+				
+				$response=CP_Views::loadTpl('recibo', $res);
+				wc_add_notice($response, 'success' );
+				
 			} catch (Exception $e) {
 				wc_add_notice( __('Compropago error:', 'woothemes') . $e->getMessage(), 'error' );
 				return;
@@ -177,7 +180,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		
 		// Remove cart
 		$woocommerce->cart->empty_cart();
-		
+		//CP_Views::loadView('recibo', $res);
 		// Return thankyou redirect
 		return array(
 				'result' => 'success',
@@ -209,6 +212,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		CP_Views::loadView('proveedores', $data);
 	}
 	
+	
 	/**
 	 * @return true success
 	 * @return null on ErrorException
@@ -222,5 +226,19 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			$this->orderProvider=$_POST['compropagoProvider'];
 		}
 		return true;
+	}
+	/**
+	 * Compropago Valid Use Validation
+	 * @return boolean
+	 */
+	public function is_valid_for_use() {
+		//solo acepta total en Pesos Mexicanos
+		if(get_option('woocommerce_currency')=='MXN'){
+			return true;
+		}else{
+			wc_add_notice( 'ComproPago solo esta disponible para pagos en Pesos Mexicanos (MXN)', 'error' );
+			return false;
+		}
+		
 	}
 }
