@@ -161,7 +161,9 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 				$this->compropagoService = new Compropago\Service($this->compropagoClient);
 				$res=$this->compropagoService->placeOrder($data) ;
 				
-				$response=CP_Views::loadTpl('recibo', $res->id);
+				
+		$response=(string)(CP_Views::loadOb('recibo', $res));		
+				
 				wc_add_notice($response, 'success' );
 				
 			} catch (Exception $e) {
@@ -185,6 +187,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		return array(
 				'result' => 'success',
 				'redirect' => $this->get_return_url( $order )
+				//'redirect'  => '/wp-content/plugins/compropago/thanks.php'
+				//'redirect' => add_query_arg('var','thanks.php')
 		);
 	}
 	

@@ -38,4 +38,9 @@ class CP_Views{
 		return $result;
 		
 	}
+	public static function loadOb($view,$data){
+		ob_start();
+		require __DIR__ . '/../Views/'.$view.'.php';
+		return ob_get_clean();
+	}
 }

@@ -36,6 +36,17 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ){
 
 
 
+/*
+ * Do something after WooCommerce sets an order on completed
+ *//*
+add_action( 'woocommerce_order_status_completed', 'compropago_complete' );
+
+function compropago_complete($order_id) {
+
+	//compropago set to hold
+
+}*/
+
 
 /**
  * css file
