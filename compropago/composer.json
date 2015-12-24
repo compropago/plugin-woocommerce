@@ -1,7 +1,7 @@
 {
-    "name": "compropago/php-sdk",
+    "name": "compropago/plugin-wc",
     "type": "library",
-    "description": "PHP SDK for Compropago API",
+    "description": "PHP woocommerce plugin",
     "keywords": ["compropago","pagos internet","payment gateway","Mexico"],
     "homepage": "https://compropago.com/documentacion/librerias",
     "license": "Apache-2.0",
@@ -12,10 +12,6 @@
         }
     ],
     "require": {
-        "php": ">=5.5",
-        "compropago/php-sdk": "1.0.0"
-    },
-    
-  
-   
+        "compropago/php-sdk": "^1.0"
+    }
 }
