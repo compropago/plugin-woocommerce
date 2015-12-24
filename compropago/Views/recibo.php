@@ -16,8 +16,7 @@
 */
 /**
  * @author Rolando Lucio <rolando@compropago.com>
- */ 
-?>
+
 <div id="compropagoWrapper">
 
 	<a href="https://www.compropago.com/comprobante/?confirmation_id=<?php echo $data->id;?>" target="_new">Consulta los detalles de la orden haciendo click <b>Aquí</b></a>
@@ -35,8 +34,20 @@
                 <tbody>
                 <tr style="line-height: 18px; padding: 2px;">
                   <td style="width: 60%;padding-left: 10px;margin: 5px 0px 10px 0px;" class="description"><span style="margin-bottom: 10px"><?php echo $data->order_info->id;?></span></td>
-                  <td style="width: 40%;margin: 5px 0px 10px 0px;" class="description"><span style="margin-left: 3px;">$200.00</span></td>
+                  <td style="width: 40%;margin: 5px 0px 10px 0px;" class="description"><span style="margin-left: 3px;"><?php echo $data->order_info->order_price;?></span></td>
                 </tr>
                 </tbody>
 	</table>
+	<p><?php echo $data->instructions->description;?></p>
+	<ol>
+		<li><?php echo $data->instructions->step_1;?></li>
+		<li><?php echo $data->instructions->step_2;?></li>
+		<li><?php echo $data->instructions->step_3;?></li>
+	</ol>
 </div>
+
+ */ 
+?>
+<pre>
+<?php print_r($data);?>
+</pre>
