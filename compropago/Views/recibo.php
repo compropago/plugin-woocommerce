@@ -19,7 +19,24 @@
  */ 
 ?>
 <div id="compropagoWrapper">
-	<a href="https://www.compropago.com/comprobante/?confirmation_id=<?php echo $data->id;?>" target="_new">Consulta los detalles de la orden haciendo click Aquí</a>
+
+	<a href="https://www.compropago.com/comprobante/?confirmation_id=<?php echo $data->id;?>" target="_new">Consulta los detalles de la orden haciendo click <b>Aquí</b></a>
+	<hr class="compropagoHr">
 	<h2><?php //echo $data->order_info->$order_id ?></h2>	
 	vence: <?php echo $data->id;?>
+	
+	<table class="table-receipt">
+                <thead>
+                <tr>
+                  <th style="width: 60%;"><span style="margin-left: 10px;">PRODUCTO/SERVICIO</span></th>
+                  <th style="width: 40%"><span class="line"></span><span></span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="line-height: 18px; padding: 2px;">
+                  <td style="width: 60%;padding-left: 10px;margin: 5px 0px 10px 0px;" class="description"><span style="margin-bottom: 10px"><?php echo $data->order_info->id;?></span></td>
+                  <td style="width: 40%;margin: 5px 0px 10px 0px;" class="description"><span style="margin-left: 3px;">$200.00</span></td>
+                </tr>
+                </tbody>
+	</table>
 </div>

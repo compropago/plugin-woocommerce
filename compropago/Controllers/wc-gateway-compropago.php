@@ -159,6 +159,13 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 				$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
 				$this->compropagoClient = new Compropago\Client($this->compropagoConfig);
 				$this->compropagoService = new Compropago\Service($this->compropagoClient);
+				/**
+				 * app_client_name
+				 * app_client_version
+				 * client_phone
+				 * @var Ambiguous $res
+				 */
+				
 				$res=$this->compropagoService->placeOrder($data) ;
 				
 				
