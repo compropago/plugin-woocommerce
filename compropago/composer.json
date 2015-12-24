@@ -13,11 +13,9 @@
     ],
     "require": {
         "php": ">=5.5",
-        "guzzlehttp/guzzle": "^6.1"
+        "compropago/php-sdk": "1.0.0"
     },
     
-    "autoload": {
-        "psr-4": {"Compropago\\": "src/"}      
-    }
+  
    
 }
