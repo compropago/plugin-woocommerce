@@ -67,7 +67,7 @@ function woocommerce_compropago_init() {
 	/**
 	 * Gateway class
 	*/
-	require_once 'Controllers/wc-gateway-compropago.php';
+	require_once 'includes/wc-gateway-compropago.php';
 
 	/**
 	 * Add the Gateway to WooCommerce
