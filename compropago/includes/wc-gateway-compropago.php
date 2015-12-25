@@ -17,6 +17,10 @@
 /**
  * @author Rolando Lucio <rolando@compropago.com>
  */
+use Compropago\Client;
+use Compropago\Service;
+use Compropago\Controllers\Views;
+
 class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
 	private $compropagoConfig;
@@ -206,8 +210,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		
 		try{
 			$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
-			$this->compropagoClient = new Compropago\Client($this->compropagoConfig);
-			$this->compropagoService = new Compropago\Service($this->compropagoClient);
+			$this->compropagoClient = new Client($this->compropagoConfig);
+			$this->compropagoService = new Service($this->compropagoClient);
 			
 			
 		} catch (Exception $e) {
@@ -220,7 +224,9 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$data['description']=$this->description;
 		$data['instrucciones']=$this->instrucciones;
 		
-		CP_Views::loadView('proveedores', $data);
+		echo 'hola';
+		//Views::loadView('providers',$data);
+		//CP_Views::loadView('proveedores', $data);
 	}
 	
 	

@@ -11,7 +11,7 @@
             "email": "rolando@compropago.com"
         }
     ],
-    "require": {
-        "compropago/php-sdk": "^1.0"
+    "require":{
+    	"compropago/php-sdk":"^1.0"
     }
 }
