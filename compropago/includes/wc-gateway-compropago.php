@@ -33,7 +33,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->id='compropago';
 		$this->has_fields=true;
 		$this->method_title='ComproPago';
-		$this->method_description='Recibe pagos en efectivo en tu tienda a traves de la red más grande de puntos de cobro para que tus clientes paguen por tus productos o servicios.';
+		$this->method_description='Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México';
 		
 		$this->init_form_fields();
 		$this->init_settings();
@@ -69,6 +69,27 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'description'	=> 'Activar ComproPago como método de pago. (<a href="https://compropago.com/" target="_new">Registrarse en Compropago</a>)',
 					'default' 		=> 'no'
 			),
+			'publickey' => array(
+					'title' => __( 'Llave Pública' ),
+					'type' => 'text',
+					'description' => __( 'Obten tu llave pública: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
+					'default' => '',
+					'css' => "width: 300px;"
+			),
+			'privatekey' => array(
+					'title' => __( 'Llave Privada' ),
+					'type' => 'text',
+					'description' => __( 'Obten tu llave privada: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
+					'default' => '',
+					'css' => "width: 300px;"
+			),
+			'showlogo' => array(
+					'title' => __( 'Estilo', 'woocommerce' ),
+					'label' => __( 'Activar Logos', 'woocommerce' ),
+					'type' => 'checkbox',
+					'description' => __( 'Activa o desactiva los logos de las empresas en donde realizar el pago ', 'woocommerce' ),
+					'default' => 'yes'
+			),
 			'title' => array(
 					'title' => __( 'Title', 'woocommerce' ),
 					'type' => 'text',
@@ -89,27 +110,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'default' => 'Selecciona una tienda',
 					
 			),
-			'showlogo' => array(
-					'title' => __( 'Estilo', 'woocommerce' ),
-					'label' => __( 'Activar Logos', 'woocommerce' ),
-					'type' => 'checkbox',
-					'description' => __( 'Activa o desactiva los logos de las empresas en donde realizar el pago ', 'woocommerce' ),
-					'default' => 'yes'
-			),
-			'publickey' => array(
-					'title' => __( 'Llave Pública' ),
-					'type' => 'text',
-					'description' => __( 'Obten tu llave pública: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
-					'default' => '',
-					'css' => "width: 300px;"
-			),
-			'privatekey' => array(
-					'title' => __( 'Llave Privada' ),
-					'type' => 'text',
-					'description' => __( 'Obten tu llave privada: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
-					'default' => '',
-					'css' => "width: 300px;"
-			),
+			
+			
 			'modopruebas' => array(
 					'title' => __( 'Modo de Pruebas', 'woocommerce' ),
 					'label' => __( 'Activar modo pruebas', 'woocommerce' ),
