@@ -12,4 +12,4 @@ composer.lock
 dev-notes
 .DS_Store
 phpunit.xml
-
+compropago/vendor
