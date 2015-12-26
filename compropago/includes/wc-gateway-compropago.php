@@ -145,35 +145,30 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		 $data = array(
 		 'order_id'    		 => $order_id,
 		 'order_price'       => $order->get_total(),
-		 //'order_name'        => esc_attr(get_bloginfo('name')).'order:'.$order_id,
-		 'order_name'        => 'A nice fancy order name by compropago',
+		 'order_name'        => get_bloginfo('name').' orden:'.$order_id,
 		 'customer_name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
 		 'customer_email'    => $order->billing_email,
-		 'payment_type'      => $this->orderProvider
+		 'payment_type'     => $this->orderProvider,
+		 'app_client_name'	=>	'woocommerce',
+		 'app_client_version' => $woocommerce->version
+		 
 		 );
 		 
 		
 		 
-		 if(!class_exists('CP_Views')){
-		 	require __DIR__ . '/CP_Views.php';
-		 }
+		
 			
-		    
+		   
 			try{
 				$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
 				$this->compropagoClient = new Compropago\Client($this->compropagoConfig);
 				$this->compropagoService = new Compropago\Service($this->compropagoClient);
-				/**
-				 * app_client_name
-				 * app_client_version
-				 * client_phone
-				 * @var Ambiguous $res
-				 */
+			
 				
 				$res=$this->compropagoService->placeOrder($data) ;
 				
 				
-		$response=(string)(CP_Views::loadOb('recibo', $res));		
+				$response=(string)(Views::loadView('raw', $res,'ob'));		
 				
 				wc_add_notice($response, 'success' );
 				
@@ -193,20 +188,17 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		
 		// Remove cart
 		$woocommerce->cart->empty_cart();
-		//CP_Views::loadView('recibo', $res);
+		
 		// Return thankyou redirect
 		return array(
 				'result' => 'success',
 				'redirect' => $this->get_return_url( $order )
-				//'redirect'  => '/wp-content/plugins/compropago/thanks.php'
-				//'redirect' => add_query_arg('var','thanks.php')
+				
 		);
 	}
 	
 	public function payment_fields(){
-		if(!class_exists('CP_Views')){
-			require __DIR__ . '/CP_Views.php';
-		}
+	
 		
 		try{
 			$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
@@ -223,10 +215,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$data['showlogo']=$this->showlogo;
 		$data['description']=$this->description;
 		$data['instrucciones']=$this->instrucciones;
-		
-		echo 'hola';
-		//Views::loadView('providers',$data);
-		//CP_Views::loadView('proveedores', $data);
+
+		Views::loadView('providers',$data);		
 	}
 	
 	
@@ -254,7 +244,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			return true;
 		}else{
 			wc_add_notice( 'ComproPago solo esta disponible para pagos en Pesos Mexicanos (MXN)', 'error' );
-			return false;
+			return ;
 		}
 		
 	}

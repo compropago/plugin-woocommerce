@@ -53,7 +53,7 @@ function compropago_complete($order_id) {
  */
 add_action( 'wp_enqueue_scripts', 'compropago_css' );
 function compropago_css() {
-	wp_register_style( 'prefix-style', plugins_url('assets/compropago.css', __FILE__) );
+	wp_register_style( 'prefix-style', plugins_url('vendor/compropago/php-sdk/assets/css/compropago.css', __FILE__) );
 	wp_enqueue_style( 'prefix-style' );
 }
 
