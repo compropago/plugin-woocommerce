@@ -1,17 +1,5 @@
 {
-    "name": "compropago/plugin-woocommerce",
-    "type": "plugin",
-    "description": "PHP woocommerce plugin",
-    "keywords": ["compropago","pagos internet","payment gateway"],
-    "homepage": "https://compropago.com/documentacion/librerias",
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "Rolando Lucio",
-            "email": "rolando@compropago.com"
-        }
-    ],
-    "require":{
-    	"compropago/php-sdk":"dev-master"
+    "require": {
+        "compropago/php-sdk": "dev-master"
     }
 }
