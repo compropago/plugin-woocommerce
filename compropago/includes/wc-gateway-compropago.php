@@ -114,7 +114,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'title' => __( 'Modo de Pruebas', 'woocommerce' ),
 					'label' => __( 'Activar modo pruebas', 'woocommerce' ),
 					'type' => 'checkbox',
-					'description' => __( 'Al activar el Modo de pruebas <b>es necesario que <span style="color:red;">cambie sus llaves por las de Modo Prueba</span></b>, Obten tus llaves en: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
+					'description' => __( 'Al activar el Modo de pruebas <b>es necesario que <span style="color:red;">cambie sus llaves por las de Modo Prueba</span></b>', 'woocommerce' ),
 					'default' => 'no'
 			)
 		);
