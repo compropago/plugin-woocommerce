@@ -23,11 +23,14 @@ use Compropago\Controllers\Views;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
+	const VERSION="1.0.1-dev";
+	
 	private $compropagoConfig;
 	private $compropagoClient;
 	private $compropagoService;
 	
 	private $orderProvider;
+	
 	
 	public function __construct(){
 		$this->id='compropago';
@@ -52,6 +55,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		//paso despues de selccion de gateway
 		$this->has_fields	= true;
 		
+		$this->setCompropagoConfig();
 		
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		
@@ -121,16 +125,18 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			)
 		);
 	}
-	/**
-	 * @return boolean
-	 */
-	private function isLive(){
-		if($this->modopruebas=='no'){
-			return true;
-		}else{
-			return false;
-		}
+	
+	private function setCompropagoConfig(){
+		global $wp_version;
+		global $woocommerce;
+		$this->compropagoConfig = array(
+				'publickey'=>$this->publickey,
+				'privatekey'=>$this->privatekey,
+				'live'=>($this->modopruebas=='no')? true:false,
+				'contained'=>'plugin; cpwc '.self::VERSION.';woocommerce '.$woocommerce->version.'; wordpress '.$wp_version.';'
+		);
 	}
+	
 	/**
 	 * handling payment and processing the order
 	 * @param unknown $order_id
@@ -155,30 +161,25 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		 'app_client_version' => $woocommerce->version
 		 
 		 );
-		 
+	   
+		try{
+			
+			$this->compropagoClient = new Client($this->compropagoConfig);
+			$this->compropagoService = new Service($this->compropagoClient);
 		
-		 
+			
+			$res=$this->compropagoService->placeOrder($data) ;
+			
+			
+			$response=(string)(Views::loadView('raw', $res,'ob'));		
+			
+			wc_add_notice($response, 'success' );
+			
+		} catch (Exception $e) {
+			wc_add_notice( __('Compropago error:', 'woothemes') . $e->getMessage(), 'error' );
+			return;
 		
-			
-		   
-			try{
-				$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
-				$this->compropagoClient = new Client($this->compropagoConfig);
-				$this->compropagoService = new Service($this->compropagoClient);
-			
-				
-				$res=$this->compropagoService->placeOrder($data) ;
-				
-				
-				$response=(string)(Views::loadView('raw', $res,'ob'));		
-				
-				wc_add_notice($response, 'success' );
-				
-			} catch (Exception $e) {
-				wc_add_notice( __('Compropago error:', 'woothemes') . $e->getMessage(), 'error' );
-				return;
-			
-			}
+		}
 		
 		
 		
@@ -194,8 +195,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		// Return thankyou redirect
 		return array(
 				'result' => 'success',
-				'redirect' => $this->get_return_url( $order )
-				
+				'redirect' => $this->get_return_url( $order )		
 		);
 	}
 	
@@ -203,7 +203,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
 		
 		try{
-			$this->compropagoConfig = array('publickey'=>$this->publickey,'privatekey'=>$this->privatekey,'live'=>$this->isLive());
+			
 			$this->compropagoClient = new Client($this->compropagoConfig);
 			$this->compropagoService = new Service($this->compropagoClient);
 			
