@@ -17,4 +17,18 @@
 /**
  * @author Rolando Lucio <rolando@compropago.com>
  */
-echo '{ "api":"webhook" }';
+//mod_security is enabled,throws 406 error (API user agent?) disable error 500
+// webhook error on shared hosting as hostgator, bluehost
+//<IfModule mod_security.c>
+//SecFilterEngine Off
+//SecFilterScanPOST Off
+//</IfModule>
+//<IfModule mod_security2.c>
+//SecRuleEngine Off
+//</IfModule>
+/* require_once('../../../wp-load.php');
+global $wpdb;
+$body = @file_get_contents('php://input'); 
+echo '<pre>'.print_r($body).'</pre>';*/
+?>
+alo mundo

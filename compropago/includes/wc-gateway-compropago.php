@@ -23,7 +23,7 @@ use Compropago\Controllers\Views;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
-	const VERSION="1.0.1-dev";
+	const VERSION="1.0.1";
 	
 	private $compropagoConfig;
 	private $compropagoClient;
