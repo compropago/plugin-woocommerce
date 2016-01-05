@@ -26,9 +26,9 @@
 //<IfModule mod_security2.c>
 //SecRuleEngine Off
 //</IfModule>
-/* require_once('../../../wp-load.php');
+ require_once('../../../wp-load.php');
 global $wpdb;
 $body = @file_get_contents('php://input'); 
-echo '<pre>'.print_r($body).'</pre>';*/
+echo '<pre>'.print_r($body).'</pre><b>{error:none}</b>';
 ?>
-alo mundo
+
