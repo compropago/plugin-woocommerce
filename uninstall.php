@@ -17,7 +17,7 @@
 /**
  * Uninstall - removes all options from DB when user deletes the plugin via WordPress backend.
  * @author Rodrigo Ayala <rodrigo@compropago.com>
- * @since 0.1
+ * @since 2.0
  *
 **/
 

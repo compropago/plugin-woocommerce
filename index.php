@@ -3,7 +3,7 @@
  Plugin Name: ComproPago 
  Plugin URI: https://www.compropago.com/documentacion/plugins
  Description: Recibe pagos en efectivo en tu tienda a traves de la red más grande de puntos de cobro para que tus clientes paguen por tus productos o servicios.
- Version: 1.0.0-dev
+ Version: 3.0.0
  Author: Compropago <contacto@compropago.com>
  Author URI: https://www.compropago.com/
  */
@@ -24,6 +24,7 @@
 */
 /**
  * @author Rolando Lucio <rolando@compropago.com>
+ * @since 3.0.0
  */
 
 //iniciamos el plugin

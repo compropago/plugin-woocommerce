@@ -16,6 +16,7 @@
 */
 /**
  * @author Rolando Lucio <rolando@compropago.com>
+ * @since 3.0.0
  */
 use Compropago\Client;
 use Compropago\Service;
@@ -23,7 +24,7 @@ use Compropago\Controllers\Views;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
-	const VERSION="1.0.1";
+	const VERSION="3.0.0";
 	
 	private $compropagoConfig;
 	private $compropagoClient;
