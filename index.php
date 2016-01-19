@@ -2,7 +2,7 @@
 /*
  Plugin Name: ComproPago 
  Plugin URI: https://www.compropago.com/documentacion/plugins
- Description: Recibe pagos en efectivo en tu tienda a traves de la red más grande de puntos de cobro para que tus clientes paguen por tus productos o servicios.
+ Description: Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
  Version: 3.0.0
  Author: Compropago <contacto@compropago.com>
  Author URI: https://www.compropago.com/
@@ -49,15 +49,20 @@ function compropago_complete($order_id) {
 }*/
 
 
-/**
- * css file
- */
+//hook css
 add_action( 'wp_enqueue_scripts', 'compropago_css' );
+/**
+ * compropago css file
+ * @since 3.0.0
+ */
 function compropago_css() {
 	wp_register_style( 'prefix-style', plugins_url('vendor/compropago/php-sdk/assets/css/compropago.css', __FILE__) );
 	wp_enqueue_style( 'prefix-style' );
 }
-
+/**
+ * compropago init plugin
+ * @since 3.0.0
+ */
 function woocommerce_compropago_init() {
 	if ( !class_exists( 'WC_Payment_Gateway' ) ) return;
 	/**
