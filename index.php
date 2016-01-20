@@ -84,4 +84,22 @@ function woocommerce_compropago_init() {
 	}
 
 	add_filter('woocommerce_payment_gateways', 'add_compropago_gateway' );
+	
+	
+	add_action( 'woocommerce_thankyou', 'my_custom_tracking',1 );
+	
+	function my_custom_tracking( $order_id ) {
+	
+		// Lets grab the order
+		$order = new WC_Order( $order_id );
+	
+		/**
+		 * Put your tracking code here
+		 * You can get the order total etc e.g. $order->get_order_total();
+		 **/
+		$compropagoData->id='ch_a9fa4fd0-8ce4-40a2-9baa-c3277b91f25a';
+		include dirname(__FILE__).'/vendor/compropago/php-sdk/views/php/iframe.php';
+	
+	}
 }	
+

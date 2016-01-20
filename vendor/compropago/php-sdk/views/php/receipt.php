@@ -20,33 +20,44 @@
  * @version 1.0.1
  */ 
 ?>
-<div id="compropagoWrapper">
 
-	<a href="https://www.compropago.com/comprobante/?confirmation_id=<?php echo $compropagoData->id;?>" target="_blank">Consulta los detalles de la orden haciendo click <b>Aquí</b></a>
-	<hr class="compropagoHr">
-	
-	vence: <?php echo $compropagoData->id;?>
-	
-	<table class="table-receipt">
-                <thead>
-                <tr>
-                  <th style="width: 60%;"><span style="margin-left: 10px;">PRODUCTO/SERVICIO</span></th>
-                  <th style="width: 40%"><span class="line"></span><span></span></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr style="line-height: 18px; padding: 2px;">
-                  <td style="width: 60%;padding-left: 10px;margin: 5px 0px 10px 0px;" class="description"><span style="margin-bottom: 10px"><?php echo $compropagoData->order_info->id;?></span></td>
-                  <td style="width: 40%;margin: 5px 0px 10px 0px;" class="description"><span style="margin-left: 3px;"><?php echo $compropagoData->order_info->order_price;?></span></td>
-                </tr>
-                </tbody>
-	</table>
-	<p><?php echo $compropagoData->instructions->description;?></p>
-	<ol>
-		<li><?php echo $compropagoData->instructions->step_1;?></li>
-		<li><?php echo $compropagoData->instructions->step_2;?></li>
-		<li><?php echo $compropagoData->instructions->step_3;?></li>
-	</ol>
+
+
+<div id="compropagoWrapper">
+<hr class="compropagoHr">
+<a href="https://www.compropago.com/comprobante/?confirmation_id=<?php echo $compropagoData->id;?>" target="_blank"><?php echo $compropagoReceiptLink; ?></a>
+
+<hr class="compropagoHr">
+<h3><?php echo $compropagoOrderTitle;?></h3>
+
+<div class="expiration-date">
+<?php echo $compropagoDueDate;?>
+<span >
+<?php echo $compropagoData->exp_date;?>
+</span>
+</div>
+      
+<div class="compropagoInstructions">
+<p><?php echo $compropagoData->instructions->description;?></p>
+<p>- <?php echo $compropagoData->instructions->step_1;?></p>
+<p>- <?php echo $compropagoData->instructions->step_2;?></p>
+<p>- <?php echo $compropagoData->instructions->step_3;?></p>
+</div>
+
+<div class="compropagoNotes">
+<?php if( isset($compropagoData->instructions->note_extra_comition) && !empty($compropagoData->instructions->note_extra_comition) ){?>
+<p>- <?php echo $compropagoData->instructions->note_extra_comition;?></p>
+<?php }
+if ( isset($compropagoData->instructions->note_expiration_date) && !empty($compropagoData->instructions->note_expiration_date) ){?>
+<p>- <?php echo $compropagoData->instructions->note_expiration_date;?></p>
+<?php }
+if( isset($compropagoData->instructions->note_confirmation) && !empty($compropagoData->instructions->note_confirmation) ){?>
+<p>- <?php echo $compropagoData->instructions->note_confirmation;?></p>
+<?php }?>
 </div>
 
 
+<hr class="compropagoHr">
+<a href="https://www.compropago.com/comprobante/?confirmation_id=<?php echo $compropagoData->id;?>" target="_blank"><?php echo $compropagoReceiptLink;?></a>
+<hr class="compropagoHr">
+</div>

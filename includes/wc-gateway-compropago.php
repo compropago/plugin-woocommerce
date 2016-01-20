@@ -88,6 +88,13 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'default' => '',
 					'css' => "width: 300px;"
 			),
+			'modopruebas' => array(
+					'title' => __( 'Modo de Pruebas', 'woocommerce' ),
+					'label' => __( 'Activar modo pruebas', 'woocommerce' ),
+					'type' => 'checkbox',
+					'description' => __( 'Al activar el Modo de pruebas <b>es necesario que <span style="color:red;">cambie sus llaves por las de Modo Prueba</span></b>', 'woocommerce' ),
+					'default' => 'no'
+			),
 			'showlogo' => array(
 					'title' => __( 'Estilo', 'woocommerce' ),
 					'label' => __( 'Activar Logos', 'woocommerce' ),
@@ -117,13 +124,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			),
 			
 			
-			'modopruebas' => array(
-					'title' => __( 'Modo de Pruebas', 'woocommerce' ),
-					'label' => __( 'Activar modo pruebas', 'woocommerce' ),
-					'type' => 'checkbox',
-					'description' => __( 'Al activar el Modo de pruebas <b>es necesario que <span style="color:red;">cambie sus llaves por las de Modo Prueba</span></b>', 'woocommerce' ),
-					'default' => 'no'
-			)
+			
+			
 		);
 	}
 	
@@ -172,7 +174,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			$res=$this->compropagoService->placeOrder($data) ;
 			
 			
-			$response=(string)(Views::loadView('raw', $res,'ob'));		
+			//$response=(string)(Views::loadView('receipt', $res,'ob'));
+	$response='<a href="https://www.compropago.com/comprobante/?confirmation_id='.$compropagoData->id.' target="_blank">'.'Su orden en ComproPago se ha creado con éxito, De click aquí para ver su recibo completo'.'</a>';
 			
 			wc_add_notice($response, 'success' );
 			
@@ -185,10 +188,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		
 		
 		// estatus en de la orden onhold, webhook actualizara a confirmacion de pago
-		$order->update_status('on-hold', __( 'Esperando pago por ComproPago', 'woocommerce' ));
+		$order->update_status('on-hold', __( 'ComproPago - Pendiente', 'woocommerce' ));
 		
 		// Reduce stock levels
-		$order->reduce_order_stock();
+		//$order->reduce_order_stock();
 		
 		// Remove cart
 		$woocommerce->cart->empty_cart();
