@@ -1,5 +1,4 @@
 <?php
-use Compropago;
 /*
  Plugin Name: ComproPago 
  Plugin URI: https://www.compropago.com/documentacion/plugins
@@ -36,26 +35,26 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ){
 }
 
 function compropago_activate() {
+	
 	global $wpdb;
 	$dbprefix=$wpdb->prefix;
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-/**
-	$queries=Compropago\Utils\Store::sqlDropTables(_DB_PREFIX_);
+	$queries=Compropago\Utils\Store::sqlDropTables($dbprefix);
 	foreach($queries as $drop){
 		
-		Db::getInstance()->execute($drop);
+		dbDelta($drop);
 	}
 	//creates compropago tables
-	$queries=Compropago\Utils\Store::sqlCreateTables(_DB_PREFIX_);
+	$queries=Compropago\Utils\Store::sqlCreateTables($dbprefix);
 	
 	foreach($queries as $create){
-		if(!Db::getInstance()->execute($create))
+		if(!dbDelta($create))
 			die('Unable to Create ComproPago Tables, module cant be installed');
 	}
- */
 
 }
-register_activation_hook( __FILE__, 'compropago' );
+register_activation_hook( __FILE__, 'compropago_activate' );
 
 //iniciamos el plugin
 add_action('plugins_loaded', 'woocommerce_compropago_init', 0);
@@ -89,8 +88,10 @@ function woocommerce_compropago_init() {
 	add_action( 'woocommerce_thankyou', 'compropago_receipt',1 );
 	
 	function compropago_receipt( $order_id ) {
-	
-		// Lets grab the order
+		
+		global $wpdb;
+		$dbprefix=$wpdb->prefix;
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		$order = new WC_Order( $order_id );
 	
 	
