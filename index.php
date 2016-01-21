@@ -1,4 +1,5 @@
 <?php
+use Compropago;
 /*
  Plugin Name: ComproPago 
  Plugin URI: https://www.compropago.com/documentacion/plugins
@@ -27,25 +28,37 @@
  * @since 3.0.0
  */
 
-//iniciamos el plugin
-add_action('plugins_loaded', 'woocommerce_compropago_init', 0);
+
 
 //load Compropago SDK & dependecies
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ){
 	require __DIR__ . '/vendor/autoload.php';
 }
 
+function compropago_activate() {
+	global $wpdb;
+	$dbprefix=$wpdb->prefix;
 
-//hook css
-add_action( 'wp_enqueue_scripts', 'compropago_css' );
 /**
- * compropago css file
- * @since 3.0.0
+	$queries=Compropago\Utils\Store::sqlDropTables(_DB_PREFIX_);
+	foreach($queries as $drop){
+		
+		Db::getInstance()->execute($drop);
+	}
+	//creates compropago tables
+	$queries=Compropago\Utils\Store::sqlCreateTables(_DB_PREFIX_);
+	
+	foreach($queries as $create){
+		if(!Db::getInstance()->execute($create))
+			die('Unable to Create ComproPago Tables, module cant be installed');
+	}
  */
-function compropago_css() {
-	wp_register_style( 'prefix-style', plugins_url('vendor/compropago/php-sdk/assets/css/compropago.css', __FILE__) );
-	wp_enqueue_style( 'prefix-style' );
+
 }
+register_activation_hook( __FILE__, 'compropago' );
+
+//iniciamos el plugin
+add_action('plugins_loaded', 'woocommerce_compropago_init', 0);
 /**
  * compropago init plugin
  * @since 3.0.0
@@ -87,6 +100,16 @@ function woocommerce_compropago_init() {
 	}
 }	
 
+//hook css
+add_action( 'wp_enqueue_scripts', 'compropago_css' );
+/**
+ * compropago css file
+ * @since 3.0.0
+ */
+function compropago_css() {
+	wp_register_style( 'prefix-style', plugins_url('vendor/compropago/php-sdk/assets/css/compropago.css', __FILE__) );
+	wp_enqueue_style( 'prefix-style' );
+}
 
 /*
  * Do something after WooCommerce sets an order on completed
