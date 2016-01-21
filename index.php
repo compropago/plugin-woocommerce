@@ -33,13 +33,14 @@
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ){
 	require __DIR__ . '/vendor/autoload.php';
 }
-
-function compropago_activate() {
-	
+/**
+ * Plugin Install / When been activated on admin 
+ * @since 3.0.0
+ */
+function compropago_activate() {	
 	global $wpdb;
 	$dbprefix=$wpdb->prefix;
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-
 	$queries=Compropago\Utils\Store::sqlDropTables($dbprefix);
 	foreach($queries as $drop){
 		
@@ -47,16 +48,14 @@ function compropago_activate() {
 	}
 	//creates compropago tables
 	$queries=Compropago\Utils\Store::sqlCreateTables($dbprefix);
-	
 	foreach($queries as $create){
 		if(!dbDelta($create))
 			die('Unable to Create ComproPago Tables, module cant be installed');
 	}
-
 }
 register_activation_hook( __FILE__, 'compropago_activate' );
 
-//iniciamos el plugin
+
 add_action('plugins_loaded', 'woocommerce_compropago_init', 0);
 /**
  * compropago init plugin
@@ -87,17 +86,17 @@ function woocommerce_compropago_init() {
 	
 	add_action( 'woocommerce_thankyou', 'compropago_receipt',1 );
 	
-	function compropago_receipt( $order_id ) {
-		
+	function compropago_receipt( $order_id ) {	
 		global $wpdb;
 		$dbprefix=$wpdb->prefix;
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		$order = new WC_Order( $order_id );
-	
-	
-		$compropagoData->id='ch_a9fa4fd0-8ce4-40a2-9baa-c3277b91f25a';
-		include dirname(__FILE__).'/vendor/compropago/php-sdk/views/php/iframe.php';
-	
+		$compropagoData=null;
+		$compropagoOrder=$dbprefix . 'compropago_orders';	
+		if($mylink = $wpdb->get_row( "SELECT * FROM ".$compropagoOrder." WHERE storeOrderId = '".$order_id."'" )){
+			$compropagoData->id=$mylink->compropagoId;	 
+			Compropago\Controllers\Views::loadView('iframe',$compropagoData);
+		}
 	}
 }	
 

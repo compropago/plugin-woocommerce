@@ -150,13 +150,14 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 		
 		global $woocommerce;
+		global $wpdb;
 		$order = new WC_Order( $order_id );
 		
 		
-		 $data = array(
+		 $compropagoOrderData = array(
 		 'order_id'    		 => $order_id,
 		 'order_price'       => $order->get_total(),
-		 'order_name'        => get_bloginfo('name').' orden:'.$order_id,
+		 'order_name'        => 'No. orden: '.$order_id,
 		 'customer_name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
 		 'customer_email'    => $order->billing_email,
 		 'payment_type'     => $this->orderProvider,
@@ -171,11 +172,42 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			$this->compropagoService = new Service($this->compropagoClient);
 		
 			
-			$res=$this->compropagoService->placeOrder($data) ;
+			$compropagoResponse=$this->compropagoService->placeOrder($compropagoOrderData) ;
 			
+			$dbprefix=$wpdb->prefix;
 			
-			//$response=(string)(Views::loadView('receipt', $res,'ob'));
-	$response='<a href="https://www.compropago.com/comprobante/?confirmation_id='.$compropagoData->id.' target="_blank">'.'Su orden en ComproPago se ha creado con éxito, De click aquí para ver su recibo completo'.'</a>';
+			$recordTime=time();
+			$ioIn=base64_encode(json_encode($compropagoResponse));
+			$ioOut=base64_encode(json_encode($compropagoOrderData));
+			
+			$idCompropagoOrder=$wpdb->insert($dbprefix . 'compropago_orders', array(
+					'date' 				=> $recordTime,
+					'modified' 			=> $recordTime,
+					'compropagoId'		=> $compropagoResponse->id,
+					'compropagoStatus'	=> $compropagoResponse->status,
+					'storeCartId'		=> $order_id,
+					'storeOrderId'		=> $order_id,
+					'storeExtra'		=> 'COMPROPAGO_PENDING',
+					'ioIn' 				=> $ioIn,
+					'ioOut' 			=> $ioOut
+					)
+				);
+			
+			//record transaction
+			$wpdb->insert($dbprefix . 'compropago_transactions', array(
+					'orderId' 			=> $idCompropagoOrder,
+					'date' 				=> $recordTime,
+					'compropagoId'		=> $compropagoResponse->id,
+					'compropagoStatus'	=> $compropagoResponse->status,
+					'compropagoStatusLast'	=> $compropagoResponse->status,
+					'ioIn' 				=> $ioIn,
+					'ioOut' 			=> $ioOut
+					)
+				);
+			
+			//uncomment if your store have custom thankyou page
+			//$response=(string)(Views::loadView('$compropagoResponse', $res,'ob'));
+			$response='Su orden de pago ComproPago se ha creado con éxito';
 			
 			wc_add_notice($response, 'success' );
 			
