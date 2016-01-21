@@ -69,23 +69,27 @@ function woocommerce_compropago_init() {
 	load_plugin_textdomain('wc-gateway-name', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
 
 	/**
-	 * Gateway class
+	 * Gateway class include
 	*/
 	require_once 'wc-gateway-compropago.php';
 
 	/**
 	 * Add the Gateway to WooCommerce
+	 * @since 3.0.0
 	 **/
 	function add_compropago_gateway($methods) {
 		$methods[] = 'WC_Gateway_Compropago';
 		return $methods;
 	}
-
 	add_filter('woocommerce_payment_gateways', 'add_compropago_gateway' );
 	
 	
 	add_action( 'woocommerce_thankyou', 'compropago_receipt',1 );
-	
+	/**
+	 * Hook receipt to thankyou page
+	 * @param unknown $order_id
+	 * @since 3.0.0
+	 */
 	function compropago_receipt( $order_id ) {	
 		global $wpdb;
 		$dbprefix=$wpdb->prefix;
@@ -100,10 +104,10 @@ function woocommerce_compropago_init() {
 	}
 }	
 
-//hook css
+
 add_action( 'wp_enqueue_scripts', 'compropago_css' );
 /**
- * compropago css file
+ *  hook compropago css file
  * @since 3.0.0
  */
 function compropago_css() {

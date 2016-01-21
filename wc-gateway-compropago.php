@@ -152,11 +152,22 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		global $woocommerce;
 		global $wpdb;
 		$order = new WC_Order( $order_id );
-		
+	
+		/*
+		$orderItems = $order->get_items();
+		$orderDetails=' ( ';
+		foreach ($orderItems as $product){
+			$product_name[] = $product['name'] .' x '. $product['qty'];
+		}
+		$product_list = implode( ' , ', $product_name );
+		$orderDetails .= $product_list;
+		$orderDetails .= ' ) ';
+		*/
 		
 		 $compropagoOrderData = array(
 		 'order_id'    		 => $order_id,
 		 'order_price'       => $order->get_total(),
+		 //'order_name'        => 'No. orden: '.$order_id.$orderDetails,
 		 'order_name'        => 'No. orden: '.$order_id,
 		 'customer_name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
 		 'customer_email'    => $order->billing_email,
