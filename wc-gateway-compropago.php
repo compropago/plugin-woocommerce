@@ -48,10 +48,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->showlogo 	= $this->settings['showlogo'];
 		$this->instrucciones 	= $this->settings['instrucciones'];
 		
-		$this->publickey 	= $this->settings['publickey'];
-		$this->privatekey 	= $this->settings['privatekey'];
+		$this->publickey 	= $this->settings['COMPROPAGO_PUBLICKEY'];
+		$this->privatekey 	= $this->settings['COMPROPAGO_PRIVATEKEY'];
 		
-		$this->modopruebas 	= $this->settings['modopruebas'];
+		$this->modopruebas 	= $this->settings['COMPROPAGO_MODE'];
 		
 		//paso despues de selccion de gateway
 		$this->has_fields	= true;
@@ -74,21 +74,21 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'description'	=> 'Activar ComproPago como método de pago. (<a href="https://compropago.com/" target="_new">Registrarse en Compropago</a>)',
 					'default' 		=> 'no'
 			),
-			'publickey' => array(
+			'COMPROPAGO_PUBLICKEY' => array(
 					'title' => __( 'Llave Pública' ),
 					'type' => 'text',
 					'description' => __( 'Obten tu llave pública: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
 					'default' => '',
 					'css' => "width: 300px;"
 			),
-			'privatekey' => array(
+			'COMPROPAGO_PRIVATEKEY' => array(
 					'title' => __( 'Llave Privada' ),
 					'type' => 'text',
 					'description' => __( 'Obten tu llave privada: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'woocommerce' ),
 					'default' => '',
 					'css' => "width: 300px;"
 			),
-			'modopruebas' => array(
+			'COMPROPAGO_MODE' => array(
 					'title' => __( 'Modo de Pruebas', 'woocommerce' ),
 					'label' => __( 'Activar modo pruebas', 'woocommerce' ),
 					'type' => 'checkbox',
