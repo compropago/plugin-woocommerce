@@ -81,7 +81,7 @@ if (!isset($config['COMPROPAGO_PUBLICKEY']) || !isset($config['COMPROPAGO_PRIVAT
 }
 
 //Compropago SDK config
-if($config['COMPROPAGO_MODE']=='no'){
+if($config['COMPROPAGO_MODE']=='yes'){
 	$moduleLive=true;
 }else {
 	$moduleLive=false;
