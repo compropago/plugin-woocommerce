@@ -162,6 +162,8 @@ try{
 		switch($nomestatus){
 			case 'COMPROPAGO_SUCCESS':
 				$order->update_status('completed', __( 'ComproPago - Payment Confirmed', 'compropago' ));
+				//dont want to complete on payment use next line instead above
+				//$order->update_status('processing', __( 'ComproPago - Payment Confirmed', 'compropago' ));
 			break;
 			case 'COMPROPAGO_PENDING':
 				$order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
