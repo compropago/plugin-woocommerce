@@ -18,17 +18,6 @@
  * @author Rolando Lucio <rolando@compropago.com>
  * @since 3.0.0
  */
-//mod_security is enabled,throws 406 error or disable error 500
-// webhook error on shared hosting as hostgator, bluehost, could disable it
-/*
-<IfModule mod_security.c>
-SecFilterEngine Off
-SecFilterScanPOST Off
-</IfModule>
-<IfModule mod_security2.c>
-SecRuleEngine Off
-</IfModule>
-*/
 
 //validate request
 $request = @file_get_contents('php://input');
@@ -114,16 +103,19 @@ try{
 if($jsonObj->id=="ch_00000-000-0000-000000" || $jsonObj->short_id =="000000"){
 	die("Probando el WebHook?, <b>Ruta correcta.</b>");
 }
+
 try{
 	$response = $compropagoService->verifyOrder($jsonObj->id);
 	if($response->type=='error'){
 		die('Error procesando el número de orden');
 	}
-	if(!Db::getInstance()->execute("SHOW TABLES LIKE '"._DB_PREFIX_ ."compropago_orders'") ||
-			!Db::getInstance()->execute("SHOW TABLES LIKE '"._DB_PREFIX_ ."compropago_transactions'")
+	if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
+			!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")
 			){
 				die('ComproPago Tables Not Found');
+				
 	}
+	
 	switch ($response->type){
 		case 'charge.success':
 			$nomestatus = "COMPROPAGO_SUCCESS";
@@ -147,44 +139,73 @@ try{
 			die('Invalid Response type');
 	}
 
-	$sql = "SELECT * FROM "._DB_PREFIX_."compropago_orders	WHERE compropagoId = '".$response->id."' ";
+	$sql = "SELECT * FROM ".$wpdb->prefix."compropago_orders	WHERE compropagoId = '".$response->id."' ";
 
-	if ($row = Db::getInstance()->getRow($sql)){
+	if ($row = $wpdb->get_row($sql)){
 
-		$id_order=intval($row['storeOrderId']);
+		$id_order=intval($row->storeOrderId);
 		$recordTime=time();
+		
+		//update store
+		/*
+		   $order_statuses = array(
+		    'wc-pending'    => _x( 'Pending Payment', 'Order status', 'woocommerce' ),
+		    'wc-processing' => _x( 'Processing', 'Order status', 'woocommerce' ),
+		    'wc-on-hold'    => _x( 'On Hold', 'Order status', 'woocommerce' ),
+		    'wc-completed'  => _x( 'Completed', 'Order status', 'woocommerce' ),
+		    'wc-cancelled'  => _x( 'Cancelled', 'Order status', 'woocommerce' ),
+		    'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
+		    'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
+		  );
+		 */
+		$order = new WC_Order( $id_order );
+		switch($nomestatus){
+			case 'COMPROPAGO_SUCCESS':
+				$order->update_status('completed', __( 'ComproPago - Payment Confirmed', 'compropago' ));
+			break;
+			case 'COMPROPAGO_PENDING':
+				$order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
+			break;
+			case 'COMPROPAGO_DECLINED':
+				$order->update_status('cancelled', __( 'ComproPago - Declined', 'compropago' ));
+			break;
+			case 'COMPROPAGO_EXPIRED':
+				$order->update_status('cancelled', __( 'ComproPago - Expired', 'compropago' ));
+			break;
+			case 'COMPROPAGO_DELETED':
+				$order->update_status('cancelled', __( 'ComproPago - Deleted', 'compropago' ));
+			break;
+			case 'COMPROPAGO_CANCELED':
+				$order->update_status('cancelled', __( 'ComproPago - Canceled', 'compropago' ));
+			break;			
+			default:
+				$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
+		}
+		
+		
 
-		$extraVars = array();
-		$history = new OrderHistory();
-		$history->id_order = $id_order;
-		$history->changeIdOrderState((int)Configuration::get($nomestatus),$history->id_order);
-		//$history->addWithemail(true,$extraVars);
-		$history->addWithemail();
-		$history->save();
-
-		$sql = "UPDATE `"._DB_PREFIX_."compropago_orders`
-				SET `modified` = '".$recordTime."', `compropagoStatus` = '".$response->status."', `storeExtra` = '".$nomestatus."'
-				 WHERE `id` = '".$row['id']."'";
-		if(!Db::getInstance()->execute($sql)){
+		$sql = "UPDATE `".$wpdb->prefix."compropago_orders`
+				SET `modified` = '".$recordTime."', `compropagoStatus` = '".$response->type."', `storeExtra` = '".$nomestatus."'
+				 WHERE `id` = '".$row->id."'";
+		if(!$wpdb->query($sql)){
 			die("Error Updating ComproPago Order Record at Store");
 		}
-		//bas64 cause prestashop db
-		//webhook
+		//save transaction
 		$ioIn=base64_encode(json_encode($jsonObj));
-		//verify response
 		$ioOut=base64_encode(json_encode($response));
 
-		Db::getInstance()->autoExecute(_DB_PREFIX_ . 'compropago_transactions', array(
-				'orderId' 			=> $row['id'],
+		$wpdb->insert($wpdb->prefix . 'compropago_transactions', array(
+				'orderId' 			=> $row->id,
 				'date' 				=> $recordTime,
 				'compropagoId'		=> $response->id,
 				'compropagoStatus'	=> $response->type,
-				'compropagoStatusLast'	=> $row['compropagoStatus'],
+				'compropagoStatusLast'	=> $row->compropagoStatus,
 				'ioIn' 				=> $ioIn,
 				'ioOut' 			=> $ioOut
-		),'INSERT');
-
-		echo('Orden '.$jsonObj->id.' Confirmada');
+				)
+			);
+		
+		echo('Orden '.$jsonObj->id.', transacción ejecutada');
 
 	}else{
 		die('El número de orden no se encontro en la tienda');
@@ -193,24 +214,6 @@ try{
 	//something went wrong at sdk lvl
 	die($e->getMessage());
 }
-	
 
-	
-/*
-	$status = $event_json->{'type'};
-	if ( $status == 'charge.pending' ) {
-		$status = 'pending';
-	} elseif ( $status == 'charge.success' ) {
-		$status = 'processing';
-	}elseif ( $status == 'charge.decline' ) {
-		$status = 'refunded';
-	}elseif ( $status == 'charge.deleted' ) {
-		$status = 'refunded';
-	}
-*/
-
-	
-	echo json_encode( $event_json );
-//echo '<pre>'.print_r($body).'</pre><b>{error:none}</b>';
 ?>
 
