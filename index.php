@@ -64,7 +64,7 @@ function woocommerce_compropago_init() {
 	/**
 	 * Localisation
 	 */
-	load_plugin_textdomain('wc-gateway-name', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
+	load_plugin_textdomain('compropago', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
 
 	/**
 	 * Gateway class include

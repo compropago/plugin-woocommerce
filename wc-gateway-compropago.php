@@ -35,11 +35,15 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	private $controlVision;
 	private $modopruebas;
 	
+	/**
+	 * init compropago
+	 * @since 3.0.0
+	 */
 	public function __construct(){
 		$this->id='compropago';
 		$this->has_fields=true;
 		$this->method_title='ComproPago';
-		$this->method_description='Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México';
+		$this->method_description=__('ComproPago allows you to accept payments at Mexico stores like OXXO, 7Eleven and More.','compropago');
 		
 		$this->init_form_fields();
 		
@@ -97,7 +101,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 									}else{
 										if(!$compropagoResponse->mode_key && !$compropagoResponse->livemode){
 											//can process orders but watch out, NOT live operations just testing
-											$this->settings['COMPROPAGO_ERRORS'] = __('WARNING: ComproPago account is Running in TEST Mode','compropago');
+											$this->settings['COMPROPAGO_ERRORS'] = __('WARNING: ComproPago account is Running in TEST Mode, NO REAL OPERATIONS','compropago');
 										}else{
 											$this->settings['COMPROPAGO_ERRORS'] = '';
 										}
@@ -111,11 +115,11 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					}
 					
 			}else{
-				$this->settings['COMPROPAGO_ERRORS']=__('Ingrese sus Llaves para poder utilizar ComproPago','compropago');
+				$this->settings['COMPROPAGO_ERRORS']=__('The Public Key and Private Key must be set before using ComproPago','compropago');
 				$this->controlVision='no';
 			}
 		}else{
-			$this->settings['COMPROPAGO_ERRORS']=__('ComproPago No se encuentra Activo','compropago');
+			$this->settings['COMPROPAGO_ERRORS']=__('ComproPago is not Enabled','compropago');
 			$this->controlVision='no';
 		}
 		
@@ -125,6 +129,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	}
 	/**
 	 * setup admin page
+	 * @since 3.0.0
 	 */
 	public function init_form_fields(){
 		$this->form_fields=array(
@@ -133,7 +138,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'title'			=> __( 'Enable/Disable', 'compropago' ),
 					'label' 		=> __( 'Enable Compropago', 'compropago' ),
 					'type' 			=> 'checkbox',
-					'description'	=> 'Activar ComproPago como método de pago. (<a href="https://compropago.com/" target="_new">Registrarse en Compropago</a>)',
+					'description'	=> __('Activate ComproPago payment method. (<a href="https://compropago.com/" target="_new">Sign Up for Compropago</a>)','compropago'),
 					'default' 		=> 'no'
 			),
 			'COMPROPAGO_ERRORS' => array(
@@ -142,59 +147,59 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'css' => 'color:#FF8C00;'
 			),
 			'COMPROPAGO_PUBLICKEY' => array(
-					'title' => __( 'Llave Pública' ),
+					'title' => __( 'Public Key','compropago' ),
 					'type' => 'text',
-					'description' => __( 'Obten tu llave pública: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'compropago' ),
+					'description' => __( 'Get your keys: <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
 					'default' => '',
 					'css' => "width: 300px;"
 			),
 			'COMPROPAGO_PRIVATEKEY' => array(
-					'title' => __( 'Llave Privada' ),
+					'title' => __( 'Private Key','compropago'),
 					'type' => 'text',
-					'description' => __( 'Obten tu llave privada: <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'compropago' ),
+					'description' => __( 'Get your keys: <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
 					'default' => '',
 					'css' => "width: 300px;"
 			),
 			'COMPROPAGO_MODE' => array(
-					'title' => __( 'Modo Activo', 'compropago' ),
+					'title' => __( 'Live Mode', 'compropago' ),
 					//'label' => __( 'Cambiar a modo Activo', 'compropago' ),
 					'type' => 'checkbox',
-					'description' => __( 'Modo Activo o de Pruebas?, cambie sus llaves de acuerdo al modo <a href="https://compropago.com/panel/configuracion" target="_new">Panel de Compropago</a>', 'compropago' ),
+					'description' => __( 'Are you on live or testing?,Change your Keys according to the mode <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
 					'default' => 'no'
 			),
 			'webhook' => array(
-					'title' => __('<b>WebHook</b>','compropago'),
+					'title' => __('WebHook','compropago'),
 					'css' => 'color:#0000FF',
 					'type'	=> 'textarea',
-					'desc_tip' =>__('Ingrese ésta dirección en su  panel de ComproPago para poder recibir la confirmación de pagos','compropago'),
-					'description'=>__('Copie y Pegue la dirección en la sección de WebHooks de su panel en ComproPago para poder recibir la confirmación de pagos <a href="https://compropago.com/panel/webhooks" target="_new">Panel de Compropago:WebHooks</a>','compropago'),
+					'desc_tip' =>__('Set this Url at ComproPago Panel to use it  to confirm to your store when a payment has been confirmed','compropago'),
+					'description'=>__('Copy & Paste this Url to WebHooks section of your ComproPago Panel to recive instant notifications when a payment is confirmed <a href="https://compropago.com/panel/webhooks" target="_new">Compropago Panel:WebHooks</a>','compropago'),
 					'default'=> plugins_url( 'webhook.php', __FILE__ ), 
 			),
 			'showlogo' => array(
-					'title' => __( 'Estilo', 'compropago' ),
-					'label' => __( 'Activar Logos', 'compropago' ),
+					'title' => __( 'Show Logos', 'compropago' ),
+					'label' => __( 'Activate Logos', 'compropago' ),
 					'type' => 'checkbox',
-					'description' => __( 'Activa o desactiva los logos de las empresas en donde realizar el pago ', 'compropago' ),
+					'description' => __( 'Want to show store logos or a select box?', 'compropago' ),
 					'default' => 'yes'
 			),
 			'title' => array(
-					'title' => __( 'Title', 'woocommerce' ),
+					'title' => __( 'Title', 'compropago' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'compropago' ),
-					'default' => __( 'ComproPago', 'compropago' ),
+					'default' => __( 'ComproPago (OXXO, 7Eleven, etc.)', 'compropago' ),
 			),
 				
 			'description' => array(
 					'title' => __( 'Description', 'compropago' ),
 					'type' => 'textarea',
 					'description' => __( 'This controls the description which the user sees during checkout.', 'compropago' ),
-					'default' => "Con ComproPago puedes realizar tu pago en OXXO, 7Eleven y muchas tiendas más",
+					'default' => __('With ComproPago make your payment at OXXO, 7Eleven and more stores','compropago'),
 			),
 			'instrucciones' => array(
-					'title' => __( 'Texto Selección' ),
+					'title' => __( 'Selection Text','compropago' ),
 					'type' => 'text',
-					'description' => __( 'El texto que se muestra para invitar a seleccionar una tienda para realizar el pago', 'compropago' ),
-					'default' => 'Selecciona una tienda',
+					'description' => __( 'Instruction text to select a store', 'compropago' ),
+					'default' => __('Select a Store','compropago'),
 					
 			),
 			
@@ -202,7 +207,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
 		
 	}
-	
+	/**
+	 * Set ComproPago config 
+	 * @since 3.0.0
+	 */
 	private function setCompropagoConfig(){
 		global $wp_version;
 		global $woocommerce;
@@ -219,11 +227,12 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	 * @param unknown $order_id
 	 * @return array
 	 * @throws Compropago\Exception
+	 * @since 3.0.0
 	 * https://docs.woothemes.com/document/payment-gateway-api/
 	 */
 	public function process_payment( $order_id ) {
 		if(!$this->is_valid_for_use()){
-			wc_add_notice( __('Método de pago no disponible', 'compropago'),'error');
+			wc_add_notice( __('This payment method is not available.', 'compropago'),'error');
 			return;
 		}
 		
@@ -263,6 +272,17 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			
 			$compropagoResponse=$this->compropagoService->placeOrder($compropagoOrderData) ;
 			
+			if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
+					!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")
+					){
+				wc_add_notice( __('ComproPago Tables Not Found', 'compropago'),'error');
+				return;
+			}
+			if(!isset($compropagoResponse->status) && $compropagoResponse->status!='pending'){
+				wc_add_notice( __('ComproPago is not available', 'compropago'),'error');
+				return;
+			}
+			
 			$dbprefix=$wpdb->prefix;
 			
 			$recordTime=time();
@@ -293,9 +313,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'ioOut' 			=> $ioOut
 					)
 				);
-			
-			$response='Su orden de pago ComproPago se ha creado con éxito';
-			
+			//success
+			$response= __('Your payment order at ComproPago is ready', 'compropago');		
 			wc_add_notice($response, 'success' );
 			
 		} catch (Exception $e) {
@@ -303,9 +322,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			return;
 		
 		}
-		
-		
-		
+	
 		// estatus en de la orden onhold, webhook actualizara a pending 
 		$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
 		
@@ -321,11 +338,14 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 				'redirect' => $this->get_return_url( $order )		
 		);
 	}
-	
+	/**
+	 * Load store selector
+	 * @since 3.0.0
+	 */
 	public function payment_fields(){
 	
 		if(!$this->is_valid_for_use()){
-			echo( __('Método de pago no disponible', 'compropago'));
+			echo( __('This payment method is not available.', 'compropago'));
 			return;
 		}
 		try{
@@ -335,7 +355,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			
 			
 		} catch (Exception $e) {
-			wc_add_notice( __('Compropago error:', 'woothemes') . $e->getMessage(), 'error' );
+			wc_add_notice( __('Compropago error:', 'compropago') . $e->getMessage(), 'error' );
 			return;
 		    
 		}
@@ -348,9 +368,11 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
 	
 	/**
+	 * Validate store selected
 	 * @return true success
 	 * @return null on ErrorException
 	 * @throws WP exception
+	 * @since 3.0.0
 	 */
 	public function validate_fields() {
 		if(!isset($_POST['compropagoProvider']) || empty($_POST['compropagoProvider'])){
@@ -364,6 +386,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	/**
 	 * Compropago Valid Use Validation
 	 * @return boolean
+	 * @since 3.0.0
 	 */
 	public function is_valid_for_use() {
 		//solo acepta total en Pesos Mexicanos
