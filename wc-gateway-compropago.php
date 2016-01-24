@@ -47,8 +47,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->settings['webhook']=plugins_url( 'webhook.php', __FILE__ );
 		// Get setting values
 		//front end title and order method name on admin
-		//$this->title 		= $this->settings['title'];
-		$this->title 		= 'ComproPago';
+		$this->title 		= $this->settings['title'];
+		//$this->title 		= 'ComproPago';
 		$this->description 	= $this->settings['description'];
 		$this->showlogo 	= $this->settings['showlogo'];
 		$this->instrucciones 	= $this->settings['instrucciones'];
@@ -177,12 +177,12 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'description' => __( 'Activa o desactiva los logos de las empresas en donde realizar el pago ', 'compropago' ),
 					'default' => 'yes'
 			),
-		/*	'title' => array(
+			'title' => array(
 					'title' => __( 'Title', 'woocommerce' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'compropago' ),
 					'default' => __( 'ComproPago', 'compropago' ),
-			),*/
+			),
 				
 			'description' => array(
 					'title' => __( 'Description', 'compropago' ),
