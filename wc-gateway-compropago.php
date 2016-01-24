@@ -294,14 +294,12 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					)
 				);
 			
-			//uncomment if your store have custom thankyou page
-			//$response=(string)(Views::loadView('$compropagoResponse', $res,'ob'));
 			$response='Su orden de pago ComproPago se ha creado con éxito';
 			
 			wc_add_notice($response, 'success' );
 			
 		} catch (Exception $e) {
-			wc_add_notice( __('Compropago error:', 'woothemes') . $e->getMessage(), 'error' );
+			wc_add_notice( __('Compropago error:', 'compropago') . $e->getMessage(), 'error' );
 			return;
 		
 		}
@@ -312,7 +310,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
 		
 		// Reduce stock levels
-		//$order->reduce_order_stock();
+		$order->reduce_order_stock();
 		
 		// Remove cart
 		$woocommerce->cart->empty_cart();
