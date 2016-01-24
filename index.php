@@ -42,11 +42,9 @@ function compropago_activate() {
 	$dbprefix=$wpdb->prefix;
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	$queries=Compropago\Utils\Store::sqlDropTables($dbprefix);
-	foreach($queries as $drop){
-		
+	foreach($queries as $drop){	
 		dbDelta($drop);
 	}
-	//creates compropago tables
 	$queries=Compropago\Utils\Store::sqlCreateTables($dbprefix);
 	foreach($queries as $create){
 		if(!dbDelta($create))

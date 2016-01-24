@@ -46,7 +46,9 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->init_settings();
 		$this->settings['webhook']=plugins_url( 'webhook.php', __FILE__ );
 		// Get setting values
-		$this->title 		= $this->settings['title'];
+		//front end title and order method name on admin
+		//$this->title 		= $this->settings['title'];
+		$this->title 		= 'ComproPago';
 		$this->description 	= $this->settings['description'];
 		$this->showlogo 	= $this->settings['showlogo'];
 		$this->instrucciones 	= $this->settings['instrucciones'];
@@ -175,12 +177,12 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'description' => __( 'Activa o desactiva los logos de las empresas en donde realizar el pago ', 'compropago' ),
 					'default' => 'yes'
 			),
-			'title' => array(
+		/*	'title' => array(
 					'title' => __( 'Title', 'woocommerce' ),
 					'type' => 'text',
 					'description' => __( 'This controls the title which the user sees during checkout.', 'compropago' ),
 					'default' => __( 'ComproPago', 'compropago' ),
-			),
+			),*/
 				
 			'description' => array(
 					'title' => __( 'Description', 'compropago' ),
@@ -267,7 +269,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			$ioIn=base64_encode(json_encode($compropagoResponse));
 			$ioOut=base64_encode(json_encode($compropagoOrderData));
 			
-			$idCompropagoOrder=$wpdb->insert($dbprefix . 'compropago_orders', array(
+			$wpdb->insert($dbprefix . 'compropago_orders', array(
 					'date' 				=> $recordTime,
 					'modified' 			=> $recordTime,
 					'compropagoId'		=> $compropagoResponse->id,
@@ -279,7 +281,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'ioOut' 			=> $ioOut
 					)
 				);
-			
+			$idCompropagoOrder=$wpdb->insert_id;
 			//record transaction
 			$wpdb->insert($dbprefix . 'compropago_transactions', array(
 					'orderId' 			=> $idCompropagoOrder,
@@ -306,8 +308,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		
 		
 		
-		// estatus en de la orden onhold, webhook actualizara a confirmacion de pago
-		$order->update_status('on-hold', __( 'ComproPago - Pendiente', 'woocommerce' ));
+		// estatus en de la orden onhold, webhook actualizara a pending 
+		$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
 		
 		// Reduce stock levels
 		//$order->reduce_order_stock();
