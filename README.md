@@ -7,6 +7,8 @@ Este modulo provee el servicio de ComproPago para poder generar intenciones de p
 
 Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
 
+[Registrarse en ComproPago ] (https://compropago.com)
+
 
 ## Ayuda y Soporte de ComproPago
 
