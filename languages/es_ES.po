@@ -1,0 +1,255 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: ComproPago\n"
+"POT-Creation-Date: 2016-01-24 18:32-0600\n"
+"PO-Revision-Date: 2016-01-24 19:03-0600\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.6\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: index.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Last-Translator: \n"
+"Language: es\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: wc-gateway-compropago.php:46
+msgid ""
+"ComproPago allows you to accept payments at Mexico stores like OXXO, 7Eleven "
+"and More."
+msgstr ""
+"ComproPago le permite aceptar pagos en tiendas de México como OXXO, 7Eleven "
+"y más."
+
+#: wc-gateway-compropago.php:88
+msgid ""
+"Invalid Keys, The Public Key and Private Key must be valid before using this "
+"module."
+msgstr "Llaves Incorrectas, Sus llaves Pública y Privada deben ser válidas'"
+
+#: wc-gateway-compropago.php:92
+msgid "Your Keys and Your ComproPago account are set to different Modes."
+msgstr "Sus llaves y el modo de  su cuenta de ComproPago deben ser iguales"
+
+#: wc-gateway-compropago.php:96
+msgid "Your Store and Your ComproPago account are set to different Modes."
+msgstr ""
+"El modo de  su cuenta de ComproPago y el modo de su Tienda deben ser iguales"
+
+#: wc-gateway-compropago.php:100
+msgid "ComproPago ALERT:Your Keys are for a different Mode."
+msgstr "ALERTA ComproPago: Llaves para modo de ejecución diferente"
+
+#: wc-gateway-compropago.php:104
+msgid "WARNING: ComproPago account is Running in TEST Mode, NO REAL OPERATIONS"
+msgstr "PRECAUCIÓN: Ejecutando en modo de PRUEBAS, OPERACIONES NO REALES"
+
+#: wc-gateway-compropago.php:118
+msgid "The Public Key and Private Key must be set before using ComproPago"
+msgstr ""
+"Se debe configurar la llave Pública y la llave Privada antes de poder usar "
+"este módulo"
+
+#: wc-gateway-compropago.php:122
+msgid "ComproPago is not Enabled"
+msgstr "ComproPago no está habilitado"
+
+#: wc-gateway-compropago.php:138
+msgid "Enable/Disable"
+msgstr "Activar/desactivar"
+
+#: wc-gateway-compropago.php:139
+msgid "Enable Compropago"
+msgstr "Activar Compropago"
+
+#: wc-gateway-compropago.php:141
+msgid ""
+"Activate ComproPago payment method. (<a href=\"https://compropago.com/\" "
+"target=\"_new\">Sign Up for Compropago</a>)"
+msgstr ""
+"Activar ComproPago como método de pago. (<a href=\"https://compropago.com/\" "
+"target=\"_new\">Regístrate en Compropago</a>)"
+
+#: wc-gateway-compropago.php:150
+msgid "Public Key"
+msgstr "Llave Pública"
+
+#: wc-gateway-compropago.php:152 wc-gateway-compropago.php:159
+msgid ""
+"Get your keys: <a href=\"https://compropago.com/panel/configuracion\" target="
+"\"_new\">Compropago Panel</a>"
+msgstr ""
+"Conseguir las llaves: <a href=\"https://compropago.com/panel/configuracion\" "
+"target=\"_new\">Compropago Panel</a>"
+
+#: wc-gateway-compropago.php:157
+msgid "Private Key"
+msgstr "Llave Privada"
+
+#: wc-gateway-compropago.php:164
+msgid "Live Mode"
+msgstr "Modo Activo"
+
+#: wc-gateway-compropago.php:167
+msgid ""
+"Are you on live or testing?,Change your Keys according to the mode <a href="
+"\"https://compropago.com/panel/configuracion\" target=\"_new\">Compropago "
+"Panel</a>"
+msgstr ""
+"Modo Activo o de Pruebas?, cambie sus llaves de acuerdo al modo <a href="
+"\"https://compropago.com/panel/configuracion\" target=\"_new\">Compropago "
+"Panel</a>"
+
+#: wc-gateway-compropago.php:171
+msgid "WebHook"
+msgstr "WebHook"
+
+#: wc-gateway-compropago.php:174
+msgid ""
+"Set this Url at ComproPago Panel to use it  to confirm to your store when a "
+"payment has been confirmed"
+msgstr ""
+"Ingrese ésta dirección en su  panel de ComproPago para poder recibir la "
+"confirmación de pagos"
+
+#: wc-gateway-compropago.php:175
+msgid ""
+"Copy & Paste this Url to WebHooks section of your ComproPago Panel to recive "
+"instant notifications when a payment is confirmed <a href=\"https://"
+"compropago.com/panel/webhooks\" target=\"_new\">Compropago Panel:WebHooks</a>"
+msgstr ""
+"Copie y Pegue la dirección en la sección de WebHooks de su panel en "
+"ComproPago para poder recibir la confirmación de pagos <a href=\"https://"
+"compropago.com/panel/webhooks\" target=\"_new\">Compropago Panel: WebHooks</"
+"a>"
+
+#: wc-gateway-compropago.php:179
+msgid "Show Logos"
+msgstr "Mostrar logos"
+
+#: wc-gateway-compropago.php:180
+msgid "Activate Logos"
+msgstr "Activar Logos"
+
+#: wc-gateway-compropago.php:182
+msgid "Want to show store logos or a select box?"
+msgstr "Desea mostrar los logos de tiendas o una caja de selección"
+
+#: wc-gateway-compropago.php:186
+msgid "Title"
+msgstr "Título"
+
+#: wc-gateway-compropago.php:188
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+"Esto controla el título que el usuario ve durante la confirmación de la "
+"compra."
+
+#: wc-gateway-compropago.php:189
+msgid "ComproPago (OXXO, 7Eleven, etc.)"
+msgstr "ComproPago (OXXO, 7Eleven, etc..)"
+
+#: wc-gateway-compropago.php:193
+msgid "Description"
+msgstr "Descripción"
+
+#: wc-gateway-compropago.php:195
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+"Aquí se configura la descripción que los usuarios verán durante la "
+"finalización de la compra."
+
+#: wc-gateway-compropago.php:196
+msgid "With ComproPago make your payment at OXXO, 7Eleven and more stores"
+msgstr "Con ComproPago puede realizar su pago en OXXO, 7Eleven y más tiendas"
+
+#: wc-gateway-compropago.php:199
+msgid "Selection Text"
+msgstr "Texto de Selección "
+
+#: wc-gateway-compropago.php:201
+msgid "Instruction text to select a store"
+msgstr "Texto de instrucciones para seleccionar una tienda"
+
+#: wc-gateway-compropago.php:202
+msgid "Select a Store"
+msgstr "Seleccione una tienda"
+
+#: wc-gateway-compropago.php:235 wc-gateway-compropago.php:348
+msgid "This payment method is not available."
+msgstr "Este método de pago no está disponible."
+
+#: wc-gateway-compropago.php:278
+msgid "ComproPago Tables Not Found"
+msgstr "Tablas de ComproPago no encontradas"
+
+#: wc-gateway-compropago.php:282
+msgid "ComproPago is not available"
+msgstr "ComproPago no está disponible"
+
+#: wc-gateway-compropago.php:317
+msgid "Your payment order at ComproPago is ready"
+msgstr "Su orden de pago en ComproPago está lista"
+
+#: wc-gateway-compropago.php:321 wc-gateway-compropago.php:358
+msgid "Compropago error:"
+msgstr "Compropago error:"
+
+#: wc-gateway-compropago.php:327 webhook.php:184
+msgid "ComproPago - On Hold"
+msgstr "ComproPago - en espera"
+
+#: webhook.php:164
+msgid "ComproPago - Payment Confirmed"
+msgstr "ComproPago - pago confirmado"
+
+#: webhook.php:169
+msgid "ComproPago - Pending Payment"
+msgstr "ComproPago - pendiente de pago"
+
+#: webhook.php:172
+msgid "ComproPago - Declined"
+msgstr "ComproPago - rechazado"
+
+#: webhook.php:175
+msgid "ComproPago - Expired"
+msgstr "ComproPago - expirado"
+
+#: webhook.php:178
+msgid "ComproPago - Deleted"
+msgstr "ComproPago - eliminado"
+
+#: webhook.php:181
+msgid "ComproPago - Canceled"
+msgstr "ComproPago - cancelado"
+
+#. Plugin Name of the plugin/theme
+msgid "ComproPago"
+msgstr "ComproPago"
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.compropago.com/documentacion/plugins"
+msgstr "https://www.compropago.com/documentacion/plugins"
+
+#. Description of the plugin/theme
+msgid ""
+"Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en "
+"todo México."
+msgstr ""
+"Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en "
+"todo México."
+
+#. Author of the plugin/theme
+msgid "Compropago <contacto@compropago.com>"
+msgstr "Compropago <contacto@compropago.com>"
+
+#. Author URI of the plugin/theme
+msgid "https://www.compropago.com/"
+msgstr "https://www.compropago.com/"
