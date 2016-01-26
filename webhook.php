@@ -36,9 +36,10 @@ foreach($wpFiles as $wpFile){
 	}
 }
 //wordpress Rdy?
-if (!defined('WP_SITEURL')){
-	die("No se pudo inicializar WordPress");
-}
+// error de compatibilidad con combinaciones de php y wp
+//if (!defined('WP_SITEURL')){
+//	die("No se pudo inicializar WordPress");
+//}
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 //Check if WooCommerce is active
 if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
@@ -98,6 +99,11 @@ try{
 }catch (Exception $e) {
 	//something went wrong at sdk lvl
 	die($e->getMessage());
+}
+//api normalization
+if($jsonObj->api_version=='1.0'){
+	$jsonObj->id=$jsonObj->data->object->id;
+	$jsonObj->short_id=$jsonObj->data->object->short_id;  
 }
 //webhook Test?
 if($jsonObj->id=="ch_00000-000-0000-000000" || $jsonObj->short_id =="000000"){
