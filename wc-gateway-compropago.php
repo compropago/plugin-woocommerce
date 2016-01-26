@@ -314,8 +314,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					)
 				);
 			//success
-			$response= __('Your payment order at ComproPago is ready', 'compropago');		
-			wc_add_notice($response, 'success' );
+			wc_add_notice(__('Your payment order at ComproPago is ready', 'compropago'), 'success' );
 			
 		} catch (Exception $e) {
 			wc_add_notice( __('Compropago error:', 'compropago') . $e->getMessage(), 'error' );
