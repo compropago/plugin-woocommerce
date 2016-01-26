@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: ComproPago\n"
-"POT-Creation-Date: 2016-01-24 18:32-0600\n"
-"PO-Revision-Date: 2016-01-24 19:03-0600\n"
+"POT-Creation-Date: 2016-01-26 13:33-0600\n"
+"PO-Revision-Date: 2016-01-26 15:39-0600\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid ""
 "Invalid Keys, The Public Key and Private Key must be valid before using this "
 "module."
-msgstr "Llaves Incorrectas, Sus llaves Pública y Privada deben ser válidas'"
+msgstr "Llaves Incorrectas, Sus llaves Pública y Privada deben ser válidas"
 
 #: wc-gateway-compropago.php:92
 msgid "Your Keys and Your ComproPago account are set to different Modes."
@@ -74,8 +74,8 @@ msgid ""
 "Activate ComproPago payment method. (<a href=\"https://compropago.com/\" "
 "target=\"_new\">Sign Up for Compropago</a>)"
 msgstr ""
-"Activar ComproPago como método de pago. (<a href=\"https://compropago.com/\" "
-"target=\"_new\">Regístrate en Compropago</a>)"
+"Activar ComproPago como método de pago. (<a href=“https://compropago.com/“ "
+"target=“_new”>Regístrate en Compropago</a>)"
 
 #: wc-gateway-compropago.php:150
 msgid "Public Key"
@@ -86,8 +86,8 @@ msgid ""
 "Get your keys: <a href=\"https://compropago.com/panel/configuracion\" target="
 "\"_new\">Compropago Panel</a>"
 msgstr ""
-"Conseguir las llaves: <a href=\"https://compropago.com/panel/configuracion\" "
-"target=\"_new\">Compropago Panel</a>"
+"Conseguir las llaves: <a href=“https://compropago.com/panel/configuracion” "
+"target=“_new”>Compropago Panel</a>"
 
 #: wc-gateway-compropago.php:157
 msgid "Private Key"
@@ -103,8 +103,8 @@ msgid ""
 "\"https://compropago.com/panel/configuracion\" target=\"_new\">Compropago "
 "Panel</a>"
 msgstr ""
-"Modo Activo o de Pruebas?, cambie sus llaves de acuerdo al modo <a href="
-"\"https://compropago.com/panel/configuracion\" target=\"_new\">Compropago "
+"Modo Activo o de Pruebas?, cambie sus llaves de acuerdo al modo <a "
+"href=“https://compropago.com/panel/configuracion” target=“_new”>Compropago "
 "Panel</a>"
 
 #: wc-gateway-compropago.php:171
@@ -126,9 +126,8 @@ msgid ""
 "compropago.com/panel/webhooks\" target=\"_new\">Compropago Panel:WebHooks</a>"
 msgstr ""
 "Copie y Pegue la dirección en la sección de WebHooks de su panel en "
-"ComproPago para poder recibir la confirmación de pagos <a href=\"https://"
-"compropago.com/panel/webhooks\" target=\"_new\">Compropago Panel: WebHooks</"
-"a>"
+"ComproPago para poder recibir la confirmación de pagos <a href=“https://"
+"compropago.com/panel/webhooks” target=“_new”>Compropago Panel: WebHooks</a>"
 
 #: wc-gateway-compropago.php:179
 msgid "Show Logos"
@@ -196,7 +195,7 @@ msgstr "ComproPago no está disponible"
 
 #: wc-gateway-compropago.php:317
 msgid "Your payment order at ComproPago is ready"
-msgstr "Su orden de pago en ComproPago está lista"
+msgstr "Su orden de pago en ComproPago está lista."
 
 #: wc-gateway-compropago.php:321 wc-gateway-compropago.php:358
 msgid "Compropago error:"
