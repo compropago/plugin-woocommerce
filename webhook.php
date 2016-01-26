@@ -145,7 +145,7 @@ try{
 			die('Invalid Response type');
 	}
 
-	$sql = "SELECT * FROM ".$wpdb->prefix."compropago_orders	WHERE compropagoId = '".$response->id."' ";
+	$sql = "SELECT * FROM ".$wpdb->prefix."compropago_orders WHERE compropagoId = '".$response->id."' ";
 
 	if ($row = $wpdb->get_row($sql)){
 
