@@ -1,9 +1,15 @@
 # CHANGELOG
 
+## 3.0.1 2016-02-22
+* Note: Versión para clientes con php 5.3
+* Require: WooCommerce 2.5.0 +
+* Require: WordPress 4.4.1 +
+* Require: PHP >= 5.3
+
 ## 3.0.0 2016-01-24
 * Require: WooCommerce 2.5.0 +
 * Require: WordPress 4.4.1 +
-* Require: PHP >= 5.4
+* Require: PHP >= 5.3
 * Require: ComproPago SDK 1.0.3 +
 * https://s3.amazonaws.com/compropago/plugins/woocommerce/compropago-wc-3-0-0.zip
 
