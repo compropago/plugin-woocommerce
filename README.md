@@ -20,6 +20,7 @@ Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en tod
 ## Requerimientos
 * [WooCommerce 2.5.0 +] (https://www.woothemes.com/woocommerce/)
 * [WordPress 4.4.1 +] (https://wordpress.org/download/)
+* ComproPago PHP Sdk 1.0.x
 * [PHP >= 5.4](http://www.php.net/)
 * [PHP JSON extension](http://php.net/manual/en/book.json.php)
 * [PHP cURL extension](http://php.net/manual/en/book.curl.php)
@@ -77,8 +78,9 @@ Información de Comisiones y Horarios, como Transferir tu dinero y la Seguridad 
 
 | Version | Status      |  WordPress    |  WooCommerce  | PHP     | Archivo                    | 
 |---------|-------------|---------------|---------------|---------|----------------------------|
-| 3.0.x   | Latest      | 4.4.1 + 		| 2.5.0 + 		| 5.4 +   | [v3.0.x][compropago-3-0-x] |
 | 2.4.0   | EOL			| <= 4.4.0 		| <2.5			| 5.2 +   | [v2.4.0][compropago-2-4-0] |
+| 3.0.x   | Latest      | 4.4.1 + 		| 2.5.0 + 		| 5.4 +   | [v3.0.x][compropago-3-0-x] |
 
-[compropago-3-0-x]: https://s3.amazonaws.com/compropago/plugins/woocommerce/compropago-wc-3-0-0.zip
+
+[compropago-3-0-x]: https://s3.amazonaws.com/compropago/plugins/woocommerce/compropago-wc-3-0-1.zip
 [compropago-2-4-0]: https://s3.amazonaws.com/compropago/plugins/woocommerce/compropago-wc-2-4-0.zip
