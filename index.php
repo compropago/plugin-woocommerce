@@ -97,7 +97,8 @@ function woocommerce_compropago_init() {
 		$compropagoOrder=$dbprefix . 'compropago_orders';	
 		if($mylink = $wpdb->get_row( "SELECT * FROM ".$compropagoOrder." WHERE storeOrderId = '".$order_id."'" )){
 			//customize thankyou page here
-			$compropagoData->id=$mylink->compropagoId;	 
+		
+			$compropagoData=   new \ArrayObject(array('id'=>$mylink->compropagoId), \ArrayObject::STD_PROP_LIST | \ArrayObject::ARRAY_AS_PROPS);
 			Compropago\Controllers\Views::loadView('iframe',$compropagoData);
 		}
 	}
