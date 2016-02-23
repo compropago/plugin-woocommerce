@@ -22,14 +22,15 @@
  * @version 1.0.1
  */
  
-namespace Compropago\Http;
+namespace Compropago\Sdk\Http;
 
-use Compropago\Client;
-use Compropago\Exception;
-use Compropago\Http\Request;
+use Compropago\Sdk\Client;
+use Compropago\Sdk\Exception;
+use Compropago\Sdk\Http\Request;
 
 
-class Curl{
+class Curl
+{
 	/**
 	 * cURL hex representation of version 7.30.0
 	 * @since 1.0.1
@@ -53,7 +54,8 @@ class Curl{
 	 */
 	
 	//Singleton Curl or Client, or not?
-	public function __construct(){
+	public function __construct()
+	{
 		if (!extension_loaded('curl') || !function_exists('curl_init')) {
 			$error="Compropago no se puede ejecutar: se requiere la extensión Curl en el servidor";
 			throw new Exception($error);
@@ -68,7 +70,8 @@ class Curl{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function executeRequest(Request $request){
+	public function executeRequest(Request $request)
+	{
 		$curl = curl_init();
 		if ($request->getData() && $request->getRequestMethod()=='POST') {
 			curl_setopt($curl, CURLOPT_POSTFIELDS, $request->getData());
@@ -102,7 +105,7 @@ class Curl{
 			$error = curl_error($curl);
 			$code = curl_errno($curl);
 			if ($code == 60 || $code == 77) {
-				curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/cacerts.pem');
+				curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . '/cacerts.pem');
 				$response = curl_exec($curl);
 			}
 			if($response==false){
@@ -180,7 +183,8 @@ class Curl{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	private function parseArrayHeaders($rawHeaders){
+	private function parseArrayHeaders($rawHeaders)
+	{
 		$header_count = count($rawHeaders);
 		$headers = array();
 		for ($i = 0; $i < $header_count; $i++) {
@@ -200,7 +204,8 @@ class Curl{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	private function parseStringHeaders($rawHeaders){
+	private function parseStringHeaders($rawHeaders)
+	{
 		$headers = array();
 		$responseHeaderLines = explode("\r\n", $rawHeaders);
 		foreach ($responseHeaderLines as $headerLine) {

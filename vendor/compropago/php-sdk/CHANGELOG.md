@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## 1.1.0 2016-02-14
+* Require: PHP >= 5.5
+* Note: Merge Master
+
+## 1.1.0-rc 2016-02-14
+* Require: PHP >= 5.5
+* Marked: Cambio de namespace de Compropago a Compropago\Sdk
+* Note: Code Styling PSR-2
+* Note: Ajustes para optimizar PHP 5.5
+* Utilizing: __DIR__ en lugar de dirname(__FILE__)
+
+## 1.0.3 2016-01-24
+* Feature: Iframe view 
+* Bug Fix: Tpl errors
+* Note: versión estable para plugins Woocommerce 3.0.0 y Prestashop 2.0.0
+
+## 1.0.2 2016-01-18
+* Require: PHP >= 5.3
+* Bug Fix: Rest regresa correctament Headers, Body y Code del request
+* Bug Fix:Services procesa el body response
+* Feature: Services\evalAuth evalúa las llaves 
+* Added: Utils\Store  
+	* Evalúa el tipo de ejecución Client Keys vs Mode vs Compropago
+	* Métodos para obtener el SQL para tablas de control de ordenes y transacciones 
+* Feature: \Utils métodos para normalizar la respuesta entre diferentes versiones de API, para crear cargos y verificar cargos 
+* Bug Fix : Estandarización de TPL para uso correcto con smarty
+* Bug Fix: Request y Curl envía los query string de manera correcta
+* Added: Se incorpora Model\DataBase para esquema
+
 ## 1.0.1 2016-01-04
 Liberación de versión estable:
 * Require: PHP >= 5.3

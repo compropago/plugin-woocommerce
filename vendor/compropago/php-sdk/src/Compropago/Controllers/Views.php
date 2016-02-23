@@ -19,11 +19,12 @@
  * @author Rolando Lucio <rolando@compropago.com>
  * @version 1.0.1
  */
-namespace Compropago\Controllers;
+namespace Compropago\Sdk\Controllers;
 
-use Compropago\Exception;
+use Compropago\Sdk\Exception;
 
-class Views{
+class Views
+{
 	
 	/**
 	 * Views Loader
@@ -39,10 +40,11 @@ class Views{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public static function loadView($view='raw',$compropagoData=null,$method='include',$ext='php',$path=null){
+	public static function loadView($view='raw',$compropagoData=null,$method='include',$ext='php',$path=null)
+	{
 		if($path==null){
 			//path relativo al vendor Compropago/views
-			$path=dirname(__FILE__). '/../../../views/'.$ext.'/';
+			$path= __DIR__. '/../../../views/'.$ext.'/';
 		}
 		$filename=$path.$view.'.'.$ext;
 		if( !file_exists($filename) ){
@@ -71,7 +73,8 @@ class Views{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	private static function loadInclude($filename,$compropagoData){
+	private static function loadInclude($filename,$compropagoData)
+	{
 		require $filename;
 	}
 	
@@ -85,7 +88,8 @@ class Views{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	private static function loadOb($filename,$compropagoData){
+	private static function loadOb($filename,$compropagoData)
+	{
 		ob_start();
 		require $filename;
 		return ob_get_clean();

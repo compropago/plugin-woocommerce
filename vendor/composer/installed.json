@@ -1,28 +1,28 @@
 [
     {
         "name": "compropago/php-sdk",
-        "version": "dev-1.0.2-dev",
-        "version_normalized": "dev-1.0.2-dev",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/compropago/compropago-php.git",
-            "reference": "f74bf78f461443b4ac046d160f1304e2bde5a27f"
+            "reference": "9b295bddbad1b62d1cfd480c38443d3648a335fb"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/f74bf78f461443b4ac046d160f1304e2bde5a27f",
-            "reference": "f74bf78f461443b4ac046d160f1304e2bde5a27f",
+            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/9b295bddbad1b62d1cfd480c38443d3648a335fb",
+            "reference": "9b295bddbad1b62d1cfd480c38443d3648a335fb",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3"
+            "php": ">=5.5"
         },
-        "time": "2016-01-08 06:41:41",
+        "time": "2016-02-15 16:07:14",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Compropago\\": "src/"
+                "Compropago\\Sdk\\": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",

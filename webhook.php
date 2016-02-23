@@ -1,33 +1,16 @@
 <?php
-/*
-* Copyright 2015 Compropago. 
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+
 /**
  * @author Rolando Lucio <rolando@compropago.com>
  * @since 3.0.0
  */
 
-//validate request
-$request = @file_get_contents('php://input');
-if(!$jsonObj = json_decode($request)){
-	die('Tipo de Request no Valido');
-}
-//include wp files
 $wpFiles= array(
-		dirname(__FILE__).'/../../../wp-load.php',
+	dirname(__FILE__).'/../../../wp-load.php',
 );
+
+
+
 foreach($wpFiles as $wpFile){
 	if(file_exists($wpFile)){
 		include_once $wpFile;
@@ -35,16 +18,31 @@ foreach($wpFiles as $wpFile){
 		echo "ComproPago Warning: No se encontro el archivo:".$wpFile."<br>";
 	}
 }
+
+
+//validate request
+$request = @file_get_contents('php://input');
+if(!$jsonObj = json_decode($request)){
+	die('Tipo de Request no Valido');
+}
+
+
+
 //wordpress Rdy?
 // error de compatibilidad con combinaciones de php y wp
 //if (!defined('WP_SITEURL')){
 //	die("No se pudo inicializar WordPress");
 //}
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+
+
+
 //Check if WooCommerce is active
 if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 	die("No se pudo inicializar WooCommerce");
 }
+
+
 //include ComproPago SDK & dependecies via composer autoload
 $compropagoComposer= dirname(__FILE__).'/vendor/autoload.php';
 if ( file_exists( $compropagoComposer ) ){
@@ -52,6 +50,9 @@ if ( file_exists( $compropagoComposer ) ){
 }else{
 	die('No se encontro el autoload para Compropago y sus dependencias:'.$compropagoComposer);
 }
+
+
+
 //Compropago Plugin Active?
 if (!is_plugin_active( 'compropago/index.php' ) ){
 	die('ComproPago no se encuentra activo en Wordpress');
@@ -70,12 +71,17 @@ if (!isset($config['COMPROPAGO_PUBLICKEY']) || !isset($config['COMPROPAGO_PRIVAT
 			die("Se requieren las llaves de compropago");
 }
 
+
+
 //Compropago SDK config
 if($config['COMPROPAGO_MODE']=='yes'){
 	$moduleLive=true;
 }else {
 	$moduleLive=false;
 }
+
+
+
 $compropagoConfig= array(
 		'publickey'=>$config['COMPROPAGO_PUBLICKEY'],
 		'privatekey'=>$config['COMPROPAGO_PRIVATEKEY'],
@@ -84,31 +90,41 @@ $compropagoConfig= array(
 	
 );
 
+
+
 // consume sdk methods
 try{
-	$compropagoClient = new Compropago\Client($compropagoConfig);
-	$compropagoService = new Compropago\Service($compropagoClient);
+	$compropagoClient = new Compropago\Sdk\Client($compropagoConfig);
+	$compropagoService = new Compropago\Sdk\Service($compropagoClient);
 	// Valid Keys?
 	if(!$compropagoResponse = $compropagoService->evalAuth()){
 		die("ComproPago Error: Llaves no validas");
 	}
 	// Store Mode Vs ComproPago Mode, Keys vs Mode & combinations
-	if(! Compropago\Utils\Store::validateGateway($compropagoClient)){
+	if(! Compropago\Sdk\Utils\Store::validateGateway($compropagoClient)){
 		die("ComproPago Error: La tienda no se encuentra en un modo de ejecución valido");
 	}
 }catch (Exception $e) {
 	//something went wrong at sdk lvl
 	die($e->getMessage());
 }
+
+
+
 //api normalization
 if($jsonObj->api_version=='1.0'){
 	$jsonObj->id=$jsonObj->data->object->id;
 	$jsonObj->short_id=$jsonObj->data->object->short_id;  
 }
+
+
+
 //webhook Test?
 if($jsonObj->id=="ch_00000-000-0000-000000" || $jsonObj->short_id =="000000"){
 	die("Probando el WebHook?, <b>Ruta correcta.</b>");
 }
+
+
 
 try{
 	$response = $compropagoService->verifyOrder($jsonObj->id);
@@ -163,29 +179,41 @@ try{
 		    'wc-refunded'   => _x( 'Refunded', 'Order status', 'woocommerce' ),
 		    'wc-failed'     => _x( 'Failed', 'Order status', 'woocommerce' ),
 		  );
-		 */
+        */
 		$order = new WC_Order( $id_order );
 		switch($nomestatus){
 			case 'COMPROPAGO_SUCCESS':
-				$order->update_status('completed', __( 'ComproPago - Payment Confirmed', 'compropago' ));
-				//dont want to complete on payment use next line instead above
-				//$order->update_status('processing', __( 'ComproPago - Payment Confirmed', 'compropago' ));
-			break;
+                if($config['COMPROPAGO_COMPLETED_ORDER'] == 'fin'){
+                    $order->payment_complete();
+                }else{
+                    $order->update_status('processing', __( 'ComproPago - Payment Confirmed', 'compropago' ));
+                }
+			    break;
+
 			case 'COMPROPAGO_PENDING':
-				$order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
-			break;
+                $order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
+
+                if($config['COMPROPAGO_COMPLETED_ORDER'] == 'init'){
+                    $order->reduce_order_stock();
+                }
+			    break;
+
 			case 'COMPROPAGO_DECLINED':
 				$order->update_status('cancelled', __( 'ComproPago - Declined', 'compropago' ));
-			break;
+			    break;
+
 			case 'COMPROPAGO_EXPIRED':
 				$order->update_status('cancelled', __( 'ComproPago - Expired', 'compropago' ));
-			break;
+			    break;
+
 			case 'COMPROPAGO_DELETED':
 				$order->update_status('cancelled', __( 'ComproPago - Deleted', 'compropago' ));
-			break;
+			    break;
+
 			case 'COMPROPAGO_CANCELED':
 				$order->update_status('cancelled', __( 'ComproPago - Canceled', 'compropago' ));
-			break;			
+			    break;
+
 			default:
 				$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
 		}
@@ -222,6 +250,3 @@ try{
 	//something went wrong at sdk lvl
 	die($e->getMessage());
 }
-
-?>
-

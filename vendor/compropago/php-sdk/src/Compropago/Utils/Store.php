@@ -19,13 +19,11 @@
  * @since 1.0.2
  * @author Rolando Lucio <rolando@compropago.com>
  */
-namespace Compropago\Utils;
+namespace Compropago\Sdk\Utils;
 
-
-
-use Compropago\Client;
-use Compropago\Exception;
-use Compropago\Service;
+use Compropago\Sdk\Client;
+use Compropago\Sdk\Exception;
+use Compropago\Sdk\Service;
 
 class Store{
 	/**
@@ -34,7 +32,8 @@ class Store{
 	 * @param Client $Client
 	 * @since 1.0.2
 	 */
-	public static function validateGateway(Client $Client){
+	public static function validateGateway(Client $Client)
+	{
 		if(!isset($Client)){
 			return false;
 		}
@@ -66,14 +65,14 @@ class Store{
 		// Ok Move on
 		return true;
 	}
-	
-	
+
 	/**
 	 * SQL query for Droping ComproPago Tables
 	 * @return string[]
 	 * @since 1.0.2
 	 */
-	public static function sqlDropTables($prefix=null){
+	public static function sqlDropTables($prefix=null)
+	{
 		return array(
 				'DROP TABLE IF EXISTS `' . $prefix . 'compropago_orders`;',
 				'DROP TABLE IF EXISTS `' . $prefix . 'compropago_transactions`;'
@@ -84,9 +83,10 @@ class Store{
 	 * @return string[]
 	 * @since 1.0.2
 	 */
-	public static function sqlCreateTables($prefix=null){
+	public static function sqlCreateTables($prefix=null)
+	{
 		return array(
-			'CREATE TABLE `' . $prefix . 'compropago_orders` (
+				'CREATE TABLE `' . $prefix . 'compropago_orders` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`date` int(11) NOT NULL,
 			`modified` int(11) NOT NULL,
@@ -100,8 +100,8 @@ class Store{
 			PRIMARY KEY (`id`), UNIQUE KEY (`compropagoId`)
 	
 			)ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;',
-			
-			'CREATE TABLE `' . $prefix . 'compropago_transactions` (
+					
+				'CREATE TABLE `' . $prefix . 'compropago_transactions` (
 			`id` int(11) NOT NULL AUTO_INCREMENT,
 			`orderId` int(11) NOT NULL,
 			`date` int(11) NOT NULL,

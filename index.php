@@ -1,6 +1,6 @@
 <?php
 /*
- Plugin Name: ComproPago 
+ Plugin Name: ComproPago
  Plugin URI: https://www.compropago.com/documentacion/plugins
  Description: Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
  Version: 3.0.0
@@ -8,7 +8,7 @@
  Author URI: https://www.compropago.com/
  */
 /*
-* Copyright 2015 Compropago. 
+* Copyright 2015 Compropago.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -41,11 +41,11 @@ function compropago_activate() {
 	global $wpdb;
 	$dbprefix=$wpdb->prefix;
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	$queries=Compropago\Utils\Store::sqlDropTables($dbprefix);
+	$queries=Compropago\Sdk\Utils\Store::sqlDropTables($dbprefix);
 	foreach($queries as $drop){	
 		dbDelta($drop);
 	}
-	$queries=Compropago\Utils\Store::sqlCreateTables($dbprefix);
+	$queries=Compropago\Sdk\Utils\Store::sqlCreateTables($dbprefix);
 	foreach($queries as $create){
 		if(!dbDelta($create))
 			die('Unable to Create ComproPago Tables, module cant be installed');
@@ -79,10 +79,14 @@ function woocommerce_compropago_init() {
 		$methods[] = 'WC_Gateway_Compropago';
 		return $methods;
 	}
+
+
 	add_filter('woocommerce_payment_gateways', 'add_compropago_gateway' );
 	
 	
 	add_action( 'woocommerce_thankyou', 'compropago_receipt',1 );
+
+
 	/**
 	 * Hook receipt to thankyou page
 	 * @param unknown $order_id
@@ -99,7 +103,7 @@ function woocommerce_compropago_init() {
 			//customize thankyou page here
 		
 			$compropagoData=   new \ArrayObject(array('id'=>$mylink->compropagoId), \ArrayObject::STD_PROP_LIST | \ArrayObject::ARRAY_AS_PROPS);
-			Compropago\Controllers\Views::loadView('iframe',$compropagoData);
+			Compropago\Sdk\Controllers\Views::loadView('iframe',$compropagoData);
 		}
 	}
 }	
