@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/compropago-php-sdk/badge/?version=latest)](http://compropago-php-sdk.readthedocs.org/es/latest/?badge=latest)
+
 ComproPago, PHP API client (PHP-SDK)
 ==============================
 
@@ -26,7 +28,7 @@ Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en tod
 
 ## Requerimientos
 
-* [PHP >= 5.3](http://www.php.net/)
+* [PHP >= 5.5](http://www.php.net/)
 * [PHP JSON extension](http://php.net/manual/en/book.json.php)
 * [PHP cURL extension](http://php.net/manual/en/book.curl.php)
 
@@ -43,10 +45,16 @@ Para instalar la última versión **Estable de la SDK**, ejecuta el comando de C
 composer require compropago/php-sdk
 ```
 
+Posteriormente o en caso de erro de carga de archivos, volvemos a crear el autoload:
+   
+```bash
+composer dumpautoload -o
+```
+   
 O agregando manualmente al archivo composer.json
 ```bash
 "require": { 
-		"compropago/php-sdk":"^1.0"
+		"compropago/php-sdk":"^1.1"
 	}
 ```
 ```bash
@@ -67,7 +75,8 @@ composer update
 ### Instalación descargando archivo ZIP
 
 Descargar y descomprimir el archivo de la versión a utilizar:
-- [v.1.0.1] (https://s3.amazonaws.com/compropago/libraries/php/compropago-php-sdk-1-0-1.zip) Última Estable
+- [Última Estable] [compropago-estable-dl]
+
 
 Para poder hacer uso de la librería es **necesario incluir** el autoloader que se encuentra dentro de la carpeta **vendor** del archivo que descomprimió:
 ```php
@@ -80,9 +89,6 @@ Puede descargar alguna de las versiones que hemos publicado:
 
 O si o lo desea puede obtener el repositorio
  ```bash
- #Última Versión estable
-git clone -b 1.0.1 https://github.com/compropago/compropago-php.git
-
  #repositorio en su estado actual (*puede no ser versón estable*)
 git clone https://github.com/compropago/compropago-php.git
  ```
@@ -120,17 +126,17 @@ require 'vendor/autoload.php';
 ```
 El Namespace a utilizar dentro de la librería es **Compropago**.
 ```php
-use Compropago\Client; //Configuración de datos de conexión
-use Compropago\Service; //Llamados al API
-use Compropago\Controllers\Views;  //Inclusión de vistas, ej. Mostrar template de las tiendas donde pagar
+use Compropago\Sdk\Client; //Configuración de datos de conexión
+use Compropago\Sdk\Service; //Llamados al API
+use Compropago\Sdk\Controllers\Views;  //Inclusión de vistas, ej. Mostrar template de las tiendas donde pagar
 ```
 Los Namespaces para los métodos se pueden ocupar a su conveniencia. Para mayor información consulte la [documentación de PHP acerca de Namespaces] (http://php.net/manual/en/language.namespaces.basics.php) . ej:
 ```php
 /* Unqualified name */
-use Compropago\Client; 
+use Compropago\Sdk\Client; 
 $compropagoClient= new Client($compropagoConfig);
 /* Fully qualified name */
-$compropagoClient= new Compropago\Client($compropagoConfig);
+$compropagoClient= new Compropago\Sdk\Client($compropagoConfig);
 ```
 ### Configuración del Cliente 
 Para poder hacer uso del SDK y llamados al API es necesario que primero configure sus Llaves de conexión y crear un instancia de Client.
@@ -149,7 +155,7 @@ $compropagoConfig= array(
 				
 		);
 // Instancia del Client
-$compropagoClient= new Compropago\Client($compropagoConfig);
+$compropagoClient= new Compropago\Sdk\Client($compropagoConfig);
 ```
 ### Uso Básico del SDK
 
@@ -159,7 +165,7 @@ $compropagoClient= new Compropago\Client($compropagoConfig);
 #### Llamados al los servicios por SDK 
 Para utilizar los métodos se necesita tener una instancia de Service. La cual recibe de parámetro el objeto de Client. 
 ```php
-$compropagoService= new Compropago\Service($compropagoClient);
+$compropagoService= new Compropago\Sdk\Service($compropagoClient);
 ```
 #### Métodos base del SDK
 ##### Crear una nueva orden de Pago
@@ -214,7 +220,7 @@ $compropagoData['instrucciones']='Compropago Instrucciones';    // texto de inst
 <body>
 	<?php
 		//llamamos al controlador para mostrar el template 
-		Compropago\Controllers\Views::loadView('providers',$compropagoData);
+		Compropago\Sdk\Controllers\Views::loadView('providers',$compropagoData);
 	?>
 </body>
 </html>
@@ -233,7 +239,7 @@ Utilice el método estático Compropago\Http\Rest::doExecute para consumir direc
  * @param string $method             // método para consumir 'GET' o 'POST'
  * @return Array                    // asociativo con responseBody, responseHeaders, responseCode
  */
-Compropago\Http\Rest::doExecute(Client $client,$service=null,$query=FALSE,$method='GET');
+Compropago\Sdk\Http\Rest::doExecute(Client $client,$service=null,$query=FALSE,$method='GET');
 ```
 
 Por ejemplo para realizar una nueva orden de pago llamando directamente al API.
@@ -250,7 +256,7 @@ $data = array(
 		'payment_type'       => 'OXXO'                     // identificador de la tienda donde realizar el pago
 );
 
-$response=Compropago\Http\Rest::doExecute($compropagoClient,'charges/',$data,'POST'); // enviamos la información de la orden y obtenemos la respuesta del API 
+$response=Compropago\Sdk\Http\Rest::doExecute($compropagoClient,'charges/',$data,'POST'); // enviamos la información de la orden y obtenemos la respuesta del API 
 
 $body = json_decode( $response['responseBody'] );   // El cuerpo de la respuesta, volvemos el objeto JSON para procesarlo
 $headers = $response['responseHeaders'];            // Los encabezados de la respuesta
@@ -265,9 +271,12 @@ $code = $response['responseCode'];                 // el código de la respuesta
 
 ## Guía de Versiones
 
-| Version | Status      | Packagist            | Namespace    | Repo                      | Docs                      | 
-|---------|-------------|----------------------|--------------|---------------------------|---------------------------|
-| 1.0.x   | Latest      | `compropago/php-sdk` | `Compropago` | [v1.0.x][compropago-repo] | [v1][compropago-1-docs]   | 
+| Version | Status      | Packagist            | Namespace    | PHP | Repo                      | Docs                      | 
+|---------|-------------|----------------------|--------------|-----|---------------------------|---------------------------|
+| 1.0.x   | Maintained  | `compropago/php-sdk` | `Compropago` | 5.3 + | [v1.0.x][compropago-repo-1-0-x] | [v1][compropago-1-docs]   | 
+| 1.1.x   | Latest      | `compropago/php-sdk` | `Compropago\Sdk` | 5.5 + | [v1.1.x][compropago-repo] | [v1][compropago-1-docs]   |
 
 [compropago-repo]: https://github.com/compropago/compropago-php
+[compropago-repo-1-0-x]: https://github.com/compropago/compropago-php/tree/1.0.x
 [compropago-1-docs]: https://compropago.com/documentacion/api
+[compropago-estable-dl]: https://s3.amazonaws.com/compropago/libraries/php/compropago-php-sdk-1-1-0.zip

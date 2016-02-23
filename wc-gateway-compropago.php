@@ -1,26 +1,15 @@
 <?php
-/*
-* Copyright 2015 Compropago. 
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
 /**
  * @author Rolando Lucio <rolando@compropago.com>
  * @since 3.0.0
  */
-use Compropago\Client;
-use Compropago\Service;
-use Compropago\Controllers\Views;
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+use Compropago\Sdk\Client;
+use Compropago\Sdk\Service;
+use Compropago\Sdk\Controllers\Views;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
@@ -34,16 +23,22 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
 	private $controlVision;
 	private $modopruebas;
+
+    private $debug;
+
+    const TEMPLATEALERT = __DIR__."/templates/alert.html";
 	
 	/**
 	 * init compropago
 	 * @since 3.0.0
 	 */
 	public function __construct(){
+		global $woocommerce;
+
 		$this->id='compropago';
 		$this->has_fields=true;
 		$this->method_title='ComproPago';
-		$this->method_description=__('ComproPago allows you to accept payments at Mexico stores like OXXO, 7Eleven and More.','compropago');
+		$this->method_description=__('<p>ComproPago allows you to accept payments at Mexico stores like OXXO, 7Eleven and More.</p>','compropago');
 		
 		$this->init_form_fields();
 		
@@ -61,12 +56,30 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		$this->privatekey 	= $this->settings['COMPROPAGO_PRIVATEKEY'];
 		
 		$this->modopruebas 	= $this->settings['COMPROPAGO_MODE'];
-		
+
+        $this->debug = $this->settings['debug'];
+        $this->completeorder = $this->settings['COMPROPAGO_COMPLETED_ORDER'];
+
 		//paso despues de selccion de gateway
 		$this->has_fields	= true;
 		$this->controlVision='no';
+
+        // Logs
+        if ( 'yes' == $this->debug ) {
+            if ( floatval( $woocommerce->version ) >= 2.1 ) {
+                if ( class_exists( 'WC_Logger' ) ) {
+                    $this->log = new WC_Logger();
+                } else {
+                    $this->log = WC()->logger();
+                }
+            }else{
+                $this->log = $woocommerce->logger();
+            }
+        }
 		
-	
+
+        $flagerror = false;
+        $alert = file_get_contents(self::TEMPLATEALERT);
 		
 		
 		$this->setCompropagoConfig();
@@ -86,22 +99,27 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 						//eval keys
 						if(!$compropagoResponse = $this->compropagoService->evalAuth()){
 							$this->settings['COMPROPAGO_ERRORS'] = __('Invalid Keys, The Public Key and Private Key must be valid before using this module.','compropago');
+                            $flagerror = true;
 						}else{
 							if($compropagoResponse->mode_key != $compropagoResponse->livemode){
 								// compropagoKey vs compropago Mode
 								$this->settings['COMPROPAGO_ERRORS'] = __('Your Keys and Your ComproPago account are set to different Modes.','compropago');
+                                $flagerror = true;
 							}else{
 								if($moduleLive != $compropagoResponse->livemode){
 									// store Mode vs compropago Mode
 									$this->settings['COMPROPAGO_ERRORS'] = __('Your Store and Your ComproPago account are set to different Modes.','compropago');
+                                    $flagerror = true;
 								}else{
 									if($moduleLive != $compropagoResponse->mode_key){
 										// store Mode vs compropago Keys
 										$this->settings['COMPROPAGO_ERRORS'] = __('ComproPago ALERT:Your Keys are for a different Mode.','compropago');
+                                        $flagerror = true;
 									}else{
 										if(!$compropagoResponse->mode_key && !$compropagoResponse->livemode){
 											//can process orders but watch out, NOT live operations just testing
 											$this->settings['COMPROPAGO_ERRORS'] = __('WARNING: ComproPago account is Running in TEST Mode, NO REAL OPERATIONS','compropago');
+                                            $flagerror = true;
 										}else{
 											$this->settings['COMPROPAGO_ERRORS'] = '';
 										}
@@ -112,16 +130,27 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					}catch (Exception $e) {
 						//something went wrong on the SDK side
 						$this->settings['COMPROPAGO_ERRORS'] = $e->getMessage(); //may not be show or translated
+
+                        $this->log->add('compropago',$e->getMessage());
+
+                        $flagerror = true;
 					}
 					
 			}else{
 				$this->settings['COMPROPAGO_ERRORS']=__('The Public Key and Private Key must be set before using ComproPago','compropago');
 				$this->controlVision='no';
+                $flagerror = true;
 			}
 		}else{
 			$this->settings['COMPROPAGO_ERRORS']=__('ComproPago is not Enabled','compropago');
 			$this->controlVision='no';
+            $flagerror = true;
 		}
+
+        if($flagerror){
+            $alert = str_replace(":message:",$this->settings['COMPROPAGO_ERRORS'],$alert);
+            $this->method_description .= $alert;
+        }
 		
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		
@@ -141,67 +170,77 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 					'description'	=> __('Activate ComproPago payment method. (<a href="https://compropago.com/" target="_new">Sign Up for Compropago</a>)','compropago'),
 					'default' 		=> 'no'
 			),
-			'COMPROPAGO_ERRORS' => array(
-					'type' => 'textarea',
-					'default' => '',
-					'css' => 'color:#FF8C00;'
-			),
-			'COMPROPAGO_PUBLICKEY' => array(
-					'title' => __( 'Public Key','compropago' ),
-					'type' => 'text',
-					'description' => __( 'Get your keys: <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
-					'default' => '',
-					'css' => "width: 300px;"
+			'COMPROPAGO_PUBLICKEY'  => array(
+					'title'         => __( 'Public Key','compropago' ),
+					'type'          => 'text',
+					'description'   => __( 'Get your keys: <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
+                    'default'       => '',
+					'css'           => "width: 300px;"
 			),
 			'COMPROPAGO_PRIVATEKEY' => array(
-					'title' => __( 'Private Key','compropago'),
-					'type' => 'text',
-					'description' => __( 'Get your keys: <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
-					'default' => '',
-					'css' => "width: 300px;"
+					'title'         => __( 'Private Key','compropago'),
+					'type'          => 'text',
+					'description'   => __( 'Get your keys: <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
+					'default'       => '',
+					'css'           => "width: 300px;"
 			),
 			'COMPROPAGO_MODE' => array(
-					'title' => __( 'Live Mode', 'compropago' ),
+					'title'         => __( 'Active Mode', 'compropago' ),
 					//'label' => __( 'Cambiar a modo Activo', 'compropago' ),
-					'type' => 'checkbox',
-					'description' => __( 'Are you on live or testing?,Change your Keys according to the mode <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
-					'default' => 'no'
+					'type'          => 'checkbox',
+					'description'   => __( 'Are you on live or testing?,Change your Keys according to the mode <a href="https://compropago.com/panel/configuracion" target="_new">Compropago Panel</a>', 'compropago' ),
+					'default'       => 'no'
 			),
 			'webhook' => array(
-					'title' => __('WebHook','compropago'),
-					'css' => 'color:#0000FF',
-					'type'	=> 'textarea',
-					'desc_tip' =>__('Set this Url at ComproPago Panel to use it  to confirm to your store when a payment has been confirmed','compropago'),
-					'description'=>__('Copy & Paste this Url to WebHooks section of your ComproPago Panel to recive instant notifications when a payment is confirmed <a href="https://compropago.com/panel/webhooks" target="_new">Compropago Panel:WebHooks</a>','compropago'),
-					'default'=> plugins_url( 'webhook.php', __FILE__ ), 
+					'title'         => __('WebHook','compropago'),
+					'css'           => 'color:#0000FF',
+					'type'	        => 'textarea',
+					'desc_tip'      =>__('Set this Url at ComproPago Panel to use it  to confirm to your store when a payment has been confirmed','compropago'),
+					'description'   =>__('Copy & Paste this Url to WebHooks section of your ComproPago Panel to recive instant notifications when a payment is confirmed <a href="https://compropago.com/panel/webhooks" target="_new">Compropago Panel:WebHooks</a>','compropago'),
+					'default'       => plugins_url( 'webhook.php', __FILE__ ),
 			),
 			'showlogo' => array(
-					'title' => __( 'Show Logos', 'compropago' ),
-					'label' => __( 'Activate Logos', 'compropago' ),
-					'type' => 'checkbox',
-					'description' => __( 'Want to show store logos or a select box?', 'compropago' ),
-					'default' => 'yes'
+					'title'         => __( 'Show Logos', 'compropago' ),
+					'label'         => __( 'Activate Logos', 'compropago' ),
+					'type'          => 'checkbox',
+					'description'   => __( 'Want to show store logos or a select box?', 'compropago' ),
+					'default'       => 'yes'
 			),
 			'title' => array(
-					'title' => __( 'Title', 'compropago' ),
-					'type' => 'text',
-					'description' => __( 'This controls the title which the user sees during checkout.', 'compropago' ),
-					'default' => __( 'ComproPago (OXXO, 7Eleven, etc.)', 'compropago' ),
+					'title'         => __( 'Title', 'compropago' ),
+					'type'          => 'text',
+					'description'   => __( 'This controls the title which the user sees during checkout.', 'compropago' ),
+					'default'       => __( 'ComproPago (OXXO, 7Eleven, etc.)', 'compropago' ),
 			),
-				
 			'description' => array(
-					'title' => __( 'Description', 'compropago' ),
-					'type' => 'textarea',
-					'description' => __( 'This controls the description which the user sees during checkout.', 'compropago' ),
-					'default' => __('With ComproPago make your payment at OXXO, 7Eleven and more stores','compropago'),
+					'title'         => __( 'Description', 'compropago' ),
+					'type'          => 'textarea',
+					'description'   => __( 'This controls the description which the user sees during checkout.', 'compropago' ),
+					'default'       => __('With ComproPago make your payment at OXXO, 7Eleven and more stores','compropago'),
 			),
 			'instrucciones' => array(
-					'title' => __( 'Selection Text','compropago' ),
-					'type' => 'text',
-					'description' => __( 'Instruction text to select a store', 'compropago' ),
-					'default' => __('Select a Store','compropago'),
+					'title'         => __( 'Selection Text','compropago' ),
+					'type'          => 'text',
+					'description'   => __( 'Instruction text to select a store', 'compropago' ),
+					'default'       => __('Select a Store','compropago'),
 					
 			),
+            'COMPROPAGO_COMPLETED_ORDER' => array(
+                'title'             => __( 'Complete order', 'compropago' ),
+                'type'              => 'select',
+                'description'       => __( 'It indicates the time when the stock is reduced.', 'compropago' ),
+                'options'           => array(
+                                        'init' => 'At place order',
+                                        'fin' => 'At complete order',
+                                        'no' => 'Notingh'
+                                    )
+            ),
+            'debug' => array(
+                'title'             => __( 'Debug', 'woocommerce' ),
+                'type'              => 'checkbox',
+                'label'             => __( 'Enable logging (<code>woocommerce/logs/compropago.txt</code>)', 'woocommerce' ),
+                'default'           => 'yes'
+            )
 			
 		);
 	
@@ -224,9 +263,9 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	
 	/**
 	 * handling payment and processing the order
-	 * @param unknown $order_id
+	 * @param $order_id
 	 * @return array
-	 * @throws Compropago\Exception
+	 * @throws Compropago\Sdk\Exception
 	 * @since 3.0.0
 	 * https://docs.woothemes.com/document/payment-gateway-api/
 	 */
@@ -252,16 +291,15 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 		*/
 		
 		 $compropagoOrderData = array(
-		 'order_id'    		 => $order_id,
-		 'order_price'       => $order->get_total(),
-		 //'order_name'        => 'No. orden: '.$order_id.$orderDetails,
-		 'order_name'        => 'No. orden: '.$order_id,
-		 'customer_name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
-		 'customer_email'    => $order->billing_email,
-		 'payment_type'     => $this->orderProvider,
-		 'app_client_name'	=>	'woocommerce',
-		 'app_client_version' => $woocommerce->version
-		 
+             'order_id'    		 => $order_id,
+             'order_price'       => $order->get_total(),
+             //'order_name'        => 'No. orden: '.$order_id.$orderDetails,
+             'order_name'        => 'No. orden: '.$order_id,
+             'customer_name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
+             'customer_email'    => $order->billing_email,
+             'payment_type'     => $this->orderProvider,
+             'app_client_name'	=>	'woocommerce',
+             'app_client_version' => $woocommerce->version
 		 );
 	   
 		try{
@@ -272,15 +310,11 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			
 			$compropagoResponse=$this->compropagoService->placeOrder($compropagoOrderData) ;
 			
-			if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
-					!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")
-					){
-				wc_add_notice( __('ComproPago Tables Not Found', 'compropago'),'error');
-				return;
+			if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||	!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")){
+                throw new Exception('ComproPago Tables Not Found');
 			}
 			if(!isset($compropagoResponse->status) && $compropagoResponse->status!='pending'){
-				wc_add_notice( __('ComproPago is not available', 'compropago'),'error');
-				return;
+                throw new Exception('ComproPago is not available');
 			}
 			
 			$dbprefix=$wpdb->prefix;
@@ -320,25 +354,32 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			
 		} catch (Exception $e) {
 			wc_add_notice( __('Compropago error:', 'compropago') . $e->getMessage(), 'error' );
+
+            $this->log->add('compropago',$e->getMessage());
+
 			return;
 		
 		}
 	
 		// estatus en de la orden onhold, webhook actualizara a pending 
 		$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
-		
-		// Reduce stock levels
-		$order->reduce_order_stock();
+
+        if($this->settings['COMPROPAGO_COMPLETED_ORDER'] == 'init') {
+            // Reduce stock levels
+            $order->reduce_order_stock();
+        }
 		
 		// Remove cart
 		$woocommerce->cart->empty_cart();
 		
 		// Return thankyou redirect
 		return array(
-				'result' => 'success',
-				'redirect' => $this->get_return_url( $order )		
+            'result' => 'success',
+            'redirect' => $this->get_return_url( $order )
 		);
 	}
+
+
 	/**
 	 * Load store selector
 	 * @since 3.0.0
@@ -349,21 +390,23 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			echo( __('This payment method is not available.', 'compropago'));
 			return;
 		}
+
 		try{
-			
 			$this->compropagoClient = new Client($this->compropagoConfig);
 			$this->compropagoService = new Service($this->compropagoClient);
-			
-			
 		} catch (Exception $e) {
 			wc_add_notice( __('Compropago error:', 'compropago') . $e->getMessage(), 'error' );
+            $this->log->add('compropago',$e->getMessage());
 			return;
-		    
 		}
+
+
 		$data['providers']=$this->compropagoService->getProviders();
 		$data['showlogo']=$this->showlogo;
 		$data['description']=$this->description;
 		$data['instrucciones']=$this->instrucciones;
+
+
 		Views::loadView('providers',$data);		
 	}
 	
@@ -377,13 +420,14 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 	 */
 	public function validate_fields() {
 		if(!isset($_POST['compropagoProvider']) || empty($_POST['compropagoProvider'])){
-		
 			$this->orderProvider='OXXO';
 		}else{
 			$this->orderProvider=$_POST['compropagoProvider'];
 		}
 		return true;
 	}
+
+
 	/**
 	 * Compropago Valid Use Validation
 	 * @return boolean
@@ -395,13 +439,14 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway {
 			try {	
 				$this->compropagoClient = new Client($this->compropagoConfig);
 				
-				if(! Compropago\Utils\Store::validateGateway($this->compropagoClient)){
+				if(! Compropago\Sdk\Utils\Store::validateGateway($this->compropagoClient)){
 					//wc_add_notice("ComproPago Error: La tienda no se encuentra en un modo de ejecución valido",'error');
 					return false;
 				}
 				return true;
 			} catch (Exception $e) {
 				//wc_add_notice( __('Compropago error:', 'compropago') . $e->getMessage(), 'error' );
+                $this->log->add('compropago',$e->getMessage());
 				return false;
 			}
 		}else{

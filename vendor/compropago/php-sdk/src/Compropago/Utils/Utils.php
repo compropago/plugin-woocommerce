@@ -18,9 +18,10 @@
  * @author Rolando Lucio <rolando@compropago.com>
  * @since 1.0.1
  */
-namespace Compropago\Utils;
+namespace Compropago\Sdk\Utils;
 
-class Utils{
+class Utils
+{
 
 	/**
 	 * Normalize all keys in an array to lower-case.
@@ -59,7 +60,8 @@ class Utils{
 	 * @param string $prefix
 	 * @since 1.0.1
 	 */
-	public static function encodeQueryString( $query, $prefix=null) {
+	public static function encodeQueryString( $query, $prefix=null) 
+	{
 		if (!is_array($query)){
 			if (parse_url($query, PHP_URL_QUERY)){
 				return $query;
@@ -79,7 +81,8 @@ class Utils{
 	 * @throws Exception
 	 * @since 1.0.2
 	 */
-	public static function normalizeResponse($json){
+	public static function normalizeResponse($json)
+	{
 		if(!json_encode($json)){
 			throw new Exception('Invalid Object Type');
 		}
@@ -116,7 +119,8 @@ class Utils{
 	 * @throws Exception
 	 * @since 1.0.2
 	 */
-	private static function normalizeVerify($json){
+	private static function normalizeVerify($json)
+	{
 		if(!json_encode($json)){
 			throw new Exception('Invalid Object Type');
 		}
@@ -166,7 +170,8 @@ class Utils{
 	 * @throws Exception
 	 * @since 1.0.2
 	 */
-	private static function normalizeCharge($json){
+	private static function normalizeCharge($json)
+	{
 		if(!json_encode($json)){
 			throw new Exception('Invalid Object Type');
 		}
