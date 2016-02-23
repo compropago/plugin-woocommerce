@@ -19,12 +19,13 @@
  * @author Rolando Lucio <rolando@compropago.com>
  * @version 1.0.1
  */
-namespace Compropago\Http;
+namespace Compropago\Sdk\Http;
 
-use Compropago\Utils\Utils;
-use Compropago\Exception;
+use Compropago\Sdk\Utils\Utils;
+use Compropago\Sdk\Exception;
 
-class Request{
+class Request
+{
 	
 	protected $userAgent;
 	protected $requestMethod;
@@ -46,7 +47,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function __construct($url,$method = 'GET',$headers = array(),$data = null) {
+	public function __construct($url,$method = 'GET',$headers = array(),$data = null) 
+	{
 		if(empty($url)){
 			throw new Exception('Missing Url');
 		}
@@ -61,7 +63,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setUrl($url){
+	public function setUrl($url)
+	{
 		$this->url=$url;
 	}
 	/**
@@ -70,7 +73,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setServiceUrl($service){
+	public function setServiceUrl($service)
+	{
 		if($service){
 			$this->serviceUrl=$this->url.$service;
 			$this->service=$service;
@@ -82,7 +86,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1 
 	 */
-	public function getServiceUrl(){
+	public function getServiceUrl()
+	{
 		return (isset($this->serviceUrl) && !empty($this->serviceUrl)) ? $this->serviceUrl : $this->url;
 	}
 	/**
@@ -92,7 +97,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setAuth($arr){
+	public function setAuth($arr)
+	{
 		if(!is_array($arr)){
 			return false;
 		}
@@ -104,7 +110,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function getAuth(){
+	public function getAuth()
+	{
 		return $this->auth;
 	}
 	
@@ -114,7 +121,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setOptions($options){
+	public function setOptions($options)
+	{
 	    $this->options = array_merge($options, $this->options);
 	}
 	/**
@@ -122,7 +130,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function getOptions(){
+	public function getOptions()
+	{
 		return $this->options;
 	}
 	
@@ -133,7 +142,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setMethodOptions($method){
+	public function setMethodOptions($method)
+	{
 		switch ($method){
 			case 'GET':
 				$this->setOptions(array(CURLOPT_HTTPGET=>1));
@@ -168,7 +178,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setRequestMethod($method){
+	public function setRequestMethod($method)
+	{
 		$this->requestMethod = strtoupper($method);
 		return true;
 	}
@@ -178,7 +189,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setRequestHeaders($headers){
+	public function setRequestHeaders($headers)
+	{
 		$headers = Utils::normalize($headers);
 		if ($this->requestHeaders) {
 			$headers = array_merge($this->requestHeaders, $headers);
@@ -190,7 +202,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function getRequestHeaders(){
+	public function getRequestHeaders()
+	{
 		return $this->requestHeaders;
 	}
 	/**
@@ -201,7 +214,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setUserAgent($suffix,$prefix,$contained=null){
+	public function setUserAgent($suffix,$prefix,$contained=null)
+	{
 		$this->userAgent= ($contained) ? $suffix.$prefix.' ('.$contained.')' : $suffix.$prefix;
 	}
 	/**
@@ -209,7 +223,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function getUserAgent(){
+	public function getUserAgent()
+	{
 		return $this->userAgent;
 	}
 	/**
@@ -217,7 +232,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function getRequestMethod(){
+	public function getRequestMethod()
+	{
 		return $this->requestMethod;
 	}
 	
@@ -227,10 +243,13 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function setData($data){
+	public function setData($data)
+	{
 		$this->data=$data;
 	}
-	public function getData(){
+	
+	public function getData()
+	{
 		return $this->data;
 	}
 	
@@ -241,7 +260,8 @@ class Request{
 	 * @since 1.0.1
 	 * @version 1.0.1
 	 */
-	public function evalData(){
+	public function evalData()
+	{
 	    if (($this->getRequestMethod() == "POST" || $this->getRequestMethod() == "PUT" ) && !empty($this->data)) {
 	    	if(!json_decode($this->data)){
 	    		throw new Exception('Invalid Json for Data');

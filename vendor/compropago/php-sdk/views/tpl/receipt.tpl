@@ -16,7 +16,7 @@
 * Receipt TPL template
 * 
 * @author Rolando Lucio <rolando@compropago.com>
-* @since 1.0.1
+* @since 1.0.1 
 *}
 
 <div id="compropagoWrapper">

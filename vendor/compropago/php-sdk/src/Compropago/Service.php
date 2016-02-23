@@ -19,11 +19,11 @@
  * @author Rolando Lucio <rolando@compropago.com>
  */
 
-namespace Compropago;
+namespace Compropago\Sdk;
 
-use Compropago\Client;
-use Compropago\Http\Rest;
-use Compropago\Utils\Utils;
+use Compropago\Sdk\Client;
+use Compropago\Sdk\Http\Rest;
+use Compropago\Sdk\Utils\Utils;
 
 
 class Service{
@@ -36,7 +36,8 @@ class Service{
 	 * @param Compropago\Client $client
 	 * @since 1.0.1
 	 */
-	public function __construct(Client $client){
+	public function __construct(Client $client)
+	{
 		$this->client=$client;
 	}
 	/**
@@ -45,7 +46,8 @@ class Service{
 	 * @retunr json responseBody
 	 * @since 1.0.2
 	 */
-	public function evalAuth(){
+	public function evalAuth()
+	{
 		
 		$response=Rest::doExecute($this->client,'users/auth');
 		
@@ -72,7 +74,8 @@ class Service{
 	 * @return json
 	 * @since 1.0.1
 	 */
-	public function getProviders(){
+	public function getProviders()
+	{
 		$response=Rest::doExecute($this->client,'providers/true');
 		$jsonObj= json_decode($response['responseBody']);	
 		usort($jsonObj, function($a, $b) { 
@@ -86,7 +89,8 @@ class Service{
 	 * @return json
 	 * @since 1.0.1
 	 */
-	public function verifyOrder( $orderId ){
+	public function verifyOrder( $orderId )
+	{
 		$response=Rest::doExecute($this->client,'charges/'.$orderId);
 		$jsonObj= json_decode($response['responseBody']);
 		
@@ -102,7 +106,8 @@ class Service{
 	 * @param array $params
 	 * @since 1.0.1
 	 */
-	public function placeOrder( $params ){
+	public function placeOrder( $params )
+	{
 		$response=Rest::doExecute($this->client,'charges/',$params,'POST');
 		$jsonObj= json_decode($response['responseBody']);
 		

@@ -19,11 +19,12 @@
  * @since 1.0.2
  */
 
-namespace Compropago\Models;
+namespace Compropago\Sdk\Models;
 
 //use Compropago\Exception;
 
-class DataBase{
+class DataBase
+{
 	
 	private $prefix;
 	

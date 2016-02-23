@@ -22,16 +22,16 @@
 * @version 1.0.1
 */
 
-namespace Compropago\Http;
+namespace Compropago\Sdk\Http;
 
-use Compropago\Http\Curl;
-
-use Compropago\Client;
-use Compropago\Exception;
-
+use Compropago\Sdk\Http\Curl;
+use Compropago\Sdk\Client;
+use Compropago\Sdk\Exception;
 
 
-class Rest{
+
+class Rest
+{
 	
 /**
  * Base Rest Request
@@ -44,7 +44,8 @@ class Rest{
  * @since 1.0.1
  * @version 1.0.1
  */
-	public static function doExecute(Client $client,$service=null,$query=FALSE,$method='GET') {
+	public static function doExecute(Client $client,$service=null,$query=FALSE,$method='GET') 
+	{
 		if(!isset($client)){
 			throw new Exception('Client Required');
 		}
