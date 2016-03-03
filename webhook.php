@@ -193,9 +193,9 @@ try{
 			case 'COMPROPAGO_PENDING':
                 $order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
 
-                if($config['COMPROPAGO_COMPLETED_ORDER'] == 'init'){
+                /*if($config['COMPROPAGO_COMPLETED_ORDER'] == 'init'){
                     $order->reduce_order_stock();
-                }
+                }*/
 			    break;
 
 			case 'COMPROPAGO_DECLINED':
