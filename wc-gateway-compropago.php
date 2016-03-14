@@ -7,6 +7,7 @@
 use Compropago\Sdk\Client;
 use Compropago\Sdk\Service;
 use Compropago\Sdk\Controllers\Views;
+use Compropago\Sdk\Utils\Store;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
@@ -23,7 +24,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
     private $debug;
 
-    //const TEMPLATEALERT = __DIR__."/templates/alert.html";
 
     /**
      * init compropago
@@ -226,29 +226,32 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
             ),
             'COMPROPAGO_COMPLETED_ORDER' => array(
-                'title'             => __( 'Complete order', 'compropago' ),
+                'title'             => __( 'Stock Management', 'compropago' ),
                 'type'              => 'select',
                 'description'       => __( 'It indicates the time when the stock is reduced.', 'compropago' ),
+            	'desc_tip'      =>__('Set when to reduce stock for the order','compropago'),
                 'options'           => array(
                     'init' => 'At place order',
-                    'fin' => 'At complete order',
-                    'no' => 'Notingh'
-                )
+                    'fin' => 'At Confirmed payment',
+                    'no' => 'Never'
+                ),
+            	'default' => 'init'
             ),
             'COMPROPAGO_INITIAL_STATE' => array(
                 'title'             => __( 'Order Initial State', 'compropago' ),
                 'type'              => 'select',
-                'description'       => __( '', 'compropago' ),
+                'description'       => __( 'Order Status when new order is created', 'compropago' ),
                 'options'           => array(
                                         'on-hold' => 'On hold',
                                         'pending' => 'Pending'
-                                    )
+                                    ),
+            	'default'			=> 'on-hold'
             ),
             'debug' => array(
                 'title'             => __( 'Debug', 'woocommerce' ),
                 'type'              => 'checkbox',
                 'label'             => __( 'Enable logging (<code>woocommerce/logs/compropago.txt</code>)', 'woocommerce' ),
-                'default'           => 'yes'
+                'default'           => 'no'
             )
 
         );
@@ -453,7 +456,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             try {
                 $this->compropagoClient = new Client($this->compropagoConfig);
 
-                if(! Compropago\Sdk\Utils\Store::validateGateway($this->compropagoClient)){
+                if(! Store::validateGateway($this->compropagoClient)){
                     //wc_add_notice("ComproPago Error: La tienda no se encuentra en un modo de ejecución valido",'error');
                     return false;
                 }
