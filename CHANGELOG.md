@@ -19,6 +19,7 @@
 * Feature: Soporte de WC Logger y WP debug
 * Enhancement: Selección de usuario de estatus de orden new/webhook
 * Enhancement: Selección de usuario de comportamiento de Inventario 
+* Enhancement: Alertas de TextArea a WC warnings
 
 
 ## 3.0.1 2016-02-22
