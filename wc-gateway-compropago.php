@@ -21,9 +21,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
     private $controlVision;
     private $modopruebas;
+    private $activeplugin;
 
     private $debug;
-
+	private $errmsg;
 
     /**
      * init compropago
@@ -54,11 +55,14 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->privatekey 	= $this->settings['COMPROPAGO_PRIVATEKEY'];
 
         $this->modopruebas 	= $this->settings['COMPROPAGO_MODE'];
+        $this->activeplugin = $this->settings['enabled'];
 
         $this->debug = $this->settings['debug'];
         $this->completeorder = $this->settings['COMPROPAGO_COMPLETED_ORDER'];
         $this->initialstate = $this->settings['COMPROPAGO_INITIAL_STATE'];
-
+		
+       
+        
         //paso despues de selccion de gateway
         $this->has_fields	= true;
         $this->controlVision='no';
@@ -76,84 +80,99 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             }
         }
 
-
-        $flagerror = false;
-        $alert = file_get_contents(__DIR__."/templates/alert.html");
-
-
         $this->setCompropagoConfig();
-        if($this->settings['enabled']=='yes'){
-            if(isset($this->publickey) && isset($this->privatekey) &&
-                !empty($this->publickey) && !empty($this->privatekey)  ){
-                $this->controlVision='yes';
-                if($this->settings['COMPROPAGO_MODE']=='yes'){
-                    $moduleLive=true;
-                }else {
-                    $moduleLive=false;
-                }
-
-                try{
-                    $this->compropagoClient = new Client($this->compropagoConfig);
-                    $this->compropagoService = new Service($this->compropagoClient);
-                    //eval keys
-                    if(!$compropagoResponse = $this->compropagoService->evalAuth()){
-                        $this->settings['COMPROPAGO_ERRORS'] = __('Invalid Keys, The Public Key and Private Key must be valid before using this module.','compropago');
-                        $flagerror = true;
-                    }else{
-                        if($compropagoResponse->mode_key != $compropagoResponse->livemode){
-                            // compropagoKey vs compropago Mode
-                            $this->settings['COMPROPAGO_ERRORS'] = __('Your Keys and Your ComproPago account are set to different Modes.','compropago');
-                            $flagerror = true;
-                        }else{
-                            if($moduleLive != $compropagoResponse->livemode){
-                                // store Mode vs compropago Mode
-                                $this->settings['COMPROPAGO_ERRORS'] = __('Your Store and Your ComproPago account are set to different Modes.','compropago');
-                                $flagerror = true;
-                            }else{
-                                if($moduleLive != $compropagoResponse->mode_key){
-                                    // store Mode vs compropago Keys
-                                    $this->settings['COMPROPAGO_ERRORS'] = __('ComproPago ALERT:Your Keys are for a different Mode.','compropago');
-                                    $flagerror = true;
-                                }else{
-                                    if(!$compropagoResponse->mode_key && !$compropagoResponse->livemode){
-                                        //can process orders but watch out, NOT live operations just testing
-                                        $this->settings['COMPROPAGO_ERRORS'] = __('WARNING: ComproPago account is Running in TEST Mode, NO REAL OPERATIONS','compropago');
-                                        $flagerror = true;
-                                    }else{
-                                        $this->settings['COMPROPAGO_ERRORS'] = '';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }catch (Exception $e) {
-                    //something went wrong on the SDK side
-                    $this->settings['COMPROPAGO_ERRORS'] = $e->getMessage(); //may not be show or translated
-
-                    $this->log->add('compropago',$e->getMessage());
-
-                    $flagerror = true;
-                }
-            }else{
-                $this->settings['COMPROPAGO_ERRORS']=__('The Public Key and Private Key must be set before using ComproPago','compropago');
-                $this->controlVision='no';
-                $flagerror = true;
-            }
-        }else{
-            $this->settings['COMPROPAGO_ERRORS']=__('ComproPago is not Enabled','compropago');
-            $this->controlVision='no';
-            $flagerror = true;
+        
+        //just validate on admin site 
+        if(is_admin()){
+        	$this->feedBackCompropago();
         }
-
-        if($flagerror){
-            $alert = str_replace(":message:",$this->settings['COMPROPAGO_ERRORS'],$alert);
-            $this->method_description .= $alert;
-        }
+       
+       
+       
 
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 
     }
-
+	
+    /**
+     * Plugin key|mode Validation and Warnings
+     * @since 3.0.2
+     */
+    private function feedBackCompropago()
+    {
+    	$flagerror = false;
+    	$alert = file_get_contents(__DIR__."/templates/alert.html");
+    	
+    	
+    	
+    	if($this->activeplugin=='yes'){
+    		if(isset($this->publickey) && isset($this->privatekey) &&
+    				!empty($this->publickey) && !empty($this->privatekey)  ){
+    					$this->controlVision='yes';
+    					if($this->modopruebas=='yes'){
+    						$moduleLive=true;
+    					}else {
+    						$moduleLive=false;
+    					}
+    	
+    					try{
+    						$this->compropagoClient = new Client($this->compropagoConfig);
+    						$this->compropagoService = new Service($this->compropagoClient);
+    						//eval keys
+    						if(!$compropagoResponse = $this->compropagoService->evalAuth()){
+    							$this->errmsg = __('Invalid Keys, The Public Key and Private Key must be valid before using this module.','compropago');
+    							$flagerror = true;
+    						}else{
+    							if($compropagoResponse->mode_key != $compropagoResponse->livemode){
+    								// compropagoKey vs compropago Mode
+    								$this->errmsg = __('Your Keys and Your ComproPago account are set to different Modes.','compropago');
+    								$flagerror = true;
+    							}else{
+    								if($moduleLive != $compropagoResponse->livemode){
+    									// store Mode vs compropago Mode
+    									$this->errmsg = __('Your Store and Your ComproPago account are set to different Modes.','compropago');
+    									$flagerror = true;
+    								}else{
+    									if($moduleLive != $compropagoResponse->mode_key){
+    										// store Mode vs compropago Keys
+    										$this->errmsg = __('ComproPago ALERT:Your Keys are for a different Mode.','compropago');
+    										$flagerror = true;
+    									}else{
+    										if(!$compropagoResponse->mode_key && !$compropagoResponse->livemode){
+    											//can process orders but watch out, NOT live operations just testing
+    											$this->errmsg = __('WARNING: ComproPago account is Running in TEST Mode, NO REAL OPERATIONS','compropago');
+    											$flagerror = true;
+    										}else{
+    											$$this->errmsg = '';
+    										}
+    									}
+    								}
+    							}
+    						}
+    					}catch (Exception $e) {
+    						//something went wrong on the SDK side
+    						$this->errmsg = $e->getMessage(); //may not be show or translated
+    	
+    						$this->log->add('compropago',$e->getMessage());
+    	
+    						$flagerror = true;
+    					}
+    		}else{
+    			$this->errmsg =__('The Public Key and Private Key must be set before using ComproPago','compropago');
+    			$this->controlVision='no';
+    			$flagerror = true;
+    		}
+    	}else{
+    		$this->errmsg =__('ComproPago is not Enabled','compropago');
+    		$this->controlVision='no';
+    		$flagerror = true;
+    	}
+    	
+    	if($flagerror){
+    		$alert = str_replace(":message:",$this->errmsg,$alert);
+    		$this->method_description .= $alert;
+    	}
+    }
 
     /**
      * setup admin page
@@ -161,6 +180,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
      */
     public function init_form_fields()
     {
+    	
+    	
         $this->form_fields=array(
 
             'enabled' => array(
@@ -245,12 +266,12 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                                         'on-hold' => 'On hold',
                                         'pending' => 'Pending'
                                     ),
-            	'default'			=> 'on-hold'
+            	'default'			=> 'pending'
             ),
             'debug' => array(
                 'title'             => __( 'Debug', 'woocommerce' ),
                 'type'              => 'checkbox',
-                'label'             => __( 'Enable logging (<code>woocommerce/logs/compropago.txt</code>)', 'woocommerce' ),
+                'label'             => __( 'Enable  (<code>woocommerce/logs/compropago.txt</code>)', 'woocommerce' ),
                 'default'           => 'no'
             )
 
@@ -378,7 +399,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         }
 
         // estatus en de la orden onhold, webhook actualizara a pending
-        $order->update_status($this->settings['COMPROPAGO_INITIAL_STATE'], __( 'ComproPago - On Hold', 'compropago' ));
+        $order->update_status($this->settings['COMPROPAGO_INITIAL_STATE'],
+        		($this->settings['COMPROPAGO_INITIAL_STATE']=='pending')?__( 'ComproPago - Pending Payment', 'compropago' ):__( 'ComproPago - On Hold', 'compropago' ));
 
         if($this->settings['COMPROPAGO_COMPLETED_ORDER'] == 'init') {
             // Reduce stock levels

@@ -6,7 +6,14 @@
 * Require: WordPress 4.4.1 +
 * Require: PHP >= 5.5
 * Require: ComproPago SDK 1.1
-* Note: Liberación de RC como step para 3.0.3
+* Note: Liberación de RC como branch para 3.0.3
+* Utilizing: DIR en lugar de dirname(FILE)
+* Marked: Cambio de versión Compropago\Sdk a 1.1
+* Feature: Soporte de WC Logger y WP debug
+* Enhancement: Selección de usuario de estatus de orden new/webhook
+* Enhancement: Selección de usuario de comportamiento de Inventario 
+* Enhancement: Alertas de TextArea a WC warnings
+* Bugfix: Recurrente Auth en Admin
 
 
 ## 3.0.2 RC 2016-03-03
