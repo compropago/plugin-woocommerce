@@ -143,7 +143,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
     											$this->errmsg = __('WARNING: ComproPago account is Running in TEST Mode, NO REAL OPERATIONS','compropago');
     											$flagerror = true;
     										}else{
-    											$$this->errmsg = '';
+    											$this->errmsg = '';
     										}
     									}
     								}
