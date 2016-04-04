@@ -25,7 +25,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
     private $debug;
 	private $errmsg;
-
+	
+	private $filterStores;
     /**
      * init compropago
      * @since 3.0.0
@@ -61,7 +62,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->completeorder = $this->settings['COMPROPAGO_COMPLETED_ORDER'];
         $this->initialstate = $this->settings['COMPROPAGO_INITIAL_STATE'];
 		
-       
+       $this->filterStores = $this->settings['COMPROPAGO_STORES'];
         
         //paso despues de selccion de gateway
         $this->has_fields	= true;
@@ -81,6 +82,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         }
 
         $this->setCompropagoConfig();
+        
+       // var_dump($this->filterStores);
         
         //just validate on admin site 
         if(is_admin()){
@@ -227,6 +230,25 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 'description'   => __( 'Want to show store logos or a select box?', 'compropago' ),
                 'default'       => 'yes'
             ),
+        	'COMPROPAGO_STORES' => array(
+        		'title'			=> __('Tiendas','compropago'),
+        		'type'			=> 'multiselect',
+        		'description'	=> __('Seleccione las tiendas que desea mostrar','compropago'),
+        		'desc_tip'      =>__('ctrl + click para seleccionar','compropago'),
+        		'options'		=> array(
+        			'OXXO'=> 'OXXO',
+        			'SEVEN_ELEVEN'=> 'Seven Eleven',
+        			'CHEDRAUI'=> 'Chedrahui',
+        			'COPEL'=> 'Copel',
+        			'EXTRA'=> 'Extra',
+        			'FARMACIA_BENAVIDES'=> 'Farmacias Benavides',
+        			'FARMACIA_ESQUIVAR'=> 'Farmacias Esquivar',
+        			'ELEKTRA'=> 'Elektra',
+        			'PITICO'=> 'Pitico',
+        			'TELECOMM'=> 'Telecomm',
+        			'FARMACIA_ABC'=> 'Farmacias ABC'	
+        		)
+        	),	
             'title' => array(
                 'title'         => __( 'Title', 'compropago' ),
                 'type'          => 'text',
@@ -438,9 +460,26 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             $this->log->add('compropago',$e->getMessage());
             return;
         }
-
-
-        $data['providers']=$this->compropagoService->getProviders();
+		
+        
+        $providers= $this->compropagoService->getProviders();
+     
+        
+		if(!$this->filterStores){
+       		$data['providers']= $providers;
+		}else{
+			foreach ($providers as $provider){
+				foreach ($this->filterStores as $internal){
+					
+					if($provider->internal_name == $internal){
+						$filtered[] = $provider;
+					}
+				}
+			}
+			
+			$data['providers']= $filtered;
+		}
+        
         $data['showlogo']=$this->showlogo;
         $data['description']=$this->description;
         $data['instrucciones']=$this->instrucciones;
