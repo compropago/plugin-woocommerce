@@ -239,7 +239,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         			'OXXO'=> 'OXXO',
         			'SEVEN_ELEVEN'=> 'Seven Eleven',
         			'CHEDRAUI'=> 'Chedrahui',
-        			'COPEL'=> 'Copel',
+        			'COPPEL'=> 'Coppel',
         			'EXTRA'=> 'Extra',
         			'FARMACIA_BENAVIDES'=> 'Farmacias Benavides',
         			'FARMACIA_ESQUIVAR'=> 'Farmacias Esquivar',
