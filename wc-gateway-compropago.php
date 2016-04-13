@@ -11,7 +11,7 @@ use Compropago\Sdk\Utils\Store;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="3.0.3";
+    const VERSION="3.0.4";
 
     private $compropagoConfig;
     private $compropagoClient;
