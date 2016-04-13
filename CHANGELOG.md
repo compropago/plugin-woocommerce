@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 3.0.3 RC 2016-04-05
+* Require: PHP >= 5.5
+* Require: WooCommerce 2.5.0 +
+* Require: WordPress 4.4.1 +
+* Require: ComproPago SDK 1.1.0 +
+* Feature: Se puede seleccionar que tiendas se desean mostrar como opción de pago 
+
 ## 3.0.2 2016-03-14
 * Soporte para PHP 5.5 o mayor
 * Require: WooCommerce 2.5.0 +
