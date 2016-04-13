@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 3.0.3 2016-04-13
+* Require: PHP >= 5.5
+* Require: WooCommerce 2.5.0 +
+* Require: WordPress 4.4.1 +
+* Require: ComproPago SDK 1.1.0 +
+
 ## 3.0.3 RC 2016-04-05
 * Require: PHP >= 5.5
 * Require: WooCommerce 2.5.0 +
