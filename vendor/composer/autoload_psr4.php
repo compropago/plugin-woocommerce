@@ -6,5 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Compropago\\Sdk\\' => array($vendorDir . '/compropago/php-sdk/src'),
+    'CompropagoSdk\\' => array($vendorDir . '/compropago/php-sdk/CompropagoSdk'),
 );

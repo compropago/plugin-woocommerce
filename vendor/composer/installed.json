@@ -1,28 +1,34 @@
 [
     {
         "name": "compropago/php-sdk",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "2.0.0",
+        "version_normalized": "2.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/compropago/compropago-php.git",
-            "reference": "9b295bddbad1b62d1cfd480c38443d3648a335fb"
+            "reference": "f48345aac922e9d0838a8779ffd3a6264f087cc0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/9b295bddbad1b62d1cfd480c38443d3648a335fb",
-            "reference": "9b295bddbad1b62d1cfd480c38443d3648a335fb",
+            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/f48345aac922e9d0838a8779ffd3a6264f087cc0",
+            "reference": "f48345aac922e9d0838a8779ffd3a6264f087cc0",
             "shasum": ""
         },
         "require": {
             "php": ">=5.5"
         },
-        "time": "2016-02-15 16:07:14",
+        "require-dev": {
+            "phpunit/phpunit": ">=5.3"
+        },
+        "suggest": {
+            "compropago/views-sdk": "Permite la manipulacion de Listado de Proveedores, Recibos de compra y botones de pago dinamicos"
+        },
+        "time": "2016-07-20 21:09:58",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Compropago\\Sdk\\": "src/"
+                "CompropagoSdk\\": "CompropagoSdk"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -31,8 +37,8 @@
         ],
         "authors": [
             {
-                "name": "Rolando Lucio",
-                "email": "rolando@compropago.com"
+                "name": "Eduardo Aguilar",
+                "email": "eduardo.aguilar@compropago.com"
             }
         ],
         "description": "PHP SDK for Compropago API",
