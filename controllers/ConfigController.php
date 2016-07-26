@@ -53,44 +53,35 @@ class ConfigController
 
     private function __init__()
     {
-        
         global $wpdb;
 
         /**
          * Publickey option
          */
-        if(get_option('compropago_publickey')){
-            add_option('compropago_publickey', $this->data['publickey']);
-        }else{
-            update_option('compropago_publickey', $this->data['publickey']);
-        }
+        delete_option('compropago_publickey');
+        add_option('compropago_publickey', $this->data['publickey']);
 
         /**
          * Private key option
          */
-        if(get_option('compropago_privatekey')){
-            add_option('compropago_privatekey', $this->data['privatekey']);
-        }else{
-            update_option('compropago_privatekey', $this->data['privatekey']);
-        }
+        delete_option('compropago_privatekey');
+        add_option('compropago_privatekey', $this->data['privatekey']);
 
         /**
          * Live option
          */
-        if(get_option('compropago_live')){
-            add_option('compropago_live', $this->data['live']);
-        }else{
-            update_option('compropago_live', $this->data['live']);
-        }
+        delete_option('compropago_live');
+        add_option('compropago_live', $this->data['live']);
 
         /**
          * Showlogo option
          */
-        if(get_option('compropago_showlogo')){
-            add_option('compropago_showlogo', $this->data['showlogo']);
-        }else{
-            update_option('compropago_showlogo', $this->data['showlogo']);
-        }
+        delete_option('compropago_showlogo');
+        add_option('compropago_showlogo', $this->data['showlogo']);
+
+
+
+
 
         $client = new Client(
             $this->data['publickey'],
@@ -103,6 +94,7 @@ class ConfigController
          */
 
         if(get_option('compropago_webhook')){
+            delete_option('compropago_webhook');
             add_option('compropago_webhook', $this->data['webhook']);
             $webhook = $client->api->createWebhook($this->data['webhook']);
 
@@ -115,7 +107,8 @@ class ConfigController
                 )
             );
         }else{
-            update_option('compropago_webhook', $this->data['webhook']);
+            delete_option('compropago_webhook');
+            add_option('compropago_webhook', $this->data['webhook']);
 
             $last = "SELECT MAX(id) as 'last' FROM {$wpdb->prefix}compropago_webhook_transactions";
 
@@ -153,29 +146,22 @@ class ConfigController
         /**
          * Provallowed option
          */
-        if(get_option('compropago_provallowed')){
-            add_option('compropago_provallowed', $this->data['provallowed']);
-        }else{
-            update_option('compropago_provallowed', $this->data['provallowed']);
-        }
+        delete_option('compropago_provallowed');
+        add_option('compropago_provallowed', $this->data['provallowed']);
 
         /**
          * Descripcion option
          */
-        if(get_option('compropago_descripcion')){
-            add_option('compropago_descripcion', $this->data['descripcion']);
-        }else{
-            update_option('compropago_descripcion', $this->data['descripcion']);
-        }
+        delete_option('compropago_descripcion');
+        add_option('compropago_descripcion', $this->data['descripcion']);
+
 
         /**
          * instrucciones option
          */
-        if(get_option('compropago_instrucciones')){
-            add_option('compropago_instrucciones', $this->data['instrucciones']);
-        }else{
-            update_option('compropago_instrucciones', $this->data['instrucciones']);
-        }
+        delete_option('compropago_instrucciones');
+        add_option('compropago_instrucciones', $this->data['instrucciones']);
+
     }
 
 }

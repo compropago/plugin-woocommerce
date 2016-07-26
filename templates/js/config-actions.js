@@ -38,8 +38,7 @@ $(function(){
 
         if(validateSendConfig(data)){
             $.ajax({
-                //url: ':url-controller:',
-                url: 'http://demo.compropago.com/pruebas/wc/wp-content/plugins/newcompropago/controllers/ConfigController.php',
+                url: '../wp-content/plugins/compropago/controllers/ConfigController.php',
                 type: 'post',
                 data: data,
                 success: function(res){
@@ -68,9 +67,9 @@ $(function(){
                     console.log(res);
                 }
             });
-
-            $("#loadig").fadeOut();
         }
+
+        $("#loadig").fadeOut();
     });
 
 });
@@ -86,8 +85,6 @@ function getProvidersAllowed(){
             active += ','+$(this).val();
         }
     });
-
-    console.log(active);
 
     return active;
 }

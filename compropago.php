@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: New ComproPago
+Plugin Name: ComproPago
 Plugin URI: https://www.compropago.com/documentacion/plugins
 Description: Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
 Version: 3.1.0
@@ -34,6 +34,14 @@ require_once __DIR__ . "/controllers/Utils.php";
 use CompropagoSdk\Client;
 
 
+/**
+ * Estilos generales
+ */
+function register_styles(){
+    wp_register_style( 'prefix-style', plugins_url('templates/css/foundation.css', __FILE__) );
+    wp_enqueue_style( 'prefix-style' );
+}
+
 
 /**
  * Pagina de configuracion Compropago
@@ -46,19 +54,13 @@ function compropago_config_page(){
     wp_enqueue_script( 'jquery_cp' );
     wp_enqueue_script( 'config-script' );
 
-    $config = get_option('woocommerce_compropago_settings');
-    
-    $publickey = get_option('compropago_publickey');
-    $privatekey = get_option('compropago_privatekey');
-    
-    $live = !empty(get_option( 'compropago_live' )) ?
-        (get_option('compropago_live') == 'yes' ? true : false) : false;
-    $showlogo = !empty(get_option( 'compropago_showlogo' )) ?
-        (get_option('compropago_showlogo') == 'yes' ? true : false) : false;
-    $webhook = !empty(get_option( 'compropago_webhook' )) ?
-        get_option( 'compropago_webhook' ) : plugins_url( 'webhook.php', __FILE__ );
-    
-    $descripcion = get_option('compropago_descripcion');
+    $config        = get_option('woocommerce_compropago_settings');
+    $publickey     = get_option('compropago_publickey');
+    $privatekey    = get_option('compropago_privatekey');
+    $live          = !empty(get_option( 'compropago_live' )) ? (get_option('compropago_live') == 'yes' ? true : false) : false;
+    $showlogo      = !empty(get_option( 'compropago_showlogo' )) ? (get_option('compropago_showlogo') == 'yes' ? true : false) : false;
+    $webhook       = !empty(get_option( 'compropago_webhook' )) ? get_option( 'compropago_webhook' ) : plugins_url( 'webhook.php', __FILE__ );
+    $descripcion   = get_option('compropago_descripcion');
     $instrucciones = get_option('compropago_instrucciones');
 
 
@@ -119,14 +121,6 @@ function compropago_add_admin_page(){
 add_action( 'admin_menu', 'compropago_add_admin_page' );
 
 
-/**
- * Estilos generales
- */
-function register_styles(){
-    wp_register_style( 'prefix-style', plugins_url('templates/css/foundation.css', __FILE__) );
-    wp_enqueue_style( 'prefix-style' );
-}
-
 
 /**
  * Rutina de instalacion para tabla de transacciones
@@ -155,14 +149,13 @@ function compropago_active(){
     }
 
     
-    /* Generacion de ruta al controlador de la peticion */
-    
-    $url = str_replace('webhook.php','controllers/ConfigController.php',plugins_url( 'webhook.php', __FILE__ ));
+    /* Generacion de ruta al controlador de la peticion
+
+    $url = plugins_url( 'controllers/ConfigController.php', __FILE__ );
 
     $js = file_get_contents(__DIR__."/templates/js/config-actions.js");
     $js = str_replace(':url-controller:', $url, $js);
-
-    file_put_contents(__DIR__."/templates/js/config-actions.js", $js);
+    file_put_contents(__DIR__."/templates/js/config-actions.js", $js);*/
 }
 
 /**

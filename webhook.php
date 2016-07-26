@@ -2,6 +2,7 @@
 
 /**
  * @author Rolando Lucio <rolando@compropago.com>
+ * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
  * @since 3.0.0
  */
 
@@ -47,7 +48,7 @@ if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', 
 
 
 //Compropago Plugin Active?
-if (!is_plugin_active( 'newcompropago/newcompropago.php' ) ){
+if (!is_plugin_active( 'compropago/compropago.php' ) ){
 	die('ComproPago no se encuentra activo en Wordpress');
 }
 
@@ -63,7 +64,7 @@ $privatekey    = get_option('compropago_privatekey');
 $live          = get_option('compropago_live') == 'yes' ? true : false;
 
 
-//Configuration::getMultiple(array('COMPROPAGO_PUBLICKEY', 'COMPROPAGO_PRIVATEKEY','COMPROPAGO_MODE'));
+
 //keys set?
 if (empty($publickey) || empty($privatekey)){
     die("Se requieren las llaves de compropago");

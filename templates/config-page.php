@@ -127,6 +127,8 @@
 </section>
 
 
+
+
 <section class="cp-block-login" id="loadig">
     <img src="<?php echo $image_load; ?>" alt="Loading...">
 </section>

@@ -50,7 +50,7 @@ class Validations
             case '200':
                 return $info;
             default:
-                throw new \Exception("CODE {$info->getCode()}: ".$info->getMessage(),$info->getCode());
+                throw new \Exception("CODE {$info->code}: ".$info->message,$info->code);
         }
     }
 
