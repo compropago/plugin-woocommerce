@@ -42,6 +42,7 @@ $(function(){
                 type: 'post',
                 data: data,
                 success: function(res){
+                    console.log(res);
                     if(res.error){
                         $("#display_error_config").removeClass('cpsuccess');
                         $("#display_error_config").addClass('cperror');
@@ -54,8 +55,8 @@ $(function(){
                     $("#display_error_config").html(res.message);
                     $("#display_error_config").fadeIn();
                     $("#display_error_config").removeClass('error');
-
-                    console.log(res);
+                    
+                    renderRetro(res.retro);
                 },
                 error: function(res){
                     $("#display_error_config").removeClass('cperror');
@@ -68,6 +69,11 @@ $(function(){
                 }
             });
         }
+
+        timer = window.setTimeout(function(){
+            console.log('Time out');
+            $("#display_error_config").fadeOut();
+        },10000);
 
         $("#loadig").fadeOut();
     });
@@ -96,15 +102,23 @@ function validateSendConfig(data){
                 return true;
             }else{
                 alert('Debe activar al menos un proveedor');
-                return false;
             }
         }else{
-            alert('El Webhook no debe de ser vacio.\nSi perdio la ruta por defecto recargue la pagina para obtenerlo de nuevo' +
-                ' o ingrese la ruta manualmente.');
-            return false;
+            alert('El Webhook no debe de ser vacio.\nSi perdio la ruta por defecto recargue la pagina para obtenerlo' +
+                ' de nuevo o ingrese la ruta manualmente.');
         }
     }else{
         alert('Las llaves no deben de estar vacias');
-        return false;
+    }
+    
+    return false;
+}
+
+function renderRetro(retro){
+    if(retro[0]){
+        $("#retro").html(retro[1]);
+        $("#retro").css('display', 'block');
+    }else{
+        $("#retro").css('display', 'none');
     }
 }

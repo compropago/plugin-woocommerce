@@ -30,6 +30,7 @@ class ConfigController
 
     private $response;
     private $data;
+    private $retro;
 
     public function __construct($data)
     {
@@ -38,7 +39,8 @@ class ConfigController
             $this->__init__();
             $this->response = array(
                 'error' => false,
-                'message' => 'Se guardaron correctamente las configuraciones.'
+                'message' => 'Se guardaron correctamente las configuraciones.',
+                'retro' => $this->retro
             );
         }catch(Exception $e){
             $this->response = array(
@@ -102,6 +104,7 @@ class ConfigController
 
             $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions', array(
                     'webhookId' => $webhook->id,
+                    'webhookUrl' => $webhook->url,
                     'updated' => $recordTime,
                     'status' => $webhook->status
                 )
@@ -123,6 +126,7 @@ class ConfigController
                     $webhook = $client->api->updateWebhook($row->webhookId, $this->data['webhook']);
                     $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions', array(
                             'webhookId' => $webhook->id,
+                            'webhookUrl' => $webhook->url,
                             'updated' => $recordTime,
                             'status' => $webhook->status
                         )
@@ -134,6 +138,7 @@ class ConfigController
                 $webhook = $client->api->createWebhook($this->data['webhook']);
                 $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions', array(
                         'webhookId' => $webhook->id,
+                        'webhookUrl' => $webhook->url,
                         'updated' => $recordTime,
                         'status' => $webhook->status
                     )
@@ -161,6 +166,14 @@ class ConfigController
          */
         delete_option('compropago_instrucciones');
         add_option('compropago_instrucciones', $this->data['instrucciones']);
+
+
+        $this->retro = Utils::retroalimentacion(
+            $this->data['publickey'],
+            $this->data['privatekey'],
+            ($this->data['live'] == 'yes'),
+            get_option('woocommerce_compropago_settings')
+        );
 
     }
 

@@ -31,7 +31,7 @@
 
     <div class="row">
         <div class="large-12 columns">
-            <div class="cpalert" style="display:<?php echo $retro[0] ? 'block' : 'none'; ?>">
+            <div class="cpalert" style="display:<?php echo $retro[0] ? 'block' : 'none'; ?>" id="retro">
                 <?php echo $retro[1]; ?>
             </div>
             <br>

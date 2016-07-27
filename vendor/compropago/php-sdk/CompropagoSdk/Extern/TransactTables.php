@@ -78,6 +78,7 @@ class TransactTables
             'CREATE TABLE `' . $prefix . 'compropago_webhook_transactions` (
             `id` integer not null auto_increment,
             `webhookId` varchar(50) not null,
+            `webhookUrl` varchar(300) not null,
             `updated` integer not null,
             `status` varchar(50) not null,
             primary key(id)
