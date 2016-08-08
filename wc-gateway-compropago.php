@@ -43,14 +43,13 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->init_form_fields();
         $this->init_settings();
 
-        $this->title 		 = $this->settings['title'];
+        
         $this->activeplugin  = $this->settings['enabled'];
 
-        $this->debug         = $this->settings['debug'];
-        $this->completeorder = $this->settings['COMPROPAGO_COMPLETED_ORDER'];
-        $this->initialstate  = $this->settings['COMPROPAGO_INITIAL_STATE'];
-
-
+        $this->debug         = get_option('compropago_debug');
+        $this->initialstate  = get_option('compropago_initial_state');
+        $this->completeorder = get_option('compropago_completed_order');
+        $this->title 		 = get_option('compropago_title');
         $this->publickey     = get_option('compropago_publickey');
         $this->privatekey    = get_option('compropago_privatekey');
         $this->live          = get_option('compropago_live') == 'yes' ? true : false;
@@ -120,44 +119,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 'title'			=> __( 'Enable/Disable', 'compropago' ),
                 'label' 		=> __( 'Enable Compropago', 'compropago' ),
                 'type' 			=> 'checkbox',
-                'description'	=> __('Activate ComproPago payment method. (<a href="https://compropago.com/" target="_new">Sign Up for Compropago</a>)','compropago'),
+                'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administracion de Wordpress desde <a href="./admin.php?page=add-compropago">AQUI</a>','compropago'),
                 'default' 		=> 'no'
-            ),
-            'title' => array(
-                'title'         => __( 'Title', 'compropago' ),
-                'type'          => 'text',
-                'description'   => __( 'This controls the title which the user sees during checkout.', 'compropago' ),
-                'default'       => __( 'ComproPago (OXXO, 7Eleven, etc.)', 'compropago' ),
-            ),
-            'COMPROPAGO_COMPLETED_ORDER' => array(
-                'title'             => __( 'Stock Management', 'compropago' ),
-                'type'              => 'select',
-                'description'       => __( 'It indicates the time when the stock is reduced.', 'compropago' ),
-            	'desc_tip'          =>__('Set when to reduce stock for the order','compropago'),
-                'options'           => array(
-                    'init' => 'At place order',
-                    'fin'  => 'At Confirmed payment',
-                    'no'   => 'Never'
-                ),
-            	'default' => 'init'
-            ),
-            'COMPROPAGO_INITIAL_STATE' => array(
-                'title'             => __( 'Order Initial State', 'compropago' ),
-                'type'              => 'select',
-                'description'       => __( 'Order Status when new order is created', 'compropago' ),
-                'options'           => array(
-                                        'on-hold' => 'On hold',
-                                        'pending' => 'Pending'
-                                    ),
-            	'default'			=> 'pending'
-            ),
-            'debug' => array(
-                'title'             => __( 'Debug', 'woocommerce' ),
-                'type'              => 'checkbox',
-                'label'             => __( 'Enable  (<code>woocommerce/logs/compropago.txt</code>)', 'woocommerce' ),
-                'default'           => 'no'
             )
-
+            
         );
 
     }
@@ -287,10 +252,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         }
 
         // estatus en de la orden onhold, webhook actualizara a pending
-        $order->update_status($this->settings['COMPROPAGO_INITIAL_STATE'],
-        		($this->settings['COMPROPAGO_INITIAL_STATE']=='pending')?__( 'ComproPago - Pending Payment', 'compropago' ):__( 'ComproPago - On Hold', 'compropago' ));
+        $order->update_status($this->initialstate,
+        		($this->initialstate == 'pending')?__( 'ComproPago - Pending Payment', 'compropago' ):__( 'ComproPago - On Hold', 'compropago' ));
 
-        if($this->settings['COMPROPAGO_COMPLETED_ORDER'] == 'init') {
+        if($this->completeorder == 'init') {
             // Reduce stock levels
             $order->reduce_order_stock();
         }

@@ -3,8 +3,8 @@
 Plugin Name: ComproPago
 Plugin URI: https://www.compropago.com/documentacion/plugins
 Description: Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
-Version: 3.1.0
-Author: Eduardo Aguilar
+Version: 4.0.0
+Author: ComproPago
 Licence: Apache-2
 */
 /**
@@ -54,14 +54,22 @@ function compropago_config_page(){
     wp_enqueue_script( 'jquery_cp' );
     wp_enqueue_script( 'config-script' );
 
-    $config        = get_option('woocommerce_compropago_settings');
-    $publickey     = get_option('compropago_publickey');
-    $privatekey    = get_option('compropago_privatekey');
-    $live          = !empty(get_option( 'compropago_live' )) ? (get_option('compropago_live') == 'yes' ? true : false) : false;
-    $showlogo      = !empty(get_option( 'compropago_showlogo' )) ? (get_option('compropago_showlogo') == 'yes' ? true : false) : false;
-    $webhook       = !empty(get_option( 'compropago_webhook' )) ? get_option( 'compropago_webhook' ) : plugins_url( 'webhook.php', __FILE__ );
-    $descripcion   = get_option('compropago_descripcion');
-    $instrucciones = get_option('compropago_instrucciones');
+
+    $config         = get_option('woocommerce_compropago_settings');
+    $publickey      = get_option('compropago_publickey');
+    $privatekey     = get_option('compropago_privatekey');
+    $live           = !empty(get_option( 'compropago_live' )) ? (get_option('compropago_live') == 'yes' ? true : false) : false;
+    $showlogo       = !empty(get_option( 'compropago_showlogo' )) ? (get_option('compropago_showlogo') == 'yes' ? true : false) : false;
+    $webhook        = !empty(get_option( 'compropago_webhook' )) ? get_option( 'compropago_webhook' ) : plugins_url( 'webhook.php', __FILE__ );
+    $descripcion    = get_option('compropago_descripcion');
+    $instrucciones  = get_option('compropago_instrucciones');
+    $titulo         = get_option('compropago_title');
+    $complete_order = get_option('compropago_completed_order');
+    $initial_state  = get_option('compropago_initial_state');
+    $debug          = get_option('compropago_debug');
+
+    $aux            = get_option('woocommerce_compropago_settings');
+    $enabled        = $aux['enabled'] === 'yes' ? true : false;
 
 
     $client = new Client(
@@ -70,29 +78,35 @@ function compropago_config_page(){
         $live
     );
 
+
     $all_providers = $client->api->listProviders();
-    
-    $allowed = !empty(get_option( 'compropago_provallowed' )) ?
-        explode(',',get_option('compropago_provallowed')) : array();
-    
-    
-    $active_providers = array();
-    $disabled_providers = array();
-    foreach ($all_providers as $provider){
-        $flag = true;
-        
-        foreach ($allowed as $value){
-            if ($value == $provider->internal_name){
-                $active_providers[] = $provider;
-                $flag = false;
-                break;
+
+    if(!empty(get_option( 'compropago_provallowed' ))){
+        $allowed = explode(',',get_option('compropago_provallowed'));
+
+        $active_providers = array();
+        $disabled_providers = array();
+        foreach ($all_providers as $provider){
+            $flag = true;
+
+            foreach ($allowed as $value){
+                if ($value == $provider->internal_name){
+                    $active_providers[] = $provider;
+                    $flag = false;
+                    break;
+                }
+            }
+
+            if($flag){
+                $disabled_providers[] = $provider;
             }
         }
-        
-        if($flag){
-            $disabled_providers[] = $provider;
-        }
+    }else{
+        $active_providers = $all_providers;
+        $disabled_providers = array();
     }
+
+
     
     $retro = Utils::retroalimentacion($publickey,$privatekey,$live,$config);
     $image_load = plugins_url('templates/img/ajax-loader.gif', __FILE__);
@@ -110,7 +124,7 @@ function compropago_add_admin_page(){
         'manage_options',
         'add-compropago',
         'compropago_config_page',
-        '' , // custom icon
+        plugins_url('templates/img/logo.png', __FILE__) , // custom icon
         110  // position menu
     );
 }

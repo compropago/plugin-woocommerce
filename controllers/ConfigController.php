@@ -57,6 +57,14 @@ class ConfigController
     {
         global $wpdb;
 
+
+        /**
+         * Active Plugin
+         */
+        delete_option('woocommerce_compropago_settings');
+        add_option('woocommerce_compropago_settings', array('enabled' => $this->data['enabled']));
+
+
         /**
          * Publickey option
          */
@@ -82,7 +90,32 @@ class ConfigController
         add_option('compropago_showlogo', $this->data['showlogo']);
 
 
+        /**
+         * Title option
+         */
+        delete_option('compropago_title');
+        add_option('compropago_title', $this->data['title']);
 
+        
+        /**
+         * Completed Order
+         */
+        delete_option('compropago_completed_order');
+        add_option('compropago_completed_order', $this->data['complete_order']);
+
+
+        /**
+         * Initial state
+         */
+        delete_option('compropago_initial_state');
+        add_option('compropago_initial_state', $this->data['initial_state']);
+
+
+        /**
+         * Debug mode
+         */
+        delete_option('compropago_debug');
+        add_option('compropago_debug', $this->data['debug']);
 
 
         $client = new Client(

@@ -64,6 +64,9 @@ $privatekey    = get_option('compropago_privatekey');
 $live          = get_option('compropago_live') == 'yes' ? true : false;
 
 
+$complete_order = get_option('compropago_completed_order');
+
+
 
 //keys set?
 if (empty($publickey) || empty($privatekey)){
@@ -151,7 +154,7 @@ try{
 
 		switch($nomestatus){
 			case 'COMPROPAGO_SUCCESS':
-                if($config['COMPROPAGO_COMPLETED_ORDER'] == 'fin'){
+                if($complete_order == 'fin'){
                     $order->payment_complete();
                 }else{
                     $order->update_status('processing', __( 'ComproPago - Payment Confirmed', 'compropago' ));

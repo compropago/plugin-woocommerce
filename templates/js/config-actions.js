@@ -26,15 +26,22 @@ $(function(){
         $("#loadig").fadeIn();
 
         data = {
-            publickey: $('#publickey').val(),
-            privatekey: $('#privatekey').val(),
-            live: $('#live').is(':checked') ? 'yes' : 'no',
-            showlogo: $('#showlogo').is(':checked') ? 'yes' : 'no',
-            webhook: $('#webhook').val(),
-            provallowed: getProvidersAllowed(),
-            descripcion: $('#descripsion').val(),
-            instrucciones: $('#instrucciones').val()
+            enabled:        $('#enabled').is(':checked') ? 'yes' : 'no',
+            publickey:      $('#publickey').val(),
+            privatekey:     $('#privatekey').val(),
+            live:           $('#live').is(':checked') ? 'yes' : 'no',
+            showlogo:       $('#showlogo').is(':checked') ? 'yes' : 'no',
+            webhook:        $('#webhook').val(),
+            provallowed:    getProvidersAllowed(),
+            descripcion:    $('#descripsion').val(),
+            instrucciones:  $('#instrucciones').val(),
+            title:          $('#title').val(),
+            complete_order: $('#complete_order').val(),
+            initial_state:  $('#intial_state').val(),
+            debug:          $('#debug').is(':checked') ? 'yes' : 'no'
         };
+
+
 
         if(validateSendConfig(data)){
             $.ajax({
@@ -71,7 +78,6 @@ $(function(){
         }
 
         timer = window.setTimeout(function(){
-            console.log('Time out');
             $("#display_error_config").fadeOut();
         },10000);
 
@@ -81,6 +87,10 @@ $(function(){
 });
 
 
+/**
+ *
+ * @returns {string}
+ */
 function getProvidersAllowed(){
     active = '';
 
@@ -92,17 +102,29 @@ function getProvidersAllowed(){
         }
     });
 
+    if(active == ''){
+        $('#prov-disabled option').each(function(){
+            if(active == ''){
+                active += $(this).val();
+            }else{
+                active += ','+$(this).val();
+            }
+        });
+    }
+
     return active;
 }
 
+
+/**
+ *
+ * @param data
+ * @returns {boolean}
+ */
 function validateSendConfig(data){
     if(data.publickey != '' && data.privatekey != ''){
         if(data.webhook != ''){
-            if(data.provallowed != ''){
-                return true;
-            }else{
-                alert('Debe activar al menos un proveedor');
-            }
+            return true;
         }else{
             alert('El Webhook no debe de ser vacio.\nSi perdio la ruta por defecto recargue la pagina para obtenerlo' +
                 ' de nuevo o ingrese la ruta manualmente.');
