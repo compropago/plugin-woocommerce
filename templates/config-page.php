@@ -43,9 +43,46 @@
 
     <div class="row">
         <div class="large-12 columns">
-            <label for="enabled">
-                <input type="checkbox" name="enabled" id="enabled" style="margin-top: 10px" <?php echo ($enabled === true) ? 'checked' : ''; ?>> Activar metodo de pago
-            </label>
+            <div style="width:25%;float:left;">
+                <div class="tooltip">
+                    Activar
+                    <span class="tooltiptext">Activa o desactiva ComproPago como metodo de pago en WooCommerce</span>
+                </div>
+                <br>
+                <label class="cpswitch" for="enabled">
+                    <input type="checkbox" name="enabled" id="enabled" <?php echo ($enabled === true) ? 'checked' : ''; ?>>
+                    <div class="cpslider"></div>
+                </label>
+            </div>
+            <div style="width:25%;float:left;">
+                <label for="live">Modo Activo</label>
+                <label class="cpswitch" for="live">
+                    <input type="checkbox" name="live" id="live" <?php echo ($live === true) ? 'checked' : ''; ?>>
+                    <div class="cpslider"></div>
+                </label>
+            </div>
+            <div style="width:25%;float:left;">
+                <label for="showlogo">Mostrar logos</label>
+                <label class="cpswitch" for="showlogo">
+                    <input type="checkbox" name="showlogo" id="showlogo" <?php echo ($showlogo === true) ? 'checked' : ''; ?>>
+                    <div class="cpslider"></div>
+                </label>
+            </div>
+            <div style="width:25%;float:left;">
+                <label for="debug">Modo depuracion</label>
+                <label class="cpswitch" for="debug">
+                    <input type="checkbox" name="debug" id="debug" <?php echo ($debug === 'yes') ? 'checked' : ''; ?>>
+                    <div class="cpslider"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="large-12 columns">
+            <br>
+            <hr>
+            <br>
         </div>
     </div>
 
@@ -65,16 +102,7 @@
             </label>
         </div>
     </div>
-    <div class="row">
-        <div class="large-12 columns">
-            <label for="live">
-                <input type="checkbox" name="live" id="live" style="margin-top: 10px" <?php echo ($live === true) ? 'checked' : ''; ?>> Modo Activo
-            </label>
-            <label for="showlogo">
-                <input type="checkbox" name="showlogo" id="showlogo" style="margin-top: 10px" <?php echo ($showlogo === true) ? 'checked' : ''; ?>> Mostrar logos
-            </label>
-        </div>
-    </div>
+
     <div class="row">
         <div class="large-12 columns">
             <label for="webhook">
@@ -93,7 +121,9 @@
                     } ?>
                 </select>
             </label>
-            <input type="button" value="Habilitar" id="agregar_proveedor" class="button primary expanded">
+            <button id="agregar_proveedor" class="button primary expanded">
+                Habilitar <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+            </button>
         </div>
         <div class="columns">
             <label for="prov-allowed">
@@ -104,7 +134,9 @@
                     } ?>
                 </select>
             </label>
-            <input type="button" value="Deshabilitar" id="quitar_proveedor" class="button primary expanded">
+            <button id="quitar_proveedor" class="button primary expanded">
+                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Deshabilitar
+            </button>
         </div>
     </div>
 
@@ -156,16 +188,6 @@
                     <option value="on-hold" <?php echo $initial_state == 'on-hold' ? 'selected' : ''; ?>>On Hold</option>
                     <option value="pending" <?php echo $initial_state == 'pending' ? 'selected' : ''; ?>>Pending</option>
                 </select>
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
-            <label for="debug">
-                <input type="checkbox" name="debug" id="debug" style="margin-top: 10px" <?php echo ($debug === 'yes') ? 'checked' : ''; ?>> Debug mode
-                <code>woocommerce/logs/compropago.txt</code>
-                <br>
             </label>
         </div>
     </div>

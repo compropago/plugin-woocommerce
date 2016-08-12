@@ -1,3 +1,106 @@
+/* Tooltip
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 170px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -85px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* Switch
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.cpswitch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.cpswitch input {display:none;}
+
+/* The slider */
+.cpslider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.cpslider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.cpswitch input:checked + .cpslider {
+    background-color: #2ba6cb;
+}
+
+.cpswitch input:focus + .cpslider {
+    box-shadow: 0 0 1px #2ba6cb;
+}
+
+.cpswitch input:checked + .cpslider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
 /* Bloc Login
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .cp-block-login{
@@ -289,123 +392,6 @@ button {
    */
 .cpcontainer optgroup {
   font-weight: bold; }
-
-
-/* Switch
-========================================================================== */
-
-
-.cpcontainer .switch {
-    margin-bottom: 1rem;
-    outline: 0;
-    position: relative;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    color: #fefefe;
-    font-weight: bold;
-    font-size: 0.875rem; }
-
-.cpcontainer .switch-input {
-    opacity: 0;
-    position: absolute; }
-
-.cpcontainer .switch-paddle {
-    background: #cacaca;
-    cursor: pointer;
-    display: block;
-    position: relative;
-    width: 4rem;
-    height: 2rem;
-    transition: all 0.25s ease-out;
-    border-radius: 0px;
-    color: inherit;
-    font-weight: inherit; }
-
-.cpcontainer input + .switch-paddle {
-    margin: 0; }
-
-.cpcontainer .switch-paddle::after {
-    background: #fefefe;
-    content: '';
-    display: block;
-    position: absolute;
-    height: 1.5rem;
-    left: 0.25rem;
-    top: 0.25rem;
-    width: 1.5rem;
-    transition: all 0.25s ease-out;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    border-radius: 0px; }
-
-.cpcontainer input:checked ~ .switch-paddle {
-    background: #2ba6cb; }
-
-.cpcontainer input:checked ~ .switch-paddle::after {
-    left: 2.25rem; }
-
-.cpcontainer [data-whatinput='mouse'] input:focus ~ .switch-paddle {
-    outline: 0; }
-
-.cpcontainer .switch-active,
-.cpcontainer .switch-inactive {
-    position: absolute;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%); }
-
-.cpcontainer .switch-active {
-    left: 8%;
-    display: none; }
-
-.cpcontainer input:checked + label > .switch-active {
-    display: block; }
-
-.cpcontainer .switch-inactive {
-    right: 15%; }
-
-.cpcontainer input:checked + label > .switch-inactive {
-    display: none; }
-
-.cpcontainer .switch.tiny .switch-paddle {
-    width: 3rem;
-    height: 1.5rem;
-    font-size: 0.625rem; }
-
-.cpcontainer .switch.tiny .switch-paddle::after {
-    width: 1rem;
-    height: 1rem; }
-
-.cpcontainer .switch.tiny input:checked ~ .switch-paddle::after {
-    left: 1.75rem; }
-
-.cpcontainer .switch.small .switch-paddle {
-    width: 3.5rem;
-    height: 1.75rem;
-    font-size: 0.75rem; }
-
-.cpcontainer .switch.small .switch-paddle::after {
-    width: 1.25rem;
-    height: 1.25rem; }
-
-.cpcontainer .switch.small input:checked ~ .switch-paddle::after {
-    left: 2rem; }
-
-.cpcontainer .switch.large .switch-paddle {
-    width: 5rem;
-    height: 2.5rem;
-    font-size: 1rem; }
-
-.cpcontainer .switch.large .switch-paddle::after {
-    width: 2rem;
-    height: 2rem; }
-
-.cpcontainer .switch.large input:checked ~ .switch-paddle::after {
-    left: 2.75rem; }
-
 
 
 /* Tables

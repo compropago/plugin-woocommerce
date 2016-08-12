@@ -49,6 +49,9 @@ function register_styles(){
 function compropago_config_page(){
     register_styles();
 
+    wp_register_style( 'glyphicons-style', plugins_url('templates/css/glyphicons/css/glyphicons.css', __FILE__) );
+    wp_enqueue_style( 'glyphicons-style' );
+    
     wp_register_script( 'config-script', plugins_url('templates/js/config-actions.js', __FILE__) );
     wp_register_script( 'jquery_cp', plugins_url('templates/js/jquery.js', __FILE__) );
     wp_enqueue_script( 'jquery_cp' );
