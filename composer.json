@@ -1,0 +1,5 @@
+{
+    "require": {
+        "compropago/php-sdk": "^3.0"
+    }
+}
