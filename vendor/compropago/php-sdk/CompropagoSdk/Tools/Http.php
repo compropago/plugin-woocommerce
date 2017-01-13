@@ -1,115 +1,91 @@
 <?php
-/**
- * Copyright 2015 Compropago.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/**
- * Compropago php-sdk
- * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
- */
-
 
 namespace CompropagoSdk\Tools;
 
-
-/**
- * Class Http Crea llamas Http para el consumo de servicios
- * @package CompropagoSdk\Tools
- */
 class Http
 {
-    /**
-     * Inicializa el objeto Http para las peticiones
-     *
-     * @param null $url
-     * @return resource
-     */
-    public static function initHttp($url = null)
+    private $url;
+    private $data;
+    private $auth;
+    private $method;
+    private $extra_headers;
+
+    public function __construct($url)
     {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        return $ch;
+        $this->url = $url;
     }
 
-    /**
-     * Define el metodo que ejecutara en la peticion
-     *
-     * @param $ch               resource    Instancia del Objeto Http
-     * @param $method           string      Tipo de peticion a ejecutar
-     * @throws \Exception
-     */
-    public static function setMethod(&$ch,$method)
+    public function setMethod($method)
     {
-        switch($method){
+        switch ($method) {
             case 'GET':
             case 'POST':
             case 'PUT':
             case 'DELETE':
-                curl_setopt($ch,CURLOPT_CUSTOMREQUEST, $method);
+                $this->method = $method;
                 break;
             default:
-                throw new \Exception("Metodo no soportado");
-                break;
+                throw new \Exception('Not supported method.');
         }
     }
 
-    /**
-     * Estable las claves de autentificacion a usar
-     *
-     * @param $ch       resource    Instancia del Objeto Http
-     * @param $auth     string      Cadena de autentificacion del cliente
-     */
-    public static function setAuth(&$ch, $auth)
+    public function setAuth(array $auth)
     {
-        curl_setopt($ch, CURLOPT_USERPWD, $auth);
-    }
-
-    /**
-     * Carga los campos que se enviaran dentro de la peticion
-     * El formato de envio es el sieguinte:
-     * campo1=valor1&campo2=valor2&.....campox=valorx
-     *
-     * @param $ch               resource    Instancia del Objeto Http
-     * @param string $fields                Campos a incluir en la peticion
-     */
-    public static function setPostFields(&$ch, $fields="")
-    {
-        if(!empty($fields)) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        if (array_key_exists('user', $auth) && array_key_exists('pass', $auth)) {
+            $this->auth = $auth['user'].':'.$auth['pass'];
+        }else{
+            $this->auth = array();
         }
     }
 
-    /**
-     * Carga los headers que se enviaran en la peticion http
-     *
-     * @param $ch
-     * @param array $headers
-     */
-    public static function setHeaders(&$ch, array $headers)
+    public function setData(array $data)
     {
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        if (!empty($data)) {
+            $this->data = json_encode($data);
+        }
     }
 
-    /**
-     * Ejecuta la peticion Http que se le especifique
-     *
-     * @param $ch
-     * @return mixed
-     * @throws \Exception
-     */
-    public static function execHttp(&$ch)
+    public function setExtraHeaders(array $headers)
     {
+        if (!empty($headers)) {
+            $this->extra_headers = $headers;
+        }
+    }
+
+    public function executeRequest()
+    {
+        $ch = curl_init($this->url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
+
+        if (!empty($this->auth)) {
+            curl_setopt($ch, CURLOPT_USERPWD, $this->auth);
+        }
+
+        if (!empty($this->data)) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data);
+        }
+
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Cache-Control' => 'no-cache',
+            'Content-Length' => strlen($this->data)
+        ];
+
+        $final_headers = [];
+
+        if (!empty($this->extra_headers)) {
+            foreach ($this->extra_headers as $key => $value) {
+                $headers[$key] = $value;
+            }
+        }
+
+        foreach ($headers as $key => $value) {
+            $final_headers[] = $key.': '.$value;
+        }
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $final_headers);
+
         $response = curl_exec($ch);
 
         if(empty($response)){
@@ -127,6 +103,9 @@ class Http
             }
         }
 
+        curl_close($ch);
+
         return $response;
     }
+
 }

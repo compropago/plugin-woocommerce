@@ -22,7 +22,7 @@
 
 <section class="cpcontainer">
 
-    <div class="row">
+    <div class="row" id="top">
         <div class="large-12 columns">
             <h1>ComproPago Config</h1>
             <hr>
@@ -41,50 +41,58 @@
         </div>
     </div>
 
+
+
     <div class="row">
-        <div class="large-12 columns">
-            <div style="width:25%;float:left;">
-                <div class="tooltip">
-                    Activar
-                    <span class="tooltiptext">Activa o desactiva ComproPago como metodo de pago en WooCommerce</span>
-                </div>
-                <br>
-                <label class="cpswitch" for="enabled">
-                    <input type="checkbox" name="enabled" id="enabled" <?php echo ($enabled === true) ? 'checked' : ''; ?>>
-                    <div class="cpslider"></div>
-                </label>
+        <div class="small-12 medium-3 large-3 columns">
+          <p>Activar método de pago</p>
+            <div class="switch small">
+              <input class="switch-input" type="checkbox" name="enabled" id="enabled" style="margin-top: 10px" <?php echo ($enabled === true) ? 'checked' : ''; ?>>
+              <label class="switch-paddle" for="enabled">
+                <span class="switch-active" aria-hidden="true">Si</span>
+                <span class="switch-inactive" aria-hidden="true">No</span>
+              </label>
             </div>
-            <div style="width:25%;float:left;">
-                <label for="live">Modo Activo</label>
-                <label class="cpswitch" for="live">
-                    <input type="checkbox" name="live" id="live" <?php echo ($live === true) ? 'checked' : ''; ?>>
-                    <div class="cpslider"></div>
-                </label>
+
+        </div>
+
+        <div class="small-12 medium-3 large-3 columns">
+          <p>Modo Activo</p>
+            <div class="switch small">
+              <input class="switch-input" type="checkbox" name="live" id="live" style="margin-top: 10px" <?php echo ($live === true) ? 'checked' : ''; ?>>
+              <label class="switch-paddle" for="live">
+                <span class="switch-active" aria-hidden="true">Si</span>
+                <span class="switch-inactive" aria-hidden="true">No</span>
+              </label>
             </div>
-            <div style="width:25%;float:left;">
-                <label for="showlogo">Mostrar logos</label>
-                <label class="cpswitch" for="showlogo">
-                    <input type="checkbox" name="showlogo" id="showlogo" <?php echo ($showlogo === true) ? 'checked' : ''; ?>>
-                    <div class="cpslider"></div>
-                </label>
+        </div>
+
+        <div class="small-12 medium-3 large-3 columns">
+          <p>Mostrar Logos</p>
+          <div class="switch small">
+            <input class="switch-input" type="checkbox" name="showlogo" id="showlogo" style="margin-top: 10px" <?php echo ($showlogo === true) ? 'checked' : ''; ?>>
+            <label class="switch-paddle" for="showlogo">
+              <span class="switch-active" aria-hidden="true">Si</span>
+              <span class="switch-inactive" aria-hidden="true">No</span>
+            </label>
+          </div>
+
+        </div>
+
+        <div class="small-12 medium-3 large-1 columns">
+            <p>Debug</p>
+            <div class="switch small">
+              <input class="switch-input" type="checkbox" name="debug" id="debug" style="margin-top: 10px" <?php echo ($debug === 'yes') ? 'checked' : ''; ?>>
+              <label class="switch-paddle" for="debug">
+                <span class="switch-active" aria-hidden="true">Si</span>
+                <span class="switch-inactive" aria-hidden="true">No</span>
+              </label>
             </div>
-            <div style="width:25%;float:left;">
-                <label for="debug">Modo depuracion</label>
-                <label class="cpswitch" for="debug">
-                    <input type="checkbox" name="debug" id="debug" <?php echo ($debug === 'yes') ? 'checked' : ''; ?>>
-                    <div class="cpslider"></div>
-                </label>
-            </div>
+
         </div>
     </div>
 
-    <div class="row">
-        <div class="large-12 columns">
-            <br>
-            <hr>
-            <br>
-        </div>
-    </div>
+
 
     <div class="row">
         <div class="large-12 columns">
@@ -103,14 +111,18 @@
         </div>
     </div>
 
+
     <div class="row">
         <div class="large-12 columns">
             <label for="webhook">
-                Webhook
-                <input type="text" name="webhook" id="webhook" value="<?php echo $webhook; ?>">
+<!--                Webhook
+-->
+                <input type="hidden" name="webhook" id="webhook" value="<?php echo $webhook; ?>">
             </label>
         </div>
     </div>
+
+
     <div class="row">
         <div class="columns">
             <label for="prov-disabled">
@@ -121,9 +133,7 @@
                     } ?>
                 </select>
             </label>
-            <button id="agregar_proveedor" class="button primary expanded">
-                Habilitar <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-            </button>
+            <input type="button" value="Habilitar" id="agregar_proveedor" class="button primary expanded">
         </div>
         <div class="columns">
             <label for="prov-allowed">
@@ -134,9 +144,7 @@
                     } ?>
                 </select>
             </label>
-            <button id="quitar_proveedor" class="button primary expanded">
-                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Deshabilitar
-            </button>
+            <input type="button" value="Deshabilitar" id="quitar_proveedor" class="button primary expanded">
         </div>
     </div>
 
@@ -191,6 +199,8 @@
             </label>
         </div>
     </div>
+
+
 
     <div class="row">
         <div class="large-12 columns">

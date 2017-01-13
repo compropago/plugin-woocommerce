@@ -4,16 +4,16 @@
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
  * @since 3.0.0
  */
-
 require_once __DIR__ . "/controllers/Utils.php";
 
 use CompropagoSdk\Client;
 use CompropagoSdk\Tools\Validations;
-use CompropagoSdk\Models\PlaceOrderInfo;
+use CompropagoSdk\Factory\Models\PlaceOrderInfo;
+use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="3.0.4";
+    const VERSION="3.1.0";
 
     private $compropagoConfig;
     private $client;
@@ -43,13 +43,13 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->init_form_fields();
         $this->init_settings();
 
-        
+
         $this->activeplugin  = $this->settings['enabled'];
 
         $this->debug         = get_option('compropago_debug');
         $this->initialstate  = get_option('compropago_initial_state');
         $this->completeorder = get_option('compropago_completed_order');
-        $this->title 		 = get_option('compropago_title');
+        $this->title 		     = get_option('compropago_title');
         $this->publickey     = get_option('compropago_publickey');
         $this->privatekey    = get_option('compropago_privatekey');
         $this->live          = get_option('compropago_live') == 'yes' ? true : false;
@@ -58,7 +58,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->instrucciones = get_option('compropago_instrucciones');
         $this->provallowed   = get_option('compropago_provallowed');
 
-        
+
         //paso despues de selccion de gateway
         $this->has_fields	 = true;
         $this->controlVision = 'no';
@@ -77,10 +77,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         }
 
         $this->setCompropagoConfig();
-        
+
        // var_dump($this->filterStores);
-        
-        //just validate on admin site 
+
+        //just validate on admin site
         if(is_admin()){
         	$this->feedBackCompropago();
         }
@@ -88,7 +88,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 
     }
-	
+
     /**
      * Plugin key|mode Validation and Warnings
      * @since 3.0.2
@@ -98,7 +98,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
     	$alert = file_get_contents(__DIR__."/templates/alert.html");
 
         $flagerror = Utils::retroalimentacion($this->publickey, $this->privatekey, $this->live, $this->settings);
-    	
+
     	if($flagerror[0]){
     		$alert = str_replace(":message:",$flagerror[1],$alert);
     		$this->method_description .= $alert;
@@ -122,7 +122,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administracion de Wordpress desde <a href="./admin.php?page=add-compropago">AQUI</a>','compropago'),
                 'default' 		=> 'no'
             )
-            
+
         );
 
     }
@@ -176,37 +176,38 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             $product_list = implode( ' , ', $product_name );
             $orderDetails .= $product_list;
 
+            $order_info = [
+              'order_id' => $order_id,
+              'order_name' => 'No. orden: '.$order_id,
+              'order_price' => $order->get_total(),
+              'customer_name' => $order->billing_first_name . ' ' . $order->billing_last_name,
+              'customer_email' => $order->billing_email,
+              'payment_type' => $this->orderProvider,
+              'currency' => get_option('woocommerce_currency'),
+              'image_url' => null,
+              'app_client_name' => 'woocommerce',
+              'app_client_version' => $woocommerce->version
 
-            $ordercp = new PlaceOrderInfo(
-                $order_id,
-                $orderDetails,
-                $order->get_total(),
-                $order->billing_first_name . ' ' . $order->billing_last_name,
-                $order->billing_email,
-                $this->orderProvider,
-                null,
-                'woocommerce',
-                $woocommerce->version
-            );
+            ];
+
+	    $ordercp = Factory::getInstanceOf('PlaceOrderInfo', $order_info);
 
             $this->client = new Client(
                 $this->compropagoConfig['publickey'],
                 $this->compropagoConfig['privatekey'],
-                $this->compropagoConfig['live'],
-                $this->compropagoConfig['contained']
+                $this->compropagoConfig['live']
             );
 
 
             $compropagoResponse = $this->client->api->placeOrder($ordercp) ;
-
 
             if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
                 !$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")){
                 throw new Exception('ComproPago Tables Not Found');
             }
 
-            if($compropagoResponse->getStatus()!='pending'){
-                throw new Exception('ComproPago is not available - status not pending - '.$compropagoResponse->getStatus());
+            if($compropagoResponse->status != 'pending'){
+                throw new Exception('ComproPago is not available - status not pending - '.$compropagoResponse->status);
             }
 
             $dbprefix = $wpdb->prefix;
@@ -218,8 +219,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             $wpdb->insert($dbprefix . 'compropago_orders', array(
                     'date' 				=> $recordTime,
                     'modified' 			=> $recordTime,
-                    'compropagoId'		=> $compropagoResponse->getId(),
-                    'compropagoStatus'	=> $compropagoResponse->getStatus(),
+                    'compropagoId'		=> $compropagoResponse->id,
+                    'compropagoStatus'	=> $compropagoResponse->status,
                     'storeCartId'		=> $order_id,
                     'storeOrderId'		=> $order_id,
                     'storeExtra'		=> 'COMPROPAGO_PENDING',
@@ -234,9 +235,9 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             $wpdb->insert($dbprefix . 'compropago_transactions', array(
                     'orderId' 			=> $idCompropagoOrder,
                     'date' 				=> $recordTime,
-                    'compropagoId'		=> $compropagoResponse->getId(),
-                    'compropagoStatus'	=> $compropagoResponse->getStatus(),
-                    'compropagoStatusLast'	=> $compropagoResponse->getStatus(),
+                    'compropagoId'		=> $compropagoResponse->id,
+                    'compropagoStatus'	=> $compropagoResponse->status,
+                    'compropagoStatusLast'	=> $compropagoResponse->status,
                     'ioIn' 				=> $ioIn,
                     'ioOut' 			=> $ioOut
                 )
@@ -281,8 +282,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             $this->client = new Client(
                 $this->compropagoConfig['publickey'],
                 $this->compropagoConfig['privatekey'],
-                $this->compropagoConfig['live'],
-                $this->compropagoConfig['contained']
+                $this->compropagoConfig['live']
             );
 
 
@@ -294,8 +294,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 return;
                 //die('IF s valid for use');
             }
-        
-            $providers = $this->client->api->listProviders(false,$cart_subtotal);
+
+            $providers = $this->client->api->listProviders(true, $cart_subtotal, get_option('woocommerce_currency'));
 
             $filtered = array();
 
@@ -355,13 +355,13 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
      */
     public function is_valid_for_use() {
         //solo acepta total en Pesos Mexicanos
-        if(get_option('woocommerce_currency')=='MXN'){
+        if(get_option('woocommerce_currency')=='MXN' || get_option('woocommerce_currency')=='USD' || get_option('woocommerce_currency')=='EUR' || get_option('woocommerce_currency')=='GBP'){
             try {
                 $this->client = new Client(
                     $this->compropagoConfig['publickey'],
                     $this->compropagoConfig['privatekey'],
-                    $this->compropagoConfig['live'],
-                    $this->compropagoConfig['contained']
+                    $this->compropagoConfig['live']
+                    //$this->compropagoConfig['contained']
                 );
 
                 Validations::validateGateway($this->client);

@@ -26,7 +26,6 @@ Licence: Apache-2
  * Compropago plugin-woocommerce
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
  */
-
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/controllers/Utils.php";
 
@@ -49,9 +48,6 @@ function register_styles(){
 function compropago_config_page(){
     register_styles();
 
-    wp_register_style( 'glyphicons-style', plugins_url('templates/css/glyphicons/css/glyphicons.css', __FILE__) );
-    wp_enqueue_style( 'glyphicons-style' );
-    
     wp_register_script( 'config-script', plugins_url('templates/js/config-actions.js', __FILE__) );
     wp_register_script( 'jquery_cp', plugins_url('templates/js/jquery.js', __FILE__) );
     wp_enqueue_script( 'jquery_cp' );
@@ -110,7 +106,7 @@ function compropago_config_page(){
     }
 
 
-    
+
     $retro = Utils::retroalimentacion($publickey,$privatekey,$live,$config);
     $image_load = plugins_url('templates/img/ajax-loader.gif', __FILE__);
 
@@ -141,7 +137,7 @@ add_action( 'admin_menu', 'compropago_add_admin_page' );
 
 /**
  * Rutina de instalacion para tabla de transacciones
- * 
+ *
  * @throws Exception
  */
 function compropago_active(){
@@ -165,7 +161,7 @@ function compropago_active(){
             throw new Exception('Unable to Create ComproPago Tables, module cant be installed');
     }
 
-    
+
     /* Generacion de ruta al controlador de la peticion
 
     $url = plugins_url( 'controllers/ConfigController.php', __FILE__ );
@@ -236,4 +232,3 @@ function compropago_init() {
 
 
 add_action('plugins_loaded', 'compropago_init', 0);
-

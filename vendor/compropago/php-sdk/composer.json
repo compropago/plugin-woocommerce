@@ -17,9 +17,6 @@
   "require-dev":{
     "phpunit/phpunit": ">=5.3"
   },
-  "suggest":{
-    "compropago/views-sdk": "Permite la manipulacion de Listado de Proveedores, Recibos de compra y botones de pago dinamicos"
-  },
   "autoload": {
     "psr-4": {
       "CompropagoSdk\\": "CompropagoSdk"

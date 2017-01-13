@@ -1,4 +1,4 @@
-# ComproPago PHP SDK v2.0.0
+# ComproPago PHP SDK
 
 ## Descripción
 
@@ -50,6 +50,29 @@ O si o lo desea puede obtener el repositorio
 git clone https://github.com/compropago/compropago-php.git
 ```
 
+Despues debara de incluir en su proyecto el archivo `CompropagoSdk\UnitTest\autoload.php`, el cual le proporcionara
+el acceso a todas las clases del SDK.
+
+```php
+<?php
+require_once 'CompropagoSdk/UnitTest/autoload.php';
+```
+
+### Instalación pro Composer
+
+Puede descargar el SDK directamente desde el repositorio de composer con el siguiente comando:
+```bash
+composer require compropago/php-sdk
+```
+
+O si lo prefiere puede incluirlo directamente en su archivo composer.json
+```json
+{
+  "require": {
+    "compropago/php-sdk": "3.0.0"
+  }
+}
+```
 
 ## Documentación
 
@@ -101,19 +124,18 @@ un instancia de Client.
 # @param string publickey     Llave publica correspondiente al modo de la tienda
 # @param string privatekey    Llave privada correspondiente al modo de la tienda
 # @param bool   live          Modo de la tienda (false = Test | true = Live)
-# @param string contained     (optional) App User agent
 
 $client = new Client(
     'pk_test_5989d8209974e2d62',  # publickey
     'sk_test_6ff4e982253c44c42',  # privatekey
-    false,                        # live
-    null                          # contaiden
+    false                         # live
 );
 ```
 
-### Uso Básico de la gema
+### Uso Básico de la Libreria
 
-> Consulte la documentación de la librería PHP de ComproPago para conocer más de sus capacidades, configuraciones y métodos.
+> Consulte la documentación de la librería PHP de ComproPago para conocer más de sus capacidades, configuraciones y 
+métodos.
 
 
 #### Llamados al los servicios por SDK
@@ -129,23 +151,19 @@ de la variable **client** como se muestra a continuación.
 
 ```php
 <?php
-# @param [String] order_id          Id de la orden
-# @param [String] order_name        Nombre del producto o productos de la orden
-# @param [Float]  order_price       Monto total de la orden
-# @param [String] customer_name     Nombre completo del cliente
-# @param [String] customer_email    Correo electronico del cliente
-# @param [String] payment_type      (default = OXXO) Valor del atributo internal_name' de un objeto 'Provider' 
-# @param [String] image_url         (optional) Url a la imagen del producto
 
-$order = new PlaceOrderInfo(
-    '123',                                # order_id
-    'M4 Style Ruby',                      # order_name
-    1000,                                 # order_price
-    'Eduardo Aguilar',                    # customer_name
-    'eduardo.aguilar@compropago.com',     # customer_email
-    'OXXO',                               # payment_type
-    null                                  # image_url
-);
+# Se genera el objeto con la informacion de la orden
+
+$order_info = [
+    'order_id' => 12,
+    'order_name' => 'M4 php sdk',
+    'order_price' => 123.45,
+    'customer_name' => 'Eduardo',
+    'customer_email' => 'asd@asd.com',
+    'payment_type' => 'OXXO',
+    'currency' => 'MXN'
+];
+$order = \CompropagoSdk\Factory\Factory::getInstanceOf('PlaceOrderInfo', $order_info);
 
 
 # Llamada al metodo 'place_order' del API para generar la orden
@@ -160,19 +178,19 @@ $neworder = $client->api->placeOrder($order);
 ```php
 <?php
 /**
- * @param PlaceOrderInfo $neworder
- * @return \CompropagoSdk\Factory\Abs\NewOrderInfo
+ * @param $neworder 
+ * @return \CompropagoSdk\Factory\Models\NewOrderInfo
  * @throws \Exception
  */
-public function placeOrder(PlaceOrderInfo $neworder){}
+public function placeOrder($neworder){}
 ```
 
 ##### Verificar el Estatus de una orden
 
 Para verificar el estatus de una orden generada es necesario llamar al metodo **verifyOrder** que provee el atributo
 **api** del objeto **Client** y el cual regresa una instancia **CpOrderInfo**. este metodo recibe como parametro el ID
-generado por ComproPago para cada orden. Tambien puede obtener este ID desde un objeto **NewOrderInfo** accediendo al
-metodo **getId**.
+generado por ComproPago para cada orden. Tambien puede obtener este ID desde un objeto **NewOrderInfo** accediendo al 
+atributo **id**.
 
 ```php
 <?php
@@ -180,7 +198,7 @@ metodo **getId**.
 $order_id = "ch_xxxx_xxx_xxx_xxxx";
 
 # U obtenerlo de un objetdo NewOrderInfo
-$order_id = $neworder->getId();
+$order_id = $neworder->id;
 
 
 # Se manda llamar al metodo del API para recuperar la informacion de la orden
@@ -193,7 +211,7 @@ $info = $client->api->verifyOrder($order_id);
 <?php
 /**
  * @param $orderId
- * @return \CompropagoSdk\Factory\Abs\CpOrderInfo
+ * @return \CompropagoSdk\Factory\Models\CpOrderInfo
  * @throws \Exception
  */
 public function verifyOrder( $orderId ){}
@@ -222,7 +240,7 @@ $providers = $client->api->listProviders();
  * @return array
  * @throws \Exception
  */
-public function listProviders($auth = false, $limit = 0, $fetch = false){}
+public function listProviders($auth = false, $limit = 0){}
 ```
 
 ##### Envio de instrucciones SMS
@@ -249,7 +267,7 @@ $smsinfo = $client->api->sendSmsInstructions($phone_number , $order_id);
 /**
  * @param $number
  * @param $orderId
- * @return \CompropagoSdk\Factory\Abs\SmsInfo
+ * @return \CompropagoSdk\Factory\Models\SmsInfo
  * @throws \Exception
  */
 public function sendSmsInstructions($number,$orderId){}
@@ -269,7 +287,7 @@ logica de aprobacion en su tienda en linea. El proceso que siguenes el siguiente
 ```php
 <?php
 # $cadena_obtenida es un String
-$info = Factory::cpOrderInfo($cadena_obtenida);
+$info = \CompropagoSdk\Factory\Factory::getInstanceOf('CpOrderInfo', $cadena_obtenida);
 ```
 
 3. Generar la logica de aprovacion correspondiente al estatus de la orden.
@@ -291,7 +309,7 @@ $webhook = $client->api->createWebhook('http://sitio.com/webhook');
 <?php
 /**
  * @param $url
- * @return \CompropagoSdk\Models\Webhook
+ * @return \CompropagoSdk\Factory\Models\Webhook
  * @throws \Exception
  */
 public function createWebhook($url){}
@@ -314,7 +332,7 @@ $updated_webhook = $client->api->updateWebhook($webhook->getId(), 'http://sitio.
 /**
  * @param $webhookId
  * @param $url
- * @return \CompropagoSdk\Models\Webhook
+ * @return \CompropagoSdk\Factory\Models\Webhook
  * @throws \Exception
  */
 public function updateWebhook($webhookId, $url){}
@@ -336,7 +354,7 @@ $deleted_webhook = $client->api->deleteWebhook( $webhook->getId() );
 <?php
 /**
  * @param $webhookId
- * @return \CompropagoSdk\Models\Webhook
+ * @return \CompropagoSdk\Factory\Models\Webhook
  * @throws \Exception
  */
 public function deleteWebhook($webhookId){}
@@ -363,19 +381,3 @@ $all_webhooks = $client->api->listWebhooks();
  */
 public function listWebhooks(){}
 ```
-
-
-## Guía de Versiones
-
-| Version | Status      | Packagist            | Namespace        | PHP   | Repo                            | Docs                    |
-|---------|-------------|----------------------|------------------|-------|---------------------------------|-------------------------|
-| 1.0.x   | Deprecated  | `compropago/php-sdk` | `Compropago`     | 5.3 + | v1.0.x                          | [v1][compropago-1-docs] |
-| 1.1.x   | Deprecated  | `compropago/php-sdk` | `Compropago\Sdk` | 5.5 + | v1.1.x                          | [v1][compropago-1-docs] |
-| 1.1.1   | Deprecated  | `compropago/php-sdk` | `Compropago\Sdk` | 5.5 + | v1.1.x                          | [v1][compropago-1-docs] |
-| 1.2.0   | Maintained  | `compropago/php-sdk` | `Compropago\Sdk` | 5.5 + | v1.2.0                          | [v1][compropago-1-docs] |
-| 2.0.0   | Latest      | `compropago/php-sdk` | `CompropagoSdk`  | 5.5 + | [v2.0.0][latest-repo]           | [v1][compropago-1-docs] |
-
-
-[compropago-1-docs]: https://compropago.com/documentacion/api
-
-[latest-repo]: http://github.com/compropago/compropago-php

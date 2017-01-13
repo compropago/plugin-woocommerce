@@ -21,7 +21,7 @@ $(function(){
             }
         });
     });
-    
+
     $("#save-config-compropago").click(function(){
         $("#loadig").fadeIn();
 
@@ -58,16 +58,17 @@ $(function(){
                         $("#display_error_config").addClass('cpsuccess');
                     }
 
-
+                    $(document).scrollTop($("body").offset().top);
                     $("#display_error_config").html(res.message);
                     $("#display_error_config").fadeIn();
                     $("#display_error_config").removeClass('error');
-                    
+
                     renderRetro(res.retro);
                 },
                 error: function(res){
                     $("#display_error_config").removeClass('cperror');
                     $("#display_error_config").addClass('cpsuccess');
+                    $(document).scrollTop($("body").offset().top);
                     $("#display_error_config").html(res);
                     $("#display_error_config").fadeIn();
                     $("#display_error_config").removeClass('error');
@@ -132,7 +133,7 @@ function validateSendConfig(data){
     }else{
         alert('Las llaves no deben de estar vacias');
     }
-    
+
     return false;
 }
 

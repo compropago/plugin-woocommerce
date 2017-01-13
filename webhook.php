@@ -30,7 +30,7 @@ use CompropagoSdk\Client;
 use CompropagoSdk\Tools\Validations;
 
 $request = @file_get_contents('php://input');
-if(!$resp_webhook = Factory::cpOrderInfo($request)){
+if(!$resp_webhook = Factory::getInstanceOf("CpOrderInfo",$request)){
 	die('Tipo de Request no Valido');
 }
 
@@ -78,7 +78,7 @@ $compropagoConfig= array(
     'publickey'  => $publickey,
     'privatekey' => $privatekey,
     'live'       => $live,
-    'contained'  => 'plugin; cpwc 3.0.0 ; woocommerce '.$woocommerce->version.'; wordpress '.$wp_version.'; webhook;'
+    //'contained'  => 'plugin; cpwc 3.0.0 ; woocommerce '.$woocommerce->version.'; wordpress '.$wp_version.'; webhook;'
 );
 
 
@@ -88,8 +88,8 @@ try{
 	$client = new Client(
         $compropagoConfig['publickey'],
         $compropagoConfig['privatekey'],
-        $compropagoConfig['live'],
-        $compropagoConfig['contained']
+        $compropagoConfig['live']
+      //$compropagoConfig['contained']
     );
 
     Validations::validateGateway($client);
@@ -101,16 +101,16 @@ try{
 
 
 //webhook Test?
-if($resp_webhook->getId()=="ch_00000-000-0000-000000"){
+if($resp_webhook->id=="ch_00000-000-0000-000000"){
 	die("Probando el WebHook?, <b>Ruta correcta.</b>");
 }
 
 
 
 try{
-	$response = $client->api->verifyOrder($resp_webhook->getId());
+	$response = $client->api->verifyOrder($resp_webhook->id);
 
-	if($response->getType() == 'error'){
+	if($response->type == 'error'){
 		die('Error procesando el número de orden');
 	}
 
@@ -119,8 +119,8 @@ try{
     ){
         die('ComproPago Tables Not Found');
 	}
-	
-	switch ($response->getType()){
+
+	switch ($response->type){
 		case 'charge.success':
 			$nomestatus = "COMPROPAGO_SUCCESS";
 			break;
@@ -143,7 +143,7 @@ try{
 			die('Invalid Response type');
 	}
 
-	$sql = "SELECT * FROM ".$wpdb->prefix."compropago_orders WHERE compropagoId = '".$response->getId()."' ";
+	$sql = "SELECT * FROM ".$wpdb->prefix."compropago_orders WHERE compropagoId = '".$response->id."' ";
 
 	if ($row = $wpdb->get_row($sql)){
 
@@ -184,11 +184,11 @@ try{
 			default:
 				$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
 		}
-		
-		
 
-		$sql = "UPDATE `".$wpdb->prefix."compropago_orders` SET `modified` = '".$recordTime."', 
-		`compropagoStatus` = '".$response->getType()."', `storeExtra` = '".$nomestatus."' WHERE `id` = '".$row->id."'";
+
+
+		$sql = "UPDATE `".$wpdb->prefix."compropago_orders` SET `modified` = '".$recordTime."',
+		`compropagoStatus` = '".$response->type."', `storeExtra` = '".$nomestatus."' WHERE `id` = '".$row->id."'";
 
 		if(!$wpdb->query($sql)){
 			die("Error Updating ComproPago Order Record at Store");
@@ -201,15 +201,15 @@ try{
 		$wpdb->insert($wpdb->prefix . 'compropago_transactions', array(
 				'orderId' 			=> $row->id,
 				'date' 				=> $recordTime,
-				'compropagoId'		=> $response->getId(),
-				'compropagoStatus'	=> $response->getType(),
+				'compropagoId'		=> $response->id,
+				'compropagoStatus'	=> $response->type,
 				'compropagoStatusLast'	=> $row->compropagoStatus,
 				'ioIn' 				=> $ioIn,
 				'ioOut' 			=> $ioOut
 				)
 			);
-		
-		echo('Orden '.$resp_webhook->getId().', transacción ejecutada');
+
+		echo('Orden '.$resp_webhook->id.', transacción ejecutada');
 
 	}else{
 		die('El número de orden no se encontro en la tienda');

@@ -1,12 +1,22 @@
 # CHANGELOG
 
+## 2.1.0 2016-10-26
+* Feature: Cambio Unificación de payloads de instrucciones, para pago referenciado, numeros de tarjeta y convenio bancario
+* Feature: Mejoras en las unit test
+* Deleted: CompropagoSdk\Factory\Abs\Instructions
+* Deleted: CompropagoSdk\Factory\Abs\InstructionDetails
+* Deleted: CompropagoSdk\Factory\V10\Instructions10
+* Deleted: CompropagoSdk\Factory\V10\InstructionDetails10
+* Added: CompropagoSdk\Models\Instructions
+* Added: CompropagoSdk\Models\InstructionDetails 
+
 ## 2.0.0 2016-07-20
 * Feature: cambio a patron Factory para manejo de versionamiénto API
 * Feature: separación de vistas del SDK
 * Note: renombrameinto de metodo **getProviders** por **listProviders**
 * Note: renombrameinto de metodo **getWebhooks** por **listWebhooks**
 
-## 1.2.0 2016-07-12
+## 1.2.0 (Deprecated) 2016-07-12
 * Require: PHP >= 5.5
 * Feature: CRUD de administracion de Webhooks
     * getWebhooks
