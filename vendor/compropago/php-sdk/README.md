@@ -1,22 +1,23 @@
-[![Documentation Status](https://readthedocs.org/projects/compropago-php-sdk/badge/?version=latest)](http://compropago-php-sdk.readthedocs.org/es/latest/?badge=latest)
-
-ComproPago, PHP API client (PHP-SDK)
-==============================
+# ComproPago PHP SDK
 
 ## Descripción
-La librería de ComproPago-PHP le permite interactuar con el API de ComproPago en su aplicación.  También cuenta con los métodos necesarios para facilitarle su desarrollo por medio de los servicios y vistas más utilizados (SDK). 
+
+La librería de `ComproPago PHP SDK` le permite interactuar con el API de ComproPago en su aplicación.
+También cuenta con los métodos necesarios para facilitarle su desarrollo por medio de los servicios 
+más utilizados (SDK).
 
 Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
 
-[Registrarse en ComproPago ] (https://compropago.com)
+[Registrarse en ComproPago](https://compropago.com)
 
 ## Índice de Contenidos
-- [Ayuda y Soporte de ComproPago] (#ayuda-y-soporte-de-compropago)
-- [Requerimientos] (#requerimientos)
-- [Instalación ComproPago SDK] (#instalación-compropago-sdk)
-- [Documentación] (#documentación)
-- [Guía básica de Uso] (#guía-básica-de-uso)
-- [Guía de Versiones] (#guía-de-versiones)
+
+- [Ayuda y Soporte de ComproPago](#ayuda-y-soporte-de-compropago)
+- [Requerimientos](#requerimientos)
+- [Instalación ComproPago SDK](#instalación-compropago-sdk)
+- [Documentación](#documentación)
+- [Guía básica de Uso](#guía-básica-de-uso)
+- [Guía de Versiones](#guía-de-versiones)
 
 
 ## Ayuda y Soporte de ComproPago
@@ -28,87 +29,68 @@ Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en tod
 
 ## Requerimientos
 
-* [PHP >= 5.5](http://www.php.net/)
-* [PHP JSON extension](http://php.net/manual/en/book.json.php)
-* [PHP cURL extension](http://php.net/manual/en/book.curl.php)
+* Composer
+* PHP >= 5.5
+* CURL Extension
+* JSON Extension
 
-## Instalación ComproPago SDK
 
-### Instalación usando Composer
+## Instalación ComproPago PHP SDK
 
-La manera recomenda de instalar la SDK de ComproPago es por medio de [Composer](http://getcomposer.org).
-- [Como instalar Composer?](https://getcomposer.org/doc/00-intro.md)
+### Instalación por GitHub
 
-Para instalar la última versión **Estable de la SDK**, ejecuta el comando de Composer:
+Puede descargar alguna de las versiones que hemos publicado:
 
+- [Consultar Versiones Publicadas en GitHub](https://github.com/compropago/compropago-php/releases)
+
+O si o lo desea puede obtener el repositorio
+
+```bash
+#repositorio en su estado actual (*puede no ser versón estable*)
+git clone https://github.com/compropago/compropago-php.git
+```
+
+Despues debara de incluir en su proyecto el archivo `CompropagoSdk\UnitTest\autoload.php`, el cual le proporcionara
+el acceso a todas las clases del SDK.
+
+```php
+<?php
+require_once 'CompropagoSdk/UnitTest/autoload.php';
+```
+
+### Instalación pro Composer
+
+Puede descargar el SDK directamente desde el repositorio de composer con el siguiente comando:
 ```bash
 composer require compropago/php-sdk
 ```
 
-Posteriormente o en caso de erro de carga de archivos, volvemos a crear el autoload:
-   
-```bash
-composer dumpautoload -o
-```
-   
-O agregando manualmente al archivo composer.json
-```bash
-"require": { 
-		"compropago/php-sdk":"^1.1"
-	}
-```
-```bash
-composer install
+O si lo prefiere puede incluirlo directamente en su archivo composer.json
+```json
+{
+  "require": {
+    "compropago/php-sdk": "3.0.0"
+  }
+}
 ```
 
-Después de la instalación para poder hacer uso de la librería es **necesario incluir** el autoloader de Composer:
-
-```php
-require 'vendor/autoload.php';
-```
-
-Para actualizar el SDK de ComproPago a la última versión estable ejecutar:
-
- ```bash
-composer update
- ```
-### Instalación descargando archivo ZIP
-
-Descargar y descomprimir el archivo de la versión a utilizar:
-- [Última Estable] [compropago-estable-dl]
-
-
-Para poder hacer uso de la librería es **necesario incluir** el autoloader que se encuentra dentro de la carpeta **vendor** del archivo que descomprimió:
-```php
-require 'vendor/autoload.php';
-```
-###Instalación por GitHub
-
-Puede descargar alguna de las versiones que hemos publicado:
-- [Consultar Versiones Publicadas en GitHub](https://github.com/compropago/compropago-php/releases)
-
-O si o lo desea puede obtener el repositorio
- ```bash
- #repositorio en su estado actual (*puede no ser versón estable*)
-git clone https://github.com/compropago/compropago-php.git
- ```
- Para poder hacer uso de la librería es necesario que incluya **Todos** los archivos contenidos en la carpeta **src/Compropago** 
- 
 ## Documentación
-### Documentación PHP-SDK ComproPago
+
+### Documentación ComproPago PHP SDK
 
 ### Documentación de ComproPago
-**[API de ComproPago] (https://compropago.com/documentacion/api)**
+
+**[API de ComproPago](https://compropago.com/documentacion/api)**
 
 ComproPago te ofrece un API tipo REST para integrar pagos en efectivo en tu comercio electrónico o tus aplicaciones.
 
-
-**[General] (https://compropago.com/documentacion)**
+**[General](https://compropago.com/documentacion)**
 
 Información de Comisiones y Horarios, como Transferir tu dinero y la Seguridad que proporciona ComproPAgo
 
 
-**[Herramientas] (https://compropago.com/documentacion/boton-pago)**
+**[Herramientas](https://compropago.com/documentacion/boton-pago)**
+
 * Botón de pago
 * Modo de pruebas/activo
 * WebHooks
@@ -116,167 +98,286 @@ Información de Comisiones y Horarios, como Transferir tu dinero y la Seguridad 
 * Shopify
 
 ## Guía básica de Uso
-Se debe contar con una cuenta activa de ComproPago. [Registrarse en ComproPago ] (https://compropago.com)
+
+Se debe contar con una cuenta activa de ComproPago. [Registrarse en ComproPago](https://compropago.com)
 
 ### General
 
-Para poder hacer uso de la librería es necesario incluir el autoloader 
+Para poder hacer uso de la librería es necesario incluir la libreria principales del SDK
+
 ```php
+<?php
+
 require 'vendor/autoload.php';
 ```
-El Namespace a utilizar dentro de la librería es **Compropago**.
-```php
-use Compropago\Sdk\Client; //Configuración de datos de conexión
-use Compropago\Sdk\Service; //Llamados al API
-use Compropago\Sdk\Controllers\Views;  //Inclusión de vistas, ej. Mostrar template de las tiendas donde pagar
-```
-Los Namespaces para los métodos se pueden ocupar a su conveniencia. Para mayor información consulte la [documentación de PHP acerca de Namespaces] (http://php.net/manual/en/language.namespaces.basics.php) . ej:
-```php
-/* Unqualified name */
-use Compropago\Sdk\Client; 
-$compropagoClient= new Client($compropagoConfig);
-/* Fully qualified name */
-$compropagoClient= new Compropago\Sdk\Client($compropagoConfig);
-```
-### Configuración del Cliente 
-Para poder hacer uso del SDK y llamados al API es necesario que primero configure sus Llaves de conexión y crear un instancia de Client.
+
+### Configuración del Cliente
+
+Para poder hacer uso de la gema y llamados al API es necesario que primero configure sus Llaves de conexión y crear 
+un instancia de Client.
 *Sus llaves las encontrara en su Panel de ComproPago en el menú Configuración.*
 
-[Consulte Aquí sus Llaves] (https://compropago.com/panel/configuracion) 
+[Consulte Aquí sus Llaves](https://compropago.com/panel/configuracion)
 
 ```php
-$compropagoConfig= array(
-				//Llave pública
-				'publickey'=>'pk_test_TULLAVEPUBLICA',
-				//Llave privada 
-				'privatekey'=>'sk_test_TULLAVE PRIVADA',
-				//Esta probando?, utilice  'live'=>false
-				'live'=>true 
-				
-		);
-// Instancia del Client
-$compropagoClient= new Compropago\Sdk\Client($compropagoConfig);
-```
-### Uso Básico del SDK
+<?php
+# @param string publickey     Llave publica correspondiente al modo de la tienda
+# @param string privatekey    Llave privada correspondiente al modo de la tienda
+# @param bool   live          Modo de la tienda (false = Test | true = Live)
 
-> ###### Consulte la documentación de la librería PHP-SDK de ComproPago para conocer más de sus capacidades, configuraciones y métodos. (docs-php-sdk-link)
- 
-
-#### Llamados al los servicios por SDK 
-Para utilizar los métodos se necesita tener una instancia de Service. La cual recibe de parámetro el objeto de Client. 
-```php
-$compropagoService= new Compropago\Sdk\Service($compropagoClient);
-```
-#### Métodos base del SDK
-##### Crear una nueva orden de Pago
-```php
-//Campos Obligatorios para poder realizar una nueva orden
-$data = array(
-		'order_id'    	     => 'testorderid',             // string para identificar la orden
-		'order_price'        => '123.45',                  // float con el monto de la operación
-		'order_name'         => 'Test Order Name',         // nombre para la orden
-		'customer_name'      => 'Compropago Test',         // nombre del cliente
-		'customer_email'     => 'test@compropago.com',     // email del cliente
-		'payment_type'       => 'OXXO'                     // identificador de la tienda donde realizar el pago
+$client = new Client(
+    'pk_test_5989d8209974e2d62',  # publickey
+    'sk_test_6ff4e982253c44c42',  # privatekey
+    false                         # live
 );
-//Obtenemos el JSON de la respuesta 
-$response = $compropagoService->placeOrder($data);
+```
 
+### Uso Básico de la Libreria
+
+> Consulte la documentación de la librería PHP de ComproPago para conocer más de sus capacidades, configuraciones y 
+métodos.
+
+
+#### Llamados al los servicios por SDK
+
+Para poder hacer uso de los servicos de ComproPago, solo debe de llamar a los metodos contenidos en la propiedad **api**
+de la variable **client** como se muestra a continuación.
+
+
+#### Métodos base del SDK
+
+##### Crear una nueva orden de Pago
+
+
+```php
+<?php
+
+# Se genera el objeto con la informacion de la orden
+
+$order_info = [
+    'order_id' => 12,
+    'order_name' => 'M4 php sdk',
+    'order_price' => 123.45,
+    'customer_name' => 'Eduardo',
+    'customer_email' => 'asd@asd.com',
+    'payment_type' => 'OXXO',
+    'currency' => 'MXN'
+];
+$order = \CompropagoSdk\Factory\Factory::getInstanceOf('PlaceOrderInfo', $order_info);
+
+
+# Llamada al metodo 'place_order' del API para generar la orden
+
+# @param [PlaceOrderInfo] order
+# @return [NewOrderInfo]
+$neworder = $client->api->placeOrder($order);
+```
+
+###### Prototipo del metodo placeOrder()
+
+```php
+<?php
+/**
+ * @param $neworder 
+ * @return \CompropagoSdk\Factory\Models\NewOrderInfo
+ * @throws \Exception
+ */
+public function placeOrder($neworder){}
 ```
 
 ##### Verificar el Estatus de una orden
 
-```php
-//El número de orden que queremos verificar
-$orderId= 'ch_xxxxx-xxxxx-xxxxx-xxxxx'
-
-//Obtenemos el JSON de la respuesta 
-$response = $compropagoService->verifyOrder( $orderId );
-
-```
-
-##### Obtener el listado de las tiendas donde se puede realizar el Pago
-
-```php
-//Obtenemos el JSON de la respuesta 
-$response = $compropagoService->getProviders( );
-
-```
-
-##### Obtener el HTML con los logos para que el usuario seleccione donde pagar
+Para verificar el estatus de una orden generada es necesario llamar al metodo **verifyOrder** que provee el atributo
+**api** del objeto **Client** y el cual regresa una instancia **CpOrderInfo**. este metodo recibe como parametro el ID
+generado por ComproPago para cada orden. Tambien puede obtener este ID desde un objeto **NewOrderInfo** accediendo al 
+atributo **id**.
 
 ```php
 <?php
-$compropagoData['providers']=$compropagoService->getProviders(); //obtenemos el listado
-$compropagoData['showlogo']='yes';                              //(yes|no) logos o select
-$compropagoData['description']='Plugin Descriptor compropago';  // Título a mostrar
-$compropagoData['instrucciones']='Compropago Instrucciones';    // texto de instrucciones
-?>
-<html>
-<head>
-	<!-- CSS de ComproPago-->
-	<link rel="stylesheet" type="text/css" href="../assets/css/compropago.css">
-</head>
-<body>
-	<?php
-		//llamamos al controlador para mostrar el template 
-		Compropago\Sdk\Controllers\Views::loadView('providers',$compropagoData);
-	?>
-</body>
-</html>
+# Guardar el ID de la orden
+$order_id = "ch_xxxx_xxx_xxx_xxxx";
+
+# U obtenerlo de un objetdo NewOrderInfo
+$order_id = $neworder->id;
+
+
+# Se manda llamar al metodo del API para recuperar la informacion de la orden
+$info = $client->api->verifyOrder($order_id);
 ```
 
-### Llamados directos al API 
-Para conocer los servicios del API visite la documentación: [API de ComproPago] (https://compropago.com/documentacion/api)
-
-Utilice el método estático Compropago\Http\Rest::doExecute para consumir directamente el API, su estructura es la siguiente:
+###### Prototipo del metodo verifyOrder()
 
 ```php
+<?php
 /**
- * @param Compropago\Client $client  // Objeto Cliente configurado
- * @param string $service            // Servicio del API a llamar
- * @param mixed$query                // Información a enviar: query string 'foo=bar' o Array Asociativo array( 'foo'=>'bar')
- * @param string $method             // método para consumir 'GET' o 'POST'
- * @return Array                    // asociativo con responseBody, responseHeaders, responseCode
+ * @param $orderId
+ * @return \CompropagoSdk\Factory\Models\CpOrderInfo
+ * @throws \Exception
  */
-Compropago\Sdk\Http\Rest::doExecute(Client $client,$service=null,$query=FALSE,$method='GET');
+public function verifyOrder( $orderId ){}
 ```
 
-Por ejemplo para realizar una nueva orden de pago llamando directamente al API.
-Documentación: [API:Crear un Cargo] (https://compropago.com/documentacion/api/crear-cargo)
+
+##### Obtener el listado de las tiendas donde se puede realizar el Pago
+
+Para obtener el listado de Proveedores disponibles para realizar el pago de las ordenes es necesario consutar el metodo
+**listProviders** que se encuentra alojado en el atributo **api** del objeto **Client** y el cual regresa una instancia
+de tipo **Array** la cual contendra objetos de tipo **Provider**
 
 ```php
-//Campos Obligatorios para poder realizar una nueva orden
-$data = array(
-		'order_id'    	     => 'testorderid',             // string para identificar la orden
-		'order_price'        => '123.45',                  // float con el monto de la operación
-		'order_name'         => 'Test Order Name',         // nombre para la orden
-		'customer_name'      => 'Compropago Test',         // nombre del cliente
-		'customer_email'     => 'test@compropago.com',     // email del cliente
-		'payment_type'       => 'OXXO'                     // identificador de la tienda donde realizar el pago
-);
-
-$response=Compropago\Sdk\Http\Rest::doExecute($compropagoClient,'charges/',$data,'POST'); // enviamos la información de la orden y obtenemos la respuesta del API 
-
-$body = json_decode( $response['responseBody'] );   // El cuerpo de la respuesta, volvemos el objeto JSON para procesarlo
-$headers = $response['responseHeaders'];            // Los encabezados de la respuesta
-$code = $response['responseCode'];                 // el código de la respuesta, 200 = Todo OK 
-
-/**
- * Coloque a continuación su lógica para evaluar y procesar el resultado. 
- */
-
+<?php
+$providers = $client->api->listProviders();
 ```
 
+###### Prototipo del metodo listProviders()
 
-## Guía de Versiones
+```php
+<?php
+/**
+ * @param bool $auth
+ * @param int $limit
+ * @param bool $fetch
+ * @return array
+ * @throws \Exception
+ */
+public function listProviders($auth = false, $limit = 0){}
+```
 
-| Version | Status      | Packagist            | Namespace    | PHP | Repo                      | Docs                      | 
-|---------|-------------|----------------------|--------------|-----|---------------------------|---------------------------|
-| 1.0.x   | Maintained  | `compropago/php-sdk` | `Compropago` | 5.3 + | [v1.0.x][compropago-repo-1-0-x] | [v1][compropago-1-docs]   | 
-| 1.1.x   | Latest      | `compropago/php-sdk` | `Compropago\Sdk` | 5.5 + | [v1.1.x][compropago-repo] | [v1][compropago-1-docs]   |
+##### Envio de instrucciones SMS
 
-[compropago-repo]: https://github.com/compropago/compropago-php
-[compropago-repo-1-0-x]: https://github.com/compropago/compropago-php/tree/1.0.x
-[compropago-1-docs]: https://compropago.com/documentacion/api
-[compropago-estable-dl]: https://s3.amazonaws.com/compropago/libraries/php/compropago-php-sdk-1-1-0.zip
+Para realizar el el envio de las instrucciones de compra via SMS es necesario llamar al metodo **sendSmsInstructions**
+que se encuentra alojado en el atributo **api** del objeto **Client** y el cual regresa una instancia de tipo **SmsInfo**
+
+```php
+<?php
+# Numero al cual se enviaran las instrucciones
+$phone_number = "55xxxxxxxx";
+
+# Id de la orden de compra de cual se enviaran las instrucciones
+$order_id = "ch_xxxxx-xxxxx-xxxxx-xxxxx";
+
+# Llamada al metodo del API para envio de las instrucciones
+$smsinfo = $client->api->sendSmsInstructions($phone_number , $order_id);
+```
+
+###### Prototipo del metodo sendSmsInstructions()
+
+```php
+<?php
+/**
+ * @param $number
+ * @param $orderId
+ * @return \CompropagoSdk\Factory\Models\SmsInfo
+ * @throws \Exception
+ */
+public function sendSmsInstructions($number,$orderId){}
+```
+
+#### Webhooks
+
+Los webhooks son de suma importancia para el proceso las ordenes de ComproPago, ya que estos se encargaran de recibir
+las notificaciones de el cambio en los estatus de las ordenes de compra generadas, tambien deberan contener parte de la
+logica de aprobacion en su tienda en linea. El proceso que siguenes el siguiente.
+
+1. Cuando una orden cambia su estatus, nuestra plataforma le notificara a cada una de las rutas registradas, dicho
+   cambio con la informacion de la orden modificada en formato JSON
+2. Debera de recuperar este JSON en una cadena de texto para posterior mente convertirla a un objeto de todpo
+   **CpOrderInfo** haciendo uso de la clase Factory que proporciona el SDK de la siguiente forma:
+
+```php
+<?php
+# $cadena_obtenida es un String
+$info = \CompropagoSdk\Factory\Factory::getInstanceOf('CpOrderInfo', $cadena_obtenida);
+```
+
+3. Generar la logica de aprovacion correspondiente al estatus de la orden.
+
+##### Crear un nuevo Webhook
+
+Para crear un nuevo Webhook en la cuenta, se debe de llamar al metodo **createWebhook** que se encuentra alojado en el
+atributo **api** del objeto **Client** y el cual regresa una instancia de tipo **Webhook**
+
+```php
+<?php
+# Se pasa como paramtro la URL al webhook
+$webhook = $client->api->createWebhook('http://sitio.com/webhook');
+```
+
+###### Prototipo del metodo createWebhook()
+
+```php
+<?php
+/**
+ * @param $url
+ * @return \CompropagoSdk\Factory\Models\Webhook
+ * @throws \Exception
+ */
+public function createWebhook($url){}
+```
+
+##### Actualizar un Webhook
+
+Para actualizar la url de un webhoo, se debe de llamar al metodo **updateWebhook** que se encuentra alojado en el
+atributo **api** del objeto **Client** y el cual regresa una instancia de tipo **Webhook**
+
+```php
+<?php
+$updated_webhook = $client->api->updateWebhook($webhook->getId(), 'http://sitio.com/nuevo_webhook');
+```
+
+###### Prototipo del metodo updateWebhook()
+
+```php
+<?php
+/**
+ * @param $webhookId
+ * @param $url
+ * @return \CompropagoSdk\Factory\Models\Webhook
+ * @throws \Exception
+ */
+public function updateWebhook($webhookId, $url){}
+```
+
+##### Eliminar un Webhook
+
+Para eliminar un webhook, se debe de llamar al metodo **deleteWebhook** que se encuentra alojado en el atributo **api**
+del objeto **Client** y el cual regresa una instancia de tipo **Webhook**
+
+```php
+<?php
+$deleted_webhook = $client->api->deleteWebhook( $webhook->getId() );
+```
+
+###### Prototipo del metodo deleteWebhook()
+
+```php
+<?php
+/**
+ * @param $webhookId
+ * @return \CompropagoSdk\Factory\Models\Webhook
+ * @throws \Exception
+ */
+public function deleteWebhook($webhookId){}
+```
+
+##### Obtener listado de Webhooks registrados
+
+Para obtener la lista de webhooks registrados den una cuenta, se debe de llamar al metodo **listWebhook** que se
+encuentra alojado en el atributo **api** del objeto **Client** y el cual regresa una instancia de tipo **Array** la cual
+contiene objetos de tipo **Webhook**
+
+```php
+<?php
+$all_webhooks = $client->api->listWebhooks();
+```
+
+###### Prototipo del metodo listWebhook()
+
+```php
+<?php
+/**
+ * @return array
+ * @throws \Exception
+ */
+public function listWebhooks(){}
+```

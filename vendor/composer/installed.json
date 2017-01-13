@@ -1,28 +1,31 @@
 [
     {
         "name": "compropago/php-sdk",
-        "version": "1.1.0",
-        "version_normalized": "1.1.0.0",
+        "version": "3.0.1",
+        "version_normalized": "3.0.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/compropago/compropago-php.git",
-            "reference": "9b295bddbad1b62d1cfd480c38443d3648a335fb"
+            "reference": "5465ea298c2c442ff7c309d4639e0b9a41a4e05a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/9b295bddbad1b62d1cfd480c38443d3648a335fb",
-            "reference": "9b295bddbad1b62d1cfd480c38443d3648a335fb",
+            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/5465ea298c2c442ff7c309d4639e0b9a41a4e05a",
+            "reference": "5465ea298c2c442ff7c309d4639e0b9a41a4e05a",
             "shasum": ""
         },
         "require": {
             "php": ">=5.5"
         },
-        "time": "2016-02-15 16:07:14",
+        "require-dev": {
+            "phpunit/phpunit": ">=5.3"
+        },
+        "time": "2017-01-10 23:45:26",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Compropago\\Sdk\\": "src/"
+                "CompropagoSdk\\": "CompropagoSdk"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -31,8 +34,8 @@
         ],
         "authors": [
             {
-                "name": "Rolando Lucio",
-                "email": "rolando@compropago.com"
+                "name": "Eduardo Aguilar",
+                "email": "eduardo.aguilar@compropago.com"
             }
         ],
         "description": "PHP SDK for Compropago API",
