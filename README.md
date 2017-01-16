@@ -1,5 +1,3 @@
-> ## Si llego buscando el archivo de instalación para su tienda [Descargue la última versión dando click Aquí] [compropago-3-0-x]
-
 Plugin para WooCommerce - ComproPago
 ===================================
 ## Descripción
@@ -73,16 +71,3 @@ Información de Comisiones y Horarios, como Transferir tu dinero y la Seguridad 
 * WebHooks
 * Librerías y Plugins
 * Shopify
-
-## Guía de Versiones
-
-| Version | Status      |  WordPress    |  WooCommerce  | PHP     | Archivo                    | 
-|---------|-------------|---------------|---------------|---------|----------------------------|
-| 2.4.0   | EOL			| <= 4.4.0 		| <2.5			| 5.2 +   | [v2.4.0][compropago-2-4-0] |
-| 3.0.0   | EOL		    | 4.4.1 + 		| 2.5.0 + 		| 5.3 +   | [v3.0.0][compropago-3-0-0] |
-| 3.0.x   | Latest      | 4.4.1 + 		| 2.5.0 + 		| 5.5 +   | [v3.0.x][compropago-3-0-x] |
-
-
-[compropago-3-0-x]: https://s3.amazonaws.com/compropago/plugins/woocommerce/compropago-wc-3-0-x.zip
-[compropago-3-0-0]: https://s3.amazonaws.com/compropago/plugins/woocommerce/compropago-wc-3-0-0.zip
-[compropago-2-4-0]: https://s3.amazonaws.com/compropago/plugins/woocommerce/compropago-wc-2-4-0.zip
