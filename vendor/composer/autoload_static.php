@@ -20,11 +20,38 @@ class ComposerStaticInit161e6cdd5ca5e96e7cc5d2f368cfdf7f
         ),
     );
 
+    public static $classMap = array (
+        'CompropagoSdk\\Client' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Client.php',
+        'CompropagoSdk\\Extern\\TransactTables' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Extern/TransactTables.php',
+        'CompropagoSdk\\Factory\\Factory' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Factory.php',
+        'CompropagoSdk\\Factory\\Models\\CpOrderInfo' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/CpOrderInfo.php',
+        'CompropagoSdk\\Factory\\Models\\Customer' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/Customer.php',
+        'CompropagoSdk\\Factory\\Models\\EvalAuthInfo' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/EvalAuthInfo.php',
+        'CompropagoSdk\\Factory\\Models\\FeeDetails' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/FeeDetails.php',
+        'CompropagoSdk\\Factory\\Models\\InstructionDetails' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/InstructionDetails.php',
+        'CompropagoSdk\\Factory\\Models\\Instructions' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/Instructions.php',
+        'CompropagoSdk\\Factory\\Models\\NewOrderInfo' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/NewOrderInfo.php',
+        'CompropagoSdk\\Factory\\Models\\OrderInfo' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/OrderInfo.php',
+        'CompropagoSdk\\Factory\\Models\\PlaceOrderInfo' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/PlaceOrderInfo.php',
+        'CompropagoSdk\\Factory\\Models\\Provider' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/Provider.php',
+        'CompropagoSdk\\Factory\\Models\\SmsData' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/SmsData.php',
+        'CompropagoSdk\\Factory\\Models\\SmsInfo' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/SmsInfo.php',
+        'CompropagoSdk\\Factory\\Models\\SmsObject' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/SmsObject.php',
+        'CompropagoSdk\\Factory\\Models\\Webhook' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Models/Webhook.php',
+        'CompropagoSdk\\Factory\\Serialize' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Factory/Serialize.php',
+        'CompropagoSdk\\Service' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Service.php',
+        'CompropagoSdk\\Tools\\Http' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Tools/Http.php',
+        'CompropagoSdk\\Tools\\Request' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Tools/Request.php',
+        'CompropagoSdk\\Tools\\Validations' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/Tools/Validations.php',
+        'CompropagoSdk\\UnitTest\\Test' => __DIR__ . '/..' . '/compropago/php-sdk/CompropagoSdk/UnitTest/Test.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit161e6cdd5ca5e96e7cc5d2f368cfdf7f::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit161e6cdd5ca5e96e7cc5d2f368cfdf7f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit161e6cdd5ca5e96e7cc5d2f368cfdf7f::$classMap;
 
         }, null, ClassLoader::class);
     }
