@@ -77,8 +77,7 @@ if (empty($publickey) || empty($privatekey)){
 $compropagoConfig= array(
     'publickey'  => $publickey,
     'privatekey' => $privatekey,
-    'live'       => $live,
-    //'contained'  => 'plugin; cpwc 3.0.0 ; woocommerce '.$woocommerce->version.'; wordpress '.$wp_version.'; webhook;'
+    'live'       => $live
 );
 
 
@@ -89,7 +88,6 @@ try{
         $compropagoConfig['publickey'],
         $compropagoConfig['privatekey'],
         $compropagoConfig['live']
-      //$compropagoConfig['contained']
     );
 
     Validations::validateGateway($client);
@@ -102,7 +100,7 @@ try{
 
 //webhook Test?
 if($resp_webhook->id=="ch_00000-000-0000-000000"){
-	die("Probando el WebHook?, <b>Ruta correcta.</b>");
+	die("Probando el WebHook?, Ruta correcta.");
 }
 
 
@@ -214,7 +212,8 @@ try{
 	}else{
 		die('El número de orden no se encontro en la tienda');
 	}
+
+	die("Orden {$response->id} recibida correctamente.");
 }catch (Exception $e){
-	//something went wrong at sdk lvl
 	die($e->getMessage());
 }

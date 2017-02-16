@@ -25,6 +25,10 @@ require_once 'autoload.php';
 
 use CompropagoSdk\Client;
 use CompropagoSdk\Factory\Factory;
+use CompropagoSdk\Factory\Models\CpOrderInfo;
+use CompropagoSdk\Factory\Models\EvalAuthInfo;
+use CompropagoSdk\Factory\Models\Provider;
+use CompropagoSdk\Factory\Models\Webhook;
 use CompropagoSdk\Tools\Validations;
 
 class Test extends \PHPUnit_Framework_TestCase
@@ -34,6 +38,7 @@ class Test extends \PHPUnit_Framework_TestCase
     private $mode = false;
     
     private $phonenumber = "5561463627";
+    private $limit = 15000;
 
     private $order_info = [
         'order_id' => 12,
@@ -45,94 +50,53 @@ class Test extends \PHPUnit_Framework_TestCase
 
     public function testCreateClient()
     {
-        $client = null;
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $this->assertTrue(!empty($client));
-        }catch(\Exception $e){
-            $this->assertTrue(!empty($client));
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $res = true;
+        } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
-
-        return $client;
+        $this->assertTrue($res);
     }
 
     public function testEvalAuth()
     {
-        $res = null;
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $res = Validations::evalAuth($client);
-        }catch(\Exception $e){
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $response = Validations::evalAuth($client);
+
+            $res = $response instanceof EvalAuthInfo;
+        } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
-
-        $this->assertTrue(!empty($res));
+        $this->assertTrue($res);
     }
 
-    public function testServiceProviders()
+    public function testProviders()
     {
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $res = $client->api->listProviders();
-        }catch(\Exception $e){
-            $res = array();
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $response = $client->api->listProviders();
+
+            $res = $response[0] instanceof Provider;
+        } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
-
-        $this->assertTrue(is_array($res) && !empty($res));
+        $this->assertTrue($res);
     }
 
-    public function testServiceProvidersLimit()
-    {
-        $flag = true;
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $res = $client->api->listProviders(false, 15000);
-
-            foreach ($res as $provider){
-                if($provider->transaction_limit < 15000){
-                    $flag = false;
-                    break;
-                }
-            }
-        }catch(\Exception $e){
-            echo "====>>".$e->getMessage()."\n";
-            $flag = false;
-        }
-
-        $this->assertTrue($flag);
-    }
-
-    public function testServiceProvidersCurrency()
+    public function testProvidersLimit()
     {
         $flag = true;
         try {
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $provs = $client->api->listProviders(true, 700, 'USD');
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $res = $client->api->listProviders($this->limit);
 
-            foreach ($provs as $prov) {
-                if ($prov->transaction_limit < 15000) {
+            foreach ($res as $provider) {
+                if ($provider->transaction_limit < $this->limit) {
                     $flag = false;
                     break;
                 }
@@ -144,193 +108,155 @@ class Test extends \PHPUnit_Framework_TestCase
         $this->assertTrue($flag);
     }
 
-    public function testServiceProviderAuth()
+    public function testProvidersCurrency()
     {
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $res = $client->api->listProviders(true);
+        $flag = true;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $provs = $client->api->listProviders(700, 'USD');
 
-            if($res){
-                $res = $client->api->listProviders(true);
-            }
-        }catch(\Exception $e){
-            echo "====>>".$e->getMessage()."\n";
-        }
-
-        $this->assertTrue(isset($res) && is_array($res) && !empty($res));
-    }
-
-    public function testServiceProviderAuthLimit()
-    {
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $res = $client->api->listProviders(true, 15000);
-
-            $flag = true;
-            foreach ($res as $provider){
-                if($provider->transaction_limit < 15000){
+            foreach ($provs as $prov) {
+                if ($prov->transaction_limit < $this->limit) {
                     $flag = false;
                     break;
                 }
             }
-        }catch(\Exception $e){
+        } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
+            $flag = false;
         }
-
-        $this->assertTrue(isset($flag) && $flag);
+        $this->assertTrue($flag);
     }
 
-    public function testServicePlaceOrder()
+    public function testPlaceOrder()
     {
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $order = Factory::getInstanceOf('PlaceOrderInfo', $this->order_info);
-            $res = $client->api->placeOrder($order);
-        }catch(\Exception $e){
-            echo "====>>".$e->getMessage()."\n";
-        }
-
-        $this->assertTrue(!empty($res));
-    }
-
-    public function testServiceVerifyOrder()
-    {
+        $res = false;
         try {
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $order = Factory::getInstanceOf('PlaceOrderInfo', $this->order_info);
+
+            $response = $client->api->placeOrder($order);
+
+            $res = !empty($response->id);
+        } catch(\Exception $e) {
+            echo "====>>".$e->getMessage()."\n";
+        }
+
+        $this->assertTrue($res);
+    }
+
+    public function testPlaceOrderExpdate()
+    {
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+
+            $epoch = time() + (6 * 60 * 60);
+            $this->order_info['expiration_time'] = $epoch;
 
             $order = Factory::getInstanceOf('PlaceOrderInfo', $this->order_info);
-            $order_aux = $client->api->placeOrder($order);
+            $response = $client->api->placeOrder($order);
 
-            $res = $client->api->verifyOrder($order_aux->id);
+            $res = $epoch == $response->exp_date;
+        } catch (\Exception $e) {
+            echo "====>> ".$e->getMessage();
+        }
+        $this->assertTrue($res);
+    }
+
+    public function testVerifyOrder()
+    {
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $order = Factory::getInstanceOf('PlaceOrderInfo', $this->order_info);
+
+            $order_aux = $client->api->placeOrder($order);
+            $response = $client->api->verifyOrder($order_aux->id);
+
+            $res = $response instanceof CpOrderInfo;
         } catch (\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
-
-        $this->assertTrue(!empty($res));
+        $this->assertTrue($res);
     }
 
-    public function testServiceSms()
+    public function testSms()
     {
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
             $order = Factory::getInstanceOf('PlaceOrderInfo', $this->order_info);
-            $order_aux = $client->api->placeOrder($order);
 
-            $res = $client->api->sendSmsInstructions($this->phonenumber, $order_aux->id);
-        }catch(\Exception $e){
+            $order_aux = $client->api->placeOrder($order);
+            $response = $client->api->sendSmsInstructions($this->phonenumber, $order_aux->id);
+
+            $res = !empty($response->type);
+        } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
-
-        $this->assertTrue(!empty($res));
+        $this->assertTrue($res);
     }
 
     public function testListWebhooks()
     {
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $res = $client->api->listWebhooks();
-            if(is_array($res)){
-                if(count($res) > 0 && get_class($res[0]) == "CompropagoSdk\\Factory\\Models\\Webhook"){
-                    $flag = true;
-                }else{
-                    $flag = false;
-                }
-            }else{
-                $flag = false;
-            }
-        }catch(\Exception $e){
-            echo "====>>".$e->getMessage()."\n";
-            $flag = false;
-        }
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $webhooks = $client->api->listWebhooks();
 
-        $this->assertTrue($flag);
+            $res = is_array($webhooks) && ($webhooks[0] instanceof Webhook);
+        } catch(\Exception $e) {
+            echo "====>>".$e->getMessage()."\n";
+        }
+        $this->assertTrue($res);
     }
 
     public function testCreateWebhook()
     {
-        $flag = false;
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-            $res = $client->api->createWebhook("http://prueba.com");
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $response = $client->api->createWebhook("http://prueba.com");
 
-            $flag = (get_class($res) == "CompropagoSdk\\Factory\\Models\\Webhook");
-        }catch(\Exception $e){
+            $res = $response instanceof Webhook;
+        } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
 
-        $this->assertTrue($flag);
+        $this->assertTrue($res);
     }
 
     public function testUpdateWebhook()
     {
-        $flag = false;
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
             $webhook = $client->api->createWebhook("http://prueba.com");
 
-            $res = $client->api->updateWebhook($webhook->id, "http://prueba2.com");
+            $response = $client->api->updateWebhook($webhook->id, "http://prueba2.com");
 
-            $flag = (get_class($res) == "CompropagoSdk\\Factory\\Models\\Webhook");
-        }catch(\Exception $e){
+            $res = $response instanceof Webhook;
+        } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
 
-        $this->assertTrue($flag);
+        $this->assertTrue($res);
     }
 
     public function testDeleteWebhook()
     {
-        $flag = false;
-        $res = null;
-        try{
-            $client = new Client(
-                $this->publickey,
-                $this->privatekey,
-                $this->mode
-            );
-
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
             $webhook = $client->api->createWebhook("http://prueba2.com");
-            $res = $client->api->deleteWebhook($webhook->id);
+            $response = $client->api->deleteWebhook($webhook->id);
 
-            $flag = (get_class($res) == "CompropagoSdk\\Factory\\Models\\Webhook");
-        }catch(\Exception $e){
+            $res = $response instanceof Webhook;
+        } catch(\Exception $e) {
             echo "\n".$e->getMessage()."\n";
         }
 
-        $this->assertTrue($flag);
+        $this->assertTrue($res);
     }
 }

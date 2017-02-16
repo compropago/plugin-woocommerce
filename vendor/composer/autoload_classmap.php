@@ -12,6 +12,7 @@ return array(
     'CompropagoSdk\\Factory\\Models\\CpOrderInfo' => $vendorDir . '/compropago/php-sdk/CompropagoSdk/Factory/Models/CpOrderInfo.php',
     'CompropagoSdk\\Factory\\Models\\Customer' => $vendorDir . '/compropago/php-sdk/CompropagoSdk/Factory/Models/Customer.php',
     'CompropagoSdk\\Factory\\Models\\EvalAuthInfo' => $vendorDir . '/compropago/php-sdk/CompropagoSdk/Factory/Models/EvalAuthInfo.php',
+    'CompropagoSdk\\Factory\\Models\\Exchange' => $vendorDir . '/compropago/php-sdk/CompropagoSdk/Factory/Models/Exchange.php',
     'CompropagoSdk\\Factory\\Models\\FeeDetails' => $vendorDir . '/compropago/php-sdk/CompropagoSdk/Factory/Models/FeeDetails.php',
     'CompropagoSdk\\Factory\\Models\\InstructionDetails' => $vendorDir . '/compropago/php-sdk/CompropagoSdk/Factory/Models/InstructionDetails.php',
     'CompropagoSdk\\Factory\\Models\\Instructions' => $vendorDir . '/compropago/php-sdk/CompropagoSdk/Factory/Models/Instructions.php',
