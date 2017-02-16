@@ -31,6 +31,7 @@ require_once __DIR__ . "/controllers/Utils.php";
 
 
 use CompropagoSdk\Client;
+use CompropagoSdk\Extern\TransactTables;
 
 
 /**
@@ -54,12 +55,19 @@ function compropago_config_page(){
     wp_enqueue_script( 'config-script' );
 
 
+    $aux_live = get_option( 'compropago_live' );
+    $aux_logo = get_option( 'compropago_showlogo' );
+    $aux_webh = get_option( 'compropago_webhook' );
+
+    $def_webhook_url = plugins_url( 'webhook.php', __FILE__ );
+
+
     $config         = get_option('woocommerce_compropago_settings');
     $publickey      = get_option('compropago_publickey');
     $privatekey     = get_option('compropago_privatekey');
-    $live           = !empty(get_option( 'compropago_live' )) ? (get_option('compropago_live') == 'yes' ? true : false) : false;
-    $showlogo       = !empty(get_option( 'compropago_showlogo' )) ? (get_option('compropago_showlogo') == 'yes' ? true : false) : false;
-    $webhook        = !empty(get_option( 'compropago_webhook' )) ? get_option( 'compropago_webhook' ) : plugins_url( 'webhook.php', __FILE__ );
+    $live           = !empty($aux_live) ? ($aux_live == 'yes' ? true : false) : false;
+    $showlogo       = !empty($aux_logo) ? ($aux_logo == 'yes' ? true : false) : false;
+    $webhook        = !empty($aux_webh) ? $aux_webh : $def_webhook_url;
     $descripcion    = get_option('compropago_descripcion');
     $instrucciones  = get_option('compropago_instrucciones');
     $titulo         = get_option('compropago_title');
@@ -78,10 +86,12 @@ function compropago_config_page(){
     );
 
 
-    $all_providers = $client->api->listProviders();
+    $all_providers = $client->api->listDefaultProviders();
 
-    if(!empty(get_option( 'compropago_provallowed' ))){
-        $allowed = explode(',',get_option('compropago_provallowed'));
+    $provs_config = get_option( 'compropago_provallowed' );
+
+    if(!empty($provs_config)){
+        $allowed = explode(',', $provs_config);
 
         $active_providers = array();
         $disabled_providers = array();
@@ -146,14 +156,14 @@ function compropago_active(){
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-    $queries = CompropagoSdk\Extern\TransactTables::sqlDropTables($dbprefix);
+    $queries = TransactTables::sqlDropTables($dbprefix);
 
 
     foreach($queries as $drop){
         dbDelta($drop);
     }
 
-    $queries = CompropagoSdk\Extern\TransactTables::sqlCreateTables($dbprefix);
+    $queries = TransactTables::sqlCreateTables($dbprefix);
 
 
     foreach($queries as $create){
