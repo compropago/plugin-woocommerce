@@ -6,6 +6,7 @@ class Provider
 {
     public $name;
     public $store_image;
+    public $availability;
     public $is_active;
     public $internal_name;
     public $image_small;

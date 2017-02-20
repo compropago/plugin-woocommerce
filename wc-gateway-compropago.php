@@ -8,12 +8,11 @@ require_once __DIR__ . "/controllers/Utils.php";
 
 use CompropagoSdk\Client;
 use CompropagoSdk\Tools\Validations;
-use CompropagoSdk\Factory\Models\PlaceOrderInfo;
 use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="3.1.0";
+    const VERSION="4.0.2";
 
     private $compropagoConfig;
     private $client;
@@ -49,7 +48,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->debug         = get_option('compropago_debug');
         $this->initialstate  = get_option('compropago_initial_state');
         $this->completeorder = get_option('compropago_completed_order');
-        $this->title 		     = get_option('compropago_title');
+        $this->title 		 = get_option('compropago_title');
         $this->publickey     = get_option('compropago_publickey');
         $this->privatekey    = get_option('compropago_privatekey');
         $this->live          = get_option('compropago_live') == 'yes' ? true : false;
@@ -77,8 +76,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         }
 
         $this->setCompropagoConfig();
-
-       // var_dump($this->filterStores);
 
         //just validate on admin site
         if(is_admin()){
@@ -124,7 +121,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             )
 
         );
-
     }
 
 
@@ -149,7 +145,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
     /**
      * handling payment and processing the order
      * @param $order_id
-     * @return array
+     * @return mixed
      * @throws \Exception
      * @since 3.0.0
      * https://docs.woothemes.com/document/payment-gateway-api/
@@ -295,7 +291,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 //die('IF s valid for use');
             }
 
-            $providers = $this->client->api->listProviders(true, $cart_subtotal, get_option('woocommerce_currency'));
+            $providers = $this->client->api->listProviders($cart_subtotal, get_option('woocommerce_currency'));
 
             $filtered = array();
 
@@ -355,13 +351,14 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
      */
     public function is_valid_for_use() {
         //solo acepta total en Pesos Mexicanos
-        if(get_option('woocommerce_currency')=='MXN' || get_option('woocommerce_currency')=='USD' || get_option('woocommerce_currency')=='EUR' || get_option('woocommerce_currency')=='GBP'){
+        $currency = get_option('woocommerce_currency');
+
+        if($currency=='MXN' || $currency=='USD' || $currency=='EUR' || $currency=='GBP'){
             try {
                 $this->client = new Client(
                     $this->compropagoConfig['publickey'],
                     $this->compropagoConfig['privatekey'],
                     $this->compropagoConfig['live']
-                    //$this->compropagoConfig['contained']
                 );
 
                 Validations::validateGateway($this->client);
