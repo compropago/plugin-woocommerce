@@ -2,6 +2,7 @@
 /**
  * @author Rolando Lucio <rolando@compropago.com>
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
+ * @author Christian Aguirre <christian@compropago.com>
  * @since 3.0.0
  */
 require_once __DIR__ . "/controllers/Utils.php";
@@ -291,33 +292,45 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 //die('IF s valid for use');
             }
 
+            $providers = [];
             $providers = $this->client->api->listProviders($cart_subtotal, get_option('woocommerce_currency'));
+
+
+            if(empty($providers)){
+              $providers=0;
+            }
 
             $filtered = array();
 
             if(empty($this->provallowed)){
                 $comprodata['providers']= $providers;
             }else{
-                $aux = explode(',',$this->provallowed);
+                if($providers==0){
+                  $comprodata['providers']= $providers;
+                }else{
+                  $aux = explode(',',$this->provallowed);
 
-                foreach ($providers as $provider){
-                    foreach ($aux as $internal){
+                  foreach ($providers as $provider){
+                      foreach ($aux as $internal){
 
-                        if($provider->internal_name == $internal){
-                            $filtered[] = $provider;
-                        }
-                    }
+                          if($provider->internal_name == $internal){
+                              $filtered[] = $provider;
+                          }
+                      }
+                  }
+
+                  $comprodata['providers']= $filtered;
                 }
-
-                $comprodata['providers']= $filtered;
             }
 
             $comprodata['showlogo']=$this->showlogo;
             $comprodata['description']=$this->descripcion;
             $comprodata['instrucciones']=$this->instrucciones;
-
-
             include __DIR__ . "/templates/providers-select.php";
+
+
+
+
         } catch (Exception $e) {
             wc_add_notice( __('Compropago error providers:', 'compropago') . $e->getMessage(), 'error' );
             $this->log->add('compropago',$e->getMessage());
@@ -370,7 +383,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 return false;
             }
         }else{
-            //wc_add_notice( 'ComproPago solo esta disponible para pagos en Pesos Mexicanos (MXN)', 'error' );
+
             return false;
         }
     }
