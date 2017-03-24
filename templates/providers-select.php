@@ -15,28 +15,33 @@
 
     <div class="row">
         <div class="column">
-            <?php if($comprodata['showlogo'] == 'yes') { ?>
+            <?php if($comprodata["providers"] != 0){ ?>
+              <?php if($comprodata['showlogo'] == 'yes') { ?>
 
-                <ul>
-                    <?php foreach ($comprodata['providers'] as $provider){ ?>
-                        <li>
-                            <input type="radio" id="compropago_<?php echo $provider->internal_name; ?>" name="compropagoProvider" value="<?php echo $provider->internal_name; ?>">
-                            <label for="compropago_<?php echo $provider->internal_name; ?>">
-                                <img src="<?php echo $provider->image_medium; ?>" alt="compropago_<?php echo $provider->internal_name; ?>">
-                            </label>
-                        </li>
-                    <?php } ?>
-                </ul>
+                  <ul>
+                      <?php foreach ($comprodata['providers'] as $provider){ ?>
+                          <li>
+                              <input type="radio" id="compropago_<?php echo $provider->internal_name; ?>" name="compropagoProvider" value="<?php echo $provider->internal_name; ?>">
+                              <label for="compropago_<?php echo $provider->internal_name; ?>">
+                                  <img src="<?php echo $provider->image_medium; ?>" alt="compropago_<?php echo $provider->internal_name; ?>">
+                              </label>
+                          </li>
+                      <?php } ?>
+                  </ul>
 
-            <?php } else { ?>
+              <?php } else { ?>
 
-                <select name="compropagoProvider" title="Proveedores">
-                    <?php foreach ($comprodata['providers'] as $provider){ ?>
-                        <option value="<?php echo $provider->internal_name; ?>"> <?php echo $provider->name; ?> </option>
-                    <?php } ?>
-                </select>
+                  <select name="compropagoProvider" title="Proveedores">
+                      <?php foreach ($comprodata['providers'] as $provider){ ?>
+                          <option value="<?php echo $provider->internal_name; ?>"> <?php echo $provider->name; ?> </option>
+                      <?php } ?>
+                  </select>
 
-            <?php } ?>
+              <?php } ?>
+
+              <?php } else {echo( __('Éste método de pago temporalmente está fuera de servicio.', 'compropago')); }?>
+
+
         </div>
     </div>
 </section>
