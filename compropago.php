@@ -87,12 +87,11 @@ function compropago_config_page(){
 
 
     $all_providers = $client->api->listDefaultProviders();
-
     $provs_config = get_option( 'compropago_provallowed' );
-
+    $flag_OXXO = false;
+    $flag_oxxo_allow = false;
     if(!empty($provs_config)){
         $allowed = explode(',', $provs_config);
-
         $active_providers = array();
         $disabled_providers = array();
         foreach ($all_providers as $provider){
@@ -104,17 +103,31 @@ function compropago_config_page(){
                     $flag = false;
                     break;
                 }
+                if ($value == "OXXO") { $flag_oxxo_allow = true; }
             }
 
             if($flag){
                 $disabled_providers[] = $provider;
             }
+        if ($provider->internal_name == "OXXO") { $flag_OXXO = true; }
         }
     }else{
         $active_providers = $all_providers;
         $disabled_providers = array();
     }
 
+    if (!$flag_OXXO && !$flag_oxxo_allow) {
+            // $OXXO[] = (object)[
+            //     'internal_name' => "OXXO",
+            //     'name' => "Oxxo"
+            // ];
+
+            $oxxo = new stdClass();
+            $oxxo->internal_name = "OXXO";
+            $oxxo->name = "Oxxo";
+
+            $disabled_providers[] = $oxxo;
+    }
 
 
     $retro = Utils::retroalimentacion($publickey,$privatekey,$live,$config);
