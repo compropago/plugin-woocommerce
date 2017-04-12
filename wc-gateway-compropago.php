@@ -13,7 +13,7 @@ use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="4.0.2";
+    const VERSION="4.0.2.2";
 
     private $compropagoConfig;
     private $client;
@@ -187,7 +187,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
             ];
 
-	    $ordercp = Factory::getInstanceOf('PlaceOrderInfo', $order_info);
+	        $ordercp = Factory::getInstanceOf('PlaceOrderInfo', $order_info);
 
             $this->client = new Client(
                 $this->compropagoConfig['publickey'],
@@ -322,7 +322,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                   $comprodata['providers']= $filtered;
                 }
             }
-
             $comprodata['showlogo']=$this->showlogo;
             $comprodata['description']=$this->descripcion;
             $comprodata['instrucciones']=$this->instrucciones;
