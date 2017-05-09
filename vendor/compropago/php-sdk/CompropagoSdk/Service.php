@@ -26,6 +26,14 @@ class Service
         ];
     }
 
+    public function listDefaultProviders()
+    {
+        $url = $this->client->deployUri . 'providers/true';
+        $response = Request::get($url);
+
+        return Factory::getInstanceOf('ListProviders', $response);
+    }
+
     /**
      * @param int $limit
      * @param string $currency
@@ -49,18 +57,6 @@ class Service
     }
 
     /**
-     * @return array
-     */
-    public function listDefaultProviders()
-    {
-        $url = $this->client->deployUri . 'providers/true/';
-
-        $response = Request::get($url);
-
-        return Factory::getInstanceOf('ListProviders', $response);
-    }
-
-    /**
      * @param $orderId
      * @return \CompropagoSdk\Factory\Models\CpOrderInfo
      */
@@ -76,6 +72,7 @@ class Service
      */
     public function placeOrder(PlaceOrderInfo $neworder)
     {
+        $ip = self::getIp();
         $params = [
             'order_id' => $neworder->order_id,
             'order_name' => $neworder->order_name,
@@ -87,7 +84,20 @@ class Service
             'expiration_time' => $neworder->expiration_time,
             'image_url' => $neworder->image_url,
             'app_client_name' => $neworder->app_client_name,
-            'app_client_version' => $neworder->app_client_version
+            'app_client_version' => $neworder->app_client_version,
+            'customer' => [
+                'name'=> $neworder->customer_name,
+                'email'=> $neworder->customer_email,
+                'phone'=> $neworder->cutomer_phone,
+                'cp'=> $neworder->cp,
+                'ip_address'=> $ip,
+                'glocation' => [
+                    'lat'=> $neworder->latitude,
+                    'lon'=> $neworder->longitude
+                ]
+                        
+            ]
+            
         ];
 
         $response = Request::post($this->client->deployUri.'charges/', $params, $this->getAuth());
@@ -149,5 +159,19 @@ class Service
     {
         $response = Request::delete($this->client->deployUri.'webhooks/stores/'.$webhookId.'/', null, $this->getAuth());
         return Factory::getInstanceOf('Webhook', $response);
+    }
+
+    private function getIp(){
+        if(isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } else if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else if(isset($_SERVER['REMOTE_ADDR'])) {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        } else{
+            $ip = '';
+        }
+        
+        return $ip;
     }
 }

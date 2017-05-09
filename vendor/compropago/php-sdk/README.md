@@ -6,7 +6,7 @@ La librería de `ComproPago PHP SDK` le permite interactuar con el API de Compro
 También cuenta con los métodos necesarios para facilitarle su desarrollo por medio de los servicios 
 más utilizados (SDK).
 
-Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
+Con ComproPago puede recibir pagos en 7Eleven, Extra y muchas tiendas más en todo México.
 
 [Registrarse en ComproPago](https://compropago.com)
 
@@ -158,7 +158,7 @@ de la variable **client** como se muestra a continuación.
  * @param float  order_price       Monto total de la orden
  * @param string customer_name     Nombre completo del cliente
  * @param string customer_email    Correo electronico del cliente
- * @param string payment_type      (default = OXXO) Valor del atributo internal_name' de un objeto 'Provider'
+ * @param string payment_type      (default = SEVEN_ELEVEN) Valor del atributo internal_name' de un objeto 'Provider'
  * @param string currency          (default = MXN) Codigo de la moneda con la que se esta creando el cargo
  * @param int    expiration_time   (default = null) Fecha en formato Epoch la cual indica la fecha de expiración de la orden
  */
@@ -168,7 +168,7 @@ $order_info = [
     'order_price' => 123.45,
     'customer_name' => 'Eduardo',
     'customer_email' => 'asd@asd.com',
-    'payment_type' => 'OXXO',
+    'payment_type' => 'SEVEN_ELEVEN',
     'currency' => 'MXN',
     'expiration_time' => 1484799158
 ];

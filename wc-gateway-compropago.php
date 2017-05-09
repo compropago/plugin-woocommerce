@@ -57,7 +57,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->descripcion   = get_option('compropago_descripcion');
         $this->instrucciones = get_option('compropago_instrucciones');
         $this->provallowed   = get_option('compropago_provallowed');
-
+        $this->glocation     = get_option('compropago_glocation') == 'si' ? true : false;
 
         //paso despues de selccion de gateway
         $this->has_fields	 = true;
@@ -306,34 +306,31 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 $comprodata['providers']= $providers;
             }else{
                 if($providers==0){
-                  $comprodata['providers']= $providers;
+                    $comprodata['providers']= $providers;
                 }else{
-                  $aux = explode(',',$this->provallowed);
+                    $aux = explode(',',$this->provallowed);
 
-                  foreach ($providers as $provider){
-                      foreach ($aux as $internal){
+                    foreach ($providers as $provider){
+                        foreach ($aux as $internal){
 
-                          if($provider->internal_name == $internal){
-                              $filtered[] = $provider;
-                          }
-                      }
-                  }
+                            if($provider->internal_name == $internal){
+                                $filtered[] = $provider;
+                            }
+                        }
+                    }
 
-                  $comprodata['providers']= $filtered;
+                    $comprodata['providers']= $filtered;
                 }
             }
+            
             $comprodata['showlogo']=$this->showlogo;
             $comprodata['description']=$this->descripcion;
             $comprodata['instrucciones']=$this->instrucciones;
+            $comprodata['glocation'] = $this->glocation;
             include __DIR__ . "/templates/providers-select.php";
-
-
-
-
         } catch (Exception $e) {
             wc_add_notice( __('Compropago error providers:', 'compropago') . $e->getMessage(), 'error' );
             $this->log->add('compropago',$e->getMessage());
-            //return;
             echo($e->getMessage());
         }
     }

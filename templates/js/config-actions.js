@@ -1,9 +1,7 @@
 /**
  * Created by Arthur on 22/07/16.
  */
-
 $(function(){
-
     $("#agregar_proveedor").click(function(){
         $("#prov-disabled option").each(function(){
             if($(this).is(':selected')){
@@ -38,10 +36,11 @@ $(function(){
             title:          $('#title').val(),
             complete_order: $('#complete_order').val(),
             initial_state:  $('#intial_state').val(),
-            debug:          $('#debug').is(':checked') ? 'yes' : 'no'
+            debug:          $('#debug').is(':checked') ? 'yes' : 'no',
+            glocation:      $('#glocation').val()
         };
 
-
+        console.log(data);
 
         if(validateSendConfig(data)){
             $.ajax({
@@ -87,9 +86,9 @@ $(function(){
 
 });
 
-
 /**
- *
+ * Get allow providers
+ * 
  * @returns {string}
  */
 function getProvidersAllowed(){
@@ -116,7 +115,6 @@ function getProvidersAllowed(){
     return active;
 }
 
-
 /**
  *
  * @param data
@@ -137,6 +135,11 @@ function validateSendConfig(data){
     return false;
 }
 
+/**
+ * Display retro info
+ * 
+ * @param {any} retro 
+ */
 function renderRetro(retro){
     if(retro[0]){
         $("#retro").html(retro[1]);
