@@ -21,7 +21,6 @@
 ?>
 
 <section class="cpcontainer">
-
     <div class="row" id="top">
         <div class="large-12 columns">
             <h1>ComproPago Config</h1>
@@ -35,13 +34,10 @@
                 <?php echo $retro[1]; ?>
             </div>
             <br>
-            <div class="cpalert cperror" id="display_error_config" style="display: none">
-            </div>
+            <div class="cpalert cperror" id="display_error_config" style="display: none"></div>
             <br>
         </div>
     </div>
-
-
 
     <div class="row">
         <div class="small-12 medium-3 large-3 columns">
@@ -53,7 +49,6 @@
                 <span class="switch-inactive" aria-hidden="true">No</span>
               </label>
             </div>
-
         </div>
 
         <div class="small-12 medium-3 large-3 columns">
@@ -76,7 +71,6 @@
               <span class="switch-inactive" aria-hidden="true">No</span>
             </label>
           </div>
-
         </div>
 
         <div class="small-12 medium-3 large-1 columns">
@@ -88,11 +82,8 @@
                 <span class="switch-inactive" aria-hidden="true">No</span>
               </label>
             </div>
-
         </div>
     </div>
-
-
 
     <div class="row">
         <div class="large-12 columns">
@@ -102,6 +93,7 @@
             </label>
         </div>
     </div>
+
     <div class="row">
         <div class="large-12 columns">
             <label for="privatekey">
@@ -111,17 +103,13 @@
         </div>
     </div>
 
-
     <div class="row">
         <div class="large-12 columns">
             <label for="webhook">
-<!--                Webhook
--->
                 <input type="hidden" name="webhook" id="webhook" value="<?php echo $webhook; ?>">
             </label>
         </div>
     </div>
-
 
     <div class="row">
         <div class="columns">
@@ -135,6 +123,7 @@
             </label>
             <input type="button" value="Habilitar" id="agregar_proveedor" class="button primary expanded">
         </div>
+        
         <div class="columns">
             <label for="prov-allowed">
                 Proveedores Habilitados
@@ -200,18 +189,24 @@
         </div>
     </div>
 
-
+    <div class="row">
+        <div class="large-12 columns">
+            <label for="intial_state">
+                Geolocalización
+                <select name="glocation" id="glocation">
+                    <option value="si" <?php echo $glocation == 'si' ? 'selected' : ''; ?>>Si</option>
+                    <option value="no" <?php echo $glocation == 'no' ? 'selected' : ''; ?>>No</option>
+                </select>
+            </label>
+        </div>
+    </div>
 
     <div class="row">
         <div class="large-12 columns">
             <input type="button" class="button primary expanded" value="Guardar configuracion" id="save-config-compropago">
         </div>
     </div>
-
 </section>
-
-
-
 
 <section class="cp-block-login" id="loadig">
     <img src="<?php echo $image_load; ?>" alt="Loading...">

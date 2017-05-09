@@ -88,6 +88,20 @@ class Test extends \PHPUnit_Framework_TestCase
         $this->assertTrue($res);
     }
 
+    public function testDefaultProviders()
+    {
+        $res = false;
+        try {
+            $client = new Client($this->publickey, $this->privatekey, $this->mode);
+            $response = $client->api->listDefaultProviders();
+
+            $res = ($response[0] instanceof Provider && sizeof($response) == 18);
+        } catch (\Exception $e) {
+            echo "====>>".$e->getMessage()."\n";
+        }
+        $this->assertTrue($res);
+    }
+
     public function testProvidersLimit()
     {
         $flag = true;
