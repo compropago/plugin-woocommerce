@@ -38,8 +38,6 @@ class TransactTables
         );
     }
 
-
-
     /**
      * SQL query for Creating ComproPago Tables
      * @return string[]
@@ -47,42 +45,39 @@ class TransactTables
      */
     public static function sqlCreateTables($prefix=null)
     {
-        return array(
-            'CREATE TABLE `' . $prefix . 'compropago_orders` (
-			`id` int(11) NOT NULL AUTO_INCREMENT,
-			`date` int(11) NOT NULL,
-			`modified` int(11) NOT NULL,
-			`compropagoId` varchar(50) NOT NULL,
-			`compropagoStatus`varchar(50) NOT NULL,
-			`storeCartId` varchar(255) NOT NULL,
-			`storeOrderId` varchar(255) NOT NULL,
-			`storeExtra` varchar(255) NOT NULL,
-			`ioIn` mediumtext,
-			`ioOut` mediumtext,
-			PRIMARY KEY (`id`), UNIQUE KEY (`compropagoId`)
-			)ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;',
-
-
-            'CREATE TABLE `' . $prefix . 'compropago_transactions` (
-			`id` int(11) NOT NULL AUTO_INCREMENT,
-			`orderId` int(11) NOT NULL,
-			`date` int(11) NOT NULL,
-	 		`compropagoId` varchar(50) NOT NULL,
-			`compropagoStatus` varchar(50) NOT NULL,
-			`compropagoStatusLast` varchar(50) NOT NULL,
-			`ioIn` mediumtext,
-			`ioOut` mediumtext,
-			PRIMARY KEY (`id`)
-			)ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;',
-
-            'CREATE TABLE `' . $prefix . 'compropago_webhook_transactions` (
-            `id` integer not null auto_increment,
-            `webhookId` varchar(50) not null,
-            `webhookUrl` varchar(300) not null,
-            `updated` integer not null,
-            `status` varchar(50) not null,
-            primary key(id)
-            )ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;'
+      return array(
+        'CREATE TABLE `' . $prefix . 'compropago_orders` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `date` int(11) NOT NULL,
+          `modified` int(11) NOT NULL,
+          `compropagoId` varchar(50) NOT NULL,
+          `compropagoStatus`varchar(50) NOT NULL,
+          `storeCartId` varchar(255) NOT NULL,
+          `storeOrderId` varchar(255) NOT NULL,
+          `storeExtra` varchar(255) NOT NULL,
+          `ioIn` mediumtext,
+          `ioOut` mediumtext,
+          PRIMARY KEY (`id`), UNIQUE KEY (`compropagoId`)
+          )ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;',
+        'CREATE TABLE `' . $prefix . 'compropago_transactions` (
+          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `orderId` int(11) NOT NULL,
+          `date` int(11) NOT NULL,
+          `compropagoId` varchar(50) NOT NULL,
+          `compropagoStatus` varchar(50) NOT NULL,
+          `compropagoStatusLast` varchar(50) NOT NULL,
+          `ioIn` mediumtext,
+          `ioOut` mediumtext,
+          PRIMARY KEY (`id`)
+          )ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;',
+        'CREATE TABLE `' . $prefix . 'compropago_webhook_transactions` (
+          `id` integer not null auto_increment,
+          `webhookId` varchar(50) not null,
+          `webhookUrl` varchar(300) not null,
+          `updated` integer not null,
+          `status` varchar(50) not null,
+          primary key(id)
+          )ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;'
         );
     }
 }

@@ -224,7 +224,10 @@ class Serialize
                 empty($data['expiration_time']) ? null : $data['expiration_time'],
                 empty($data['image_url']) ? '': $data['image_url'],
                 empty($data['app_client_name']) ? 'php-sdk' : $data['app_client_name'],
-                empty($data['app_client_version']) ? Client::VERSION : $data['app_client_version']
+                empty($data['app_client_version']) ? Client::VERSION : $data['app_client_version'],
+                empty($data['latitude']) ? '' : $data['latitude'],
+                empty($data['longitude']) ? '' : $data['longitude'],
+                empty($data['cp']) ? '' : $data['cp']
             );
         }
     }
