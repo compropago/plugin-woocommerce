@@ -13,19 +13,15 @@ use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="4.0.2.2";
+    const VERSION="4.0.3.1";
 
     private $compropagoConfig;
     private $client;
-
     private $orderProvider;
-
     private $controlVision;
     private $live;
     private $activeplugin;
-
     private $debug;
-
 
     /**
      * init compropago
@@ -112,7 +108,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
     public function init_form_fields()
     {
         $this->form_fields=array(
-
             'enabled' => array(
                 'title'			=> __( 'Enable/Disable', 'compropago' ),
                 'label' 		=> __( 'Enable Compropago', 'compropago' ),
@@ -120,7 +115,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administracion de Wordpress desde <a href="./admin.php?page=add-compropago">AQUI</a>','compropago'),
                 'default' 		=> 'no'
             )
-
         );
     }
 
@@ -271,6 +265,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
     /**
      * Load store selector
+     * 
      * @since 3.0.0
      */
     public function payment_fields()
@@ -338,6 +333,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
     /**
      * Validate store selected
+     * 
      * @return true success
      * @return null on ErrorException
      * @throws WP exception
@@ -345,7 +341,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
      */
     public function validate_fields() {
         if(!isset($_POST['compropagoProvider']) || empty($_POST['compropagoProvider'])){
-            $this->orderProvider='OXXO';
+            $this->orderProvider='SEVEN_ELEVEN';
         }else{
             $this->orderProvider=$_POST['compropagoProvider'];
         }
@@ -355,6 +351,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
     /**
      * Compropago Valid Use Validation
+     * 
      * @return boolean
      * @since 3.0.0
      */
