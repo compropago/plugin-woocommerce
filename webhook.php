@@ -175,17 +175,8 @@ try{
 		case 'charge.pending':
 			$nomestatus = "COMPROPAGO_PENDING";
 			break;
-		case 'charge.declined':
-			$nomestatus = "COMPROPAGO_DECLINED";
-			break;
 		case 'charge.expired':
 			$nomestatus = "COMPROPAGO_EXPIRED";
-			break;
-		case 'charge.deleted':
-			$nomestatus = "COMPROPAGO_DELETED";
-			break;
-		case 'charge.canceled':
-			$nomestatus = "COMPROPAGO_CANCELED";
 			break;
 		default:
             die(json_encode([
@@ -207,37 +198,34 @@ try{
 
 		switch($nomestatus){
 			case 'COMPROPAGO_SUCCESS':
-                if($complete_order == 'fin'){
+                if ($complete_order == 'fin') {
                     $order->payment_complete();
-                }else{
+                } else {
                     $order->update_status('processing', __( 'ComproPago - Payment Confirmed', 'compropago' ));
+                    $new_status = 'processing';
                 }
 			    break;
 
 			case 'COMPROPAGO_PENDING':
                 $order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
-			    break;
-
-			case 'COMPROPAGO_DECLINED':
-				$order->update_status('cancelled', __( 'ComproPago - Declined', 'compropago' ));
+                $new_status = 'pending';
 			    break;
 
 			case 'COMPROPAGO_EXPIRED':
 				$order->update_status('cancelled', __( 'ComproPago - Expired', 'compropago' ));
-			    break;
-
-			case 'COMPROPAGO_DELETED':
-				$order->update_status('cancelled', __( 'ComproPago - Deleted', 'compropago' ));
-			    break;
-
-			case 'COMPROPAGO_CANCELED':
-				$order->update_status('cancelled', __( 'ComproPago - Canceled', 'compropago' ));
+				$new_status = 'cancellend';
 			    break;
 
 			default:
 				$order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
+				$new_status = 'on-hold';
 		}
 
+		if (!empty($new_status)) {
+            $order->set_status($new_status);
+        }
+
+		$order->save();
 
 
 		$sql = "UPDATE `".$wpdb->prefix."compropago_orders` SET `modified` = '".$recordTime."',
@@ -250,7 +238,7 @@ try{
                 'short_id' => $response->short_id,
                 'reference' => $response->order_info->order_id
             ]));
-		}
+		} 
 
 		//save transaction
 		$ioIn=base64_encode(serialize($resp_webhook));
@@ -271,7 +259,7 @@ try{
 
         die(json_encode([
             'status' => 'success',
-            'message' => 'OK',
+            'message' => 'OK - ' . $order->get_status() . ' - ' . $response->type,
             'short_id' => $response->short_id,
             'reference' => $response->order_info->order_id
         ]));

@@ -39,7 +39,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->init_form_fields();
         $this->init_settings();
 
-
         $this->activeplugin  = $this->settings['enabled'];
 
         $this->debug         = get_option('compropago_debug');
