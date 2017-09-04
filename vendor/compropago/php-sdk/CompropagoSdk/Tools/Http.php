@@ -2,6 +2,12 @@
 
 namespace CompropagoSdk\Tools;
 
+/**
+ * Class Http
+ * @package CompropagoSdk\Tools
+ *
+ * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+ */
 class Http
 {
     private $url;
@@ -10,11 +16,23 @@ class Http
     private $method;
     private $extra_headers;
 
+    /**
+     * Http constructor.
+     * @param $url
+     */
     public function __construct($url)
     {
         $this->url = $url;
     }
 
+    /**
+     * Set method request
+     *
+     * @param string $method
+     * @throws \Exception
+     *
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setMethod($method)
     {
         switch ($method) {
@@ -29,6 +47,13 @@ class Http
         }
     }
 
+    /**
+     * Set basic auth credentials for request
+     *
+     * @param array $auth
+     *
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setAuth(array $auth)
     {
         if (array_key_exists('user', $auth) && array_key_exists('pass', $auth)) {
@@ -38,6 +63,13 @@ class Http
         }
     }
 
+    /**
+     * Set array data to send JSON
+     *
+     * @param array $data
+     *
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setData(array $data)
     {
         if (!empty($data)) {
@@ -45,6 +77,13 @@ class Http
         }
     }
 
+    /**
+     * Set extra request headers
+     *
+     * @param array $headers
+     *
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setExtraHeaders(array $headers)
     {
         if (!empty($headers)) {
@@ -52,6 +91,14 @@ class Http
         }
     }
 
+    /**
+     * Execute an return response request
+     *
+     * @return mixed
+     * @throws \Exception
+     *
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function executeRequest()
     {
         $ch = curl_init($this->url);

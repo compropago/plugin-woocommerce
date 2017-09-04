@@ -2,21 +2,33 @@
 
 namespace CompropagoSdk;
 
+/**
+ * Class Client
+ * @package CompropagoSdk
+ *
+ * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+ */
 class Client
 {
-    const VERSION="3.0.4";
-
+    const VERSION="4.0.0.0";
     const API_LIVE_URI='http://api.compropago.com/v1/';
     const API_SANDBOX_URI='http://api.compropago.com/v1/';
 
     public $publickey;
     public $privatekey;
     public $live;
-
     public $deployUri;
-
     public $api;
 
+    /**
+     * Client constructor.
+     *
+     * @param string $publickey
+     * @param string $privatekey
+     * @param boolean $live
+     *
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function __construct($publickey, $privatekey, $live)
     {
         $this->publickey = $publickey;

@@ -201,8 +201,6 @@ class ConfigController
       get_option('woocommerce_compropago_settings')
     );
 
-    delete_option('compropago_glocation');
-    add_option('compropago_glocation', $this->data['glocation']);
   }
 }
 
