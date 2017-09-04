@@ -12,10 +12,15 @@ $wpFiles= array(
 
 
 foreach($wpFiles as $wpFile){
-    if(file_exists($wpFile)){
+    if (file_exists($wpFile)) {
         include_once $wpFile;
-    }else{
-        echo "ComproPago Warning: No se encontro el archivo:".$wpFile."<br>";
+    } else {
+        die(json_encode([
+            'status' => 'error',
+            'message' => 'Unresolved wordpress dependencies',
+            'short_id' => null,
+            'reference' => null
+        ]));
     }
 }
 
@@ -31,7 +36,12 @@ use CompropagoSdk\Tools\Validations;
 
 $request = @file_get_contents('php://input');
 if(!$resp_webhook = Factory::getInstanceOf("CpOrderInfo",$request)){
-	die('Tipo de Request no Valido');
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Invalid request',
+        'short_id' => null,
+        'reference' => null
+    ]));
 }
 
 
@@ -41,7 +51,12 @@ include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 //Check if WooCommerce is active
 if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-	die("No se pudo inicializar WooCommerce");
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'WooCommerce init failed',
+        'short_id' => null,
+        'reference' => null
+    ]));
 }
 
 
@@ -49,13 +64,23 @@ if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', 
 
 //Compropago Plugin Active?
 if (!is_plugin_active( 'compropago/compropago.php' ) ){
-	die('ComproPago no se encuentra activo en Wordpress');
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Inactive plugin',
+        'short_id' => null,
+        'reference' => null
+    ]));
 }
 
 //Get ComproPago  Config values
 $config = get_option('woocommerce_compropago_settings');
 if($config['enabled'] != 'yes'){
-	die('ComproPago no se encuentra activo en Woocommerce');
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Inactive plugin',
+        'short_id' => null,
+        'reference' => null
+    ]));
 }
 
 
@@ -70,7 +95,12 @@ $complete_order = get_option('compropago_completed_order');
 
 //keys set?
 if (empty($publickey) || empty($privatekey)){
-    die("Se requieren las llaves de compropago");
+    die(json_encode([
+        'status' => 'error',
+        'message' => 'Invalid plugin credentials',
+        'short_id' => null,
+        'reference' => null
+    ]));
 }
 
 
@@ -93,14 +123,24 @@ try{
     Validations::validateGateway($client);
 }catch (Exception $e) {
 	//something went wrong at sdk lvl
-	die($e->getMessage());
+    die(json_encode([
+        'status' => 'error',
+        'message' => $e->getMessage(),
+        'short_id' => null,
+        'reference' => null
+    ]));
 }
 
 
 
 //webhook Test?
-if($resp_webhook->id=="ch_00000-000-0000-000000"){
-	die("Probando el WebHook?, Ruta correcta.");
+if($resp_webhook->short_id == "000000"){
+    die(json_encode([
+        'status' => 'success',
+        'message' => 'Test webhook - OK',
+        'short_id' => null,
+        'reference' => null
+    ]));
 }
 
 
@@ -109,13 +149,23 @@ try{
 	$response = $client->api->verifyOrder($resp_webhook->id);
 
 	if($response->type == 'error'){
-		die('Error procesando el número de orden');
+        die(json_encode([
+            'status' => 'error',
+            'message' => 'invalid verified order',
+            'short_id' => null,
+            'reference' => null
+        ]));
 	}
 
 	if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
     !$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")
     ){
-        die('ComproPago Tables Not Found');
+        die(json_encode([
+            'status' => 'error',
+            'message' => 'ComproPago tables not found',
+            'short_id' => null,
+            'reference' => null
+        ]));
 	}
 
 	switch ($response->type){
@@ -138,7 +188,12 @@ try{
 			$nomestatus = "COMPROPAGO_CANCELED";
 			break;
 		default:
-			die('Invalid Response type');
+            die(json_encode([
+                'status' => 'error',
+                'message' => 'Invalid response type',
+                'short_id' => null,
+                'reference' => null
+            ]));
 	}
 
 	$sql = "SELECT * FROM ".$wpdb->prefix."compropago_orders WHERE compropagoId = '".$response->id."' ";
@@ -189,31 +244,51 @@ try{
 		`compropagoStatus` = '".$response->type."', `storeExtra` = '".$nomestatus."' WHERE `id` = '".$row->id."'";
 
 		if(!$wpdb->query($sql)){
-			die("Error Updating ComproPago Order Record at Store");
+            die(json_encode([
+                'status' => 'error',
+                'message' => 'Error updating compropago order',
+                'short_id' => $response->short_id,
+                'reference' => $response->order_info->order_id
+            ]));
 		}
 
 		//save transaction
 		$ioIn=base64_encode(serialize($resp_webhook));
 		$ioOut=base64_encode(serialize($response));
 
-		$wpdb->insert($wpdb->prefix . 'compropago_transactions', array(
-				'orderId' 			=> $row->id,
-				'date' 				=> $recordTime,
-				'compropagoId'		=> $response->id,
-				'compropagoStatus'	=> $response->type,
-				'compropagoStatusLast'	=> $row->compropagoStatus,
-				'ioIn' 				=> $ioIn,
-				'ioOut' 			=> $ioOut
-				)
-			);
+		$wpdb->insert(
+		    $wpdb->prefix . 'compropago_transactions',
+            array(
+            'orderId' 			    => $row->id,
+            'date' 				    => $recordTime,
+            'compropagoId'		    => $response->id,
+            'compropagoStatus'	    => $response->type,
+            'compropagoStatusLast'	=> $row->compropagoStatus,
+            'ioIn' 				    => $ioIn,
+            'ioOut' 			    => $ioOut
+            )
+        );
 
-		echo('Orden '.$resp_webhook->id.', transacción ejecutada');
+        die(json_encode([
+            'status' => 'success',
+            'message' => 'OK',
+            'short_id' => $response->short_id,
+            'reference' => $response->order_info->order_id
+        ]));
 
 	}else{
-		die('El número de orden no se encontro en la tienda');
+        die(json_encode([
+            'status' => 'error',
+            'message' => 'invalid order: not found ID',
+            'short_id' => null,
+            'reference' => null
+        ]));
 	}
-
-	die("Orden {$response->id} recibida correctamente.");
 }catch (Exception $e){
-	die($e->getMessage());
+    die(json_encode([
+        'status' => 'error',
+        'message' => $e->getMessage(),
+        'short_id' => null,
+        'reference' => null
+    ]));
 }

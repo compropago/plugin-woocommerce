@@ -36,22 +36,6 @@
 
         <input type="hidden" id="cp_longitude" name="cp_longitude">
         <input type="hidden" id="cp_latitude" name="cp_latitude">
-
-        <?php if ($comprodata['glocation']) { ?>
-          <script>
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(function(pos){
-                  var latitud = pos.coords.latitude;
-                  var longitud = pos.coords.longitude;
-                  document.getElementById("cp_latitude").value = latitud;
-                  document.getElementById("cp_longitude").value = longitud;
-              }, function(errorCode){
-                  console.log("Error code localization: ");
-                  console.log(errorCode);
-              });
-            }
-          </script>
-        <?php } else { var_dump($comprodata['glocation']); } ?>
       <?php } else { echo( __('Éste método de pago temporalmente está fuera de servicio.', 'compropago')); }?>
     </div>
   </div>

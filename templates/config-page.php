@@ -191,20 +191,6 @@
 
     <div class="row">
         <div class="large-12 columns">
-            <label for="intial_state">
-                Geolocalización
-                <select name="glocation" id="glocation">
-                    <option value="si" <?php echo $glocation == 'si' ? 'selected' : ''; ?>>Si</option>
-                    <option value="no" <?php echo $glocation == 'no' ? 'selected' : ''; ?>>No</option>
-                </select>
-            </label>
-            <code>Obtiene la ubicación del cliente para mostrar los establecimientos cercanos a el, agiliza las notificaciones 
-            de pago y reduce el tiempo de confirmación</code>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
             <input type="button" class="button primary expanded" value="Guardar configuracion" id="save-config-compropago">
         </div>
     </div>
