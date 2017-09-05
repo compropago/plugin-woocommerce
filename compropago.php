@@ -71,7 +71,6 @@ function compropago_config_page(){
   $complete_order = get_option('compropago_completed_order');
   $initial_state  = get_option('compropago_initial_state');
   $debug          = get_option('compropago_debug');
-  $glocation      = get_option('compropago_glocation');
 
   $aux            = get_option('woocommerce_compropago_settings');
   $enabled        = $aux['enabled'] === 'yes' ? true : false;
@@ -82,26 +81,26 @@ function compropago_config_page(){
   $flag_OXXO = false;
 
   if (!empty($provs_config)) {
-    $allowed = explode(',', $provs_config);
-    $active_providers = array();
-    $disabled_providers = array();
+      $allowed = explode(',', $provs_config);
+      $active_providers = array();
+      $disabled_providers = array();
 
-    foreach ($all_providers as $provider) {
-      $flag = true;
+      foreach ($all_providers as $provider) {
+          $flag = true;
 
-      foreach ($allowed as $value){
-        if ($value == $provider->internal_name){
-            $active_providers[] = $provider;
-            $flag = false;
-            break;
-        }
+          foreach ($allowed as $value) {
+              if ($value == $provider->internal_name) {
+                  $active_providers[] = $provider;
+                  $flag = false;
+                  break;
+              }
+          }
+
+          if ($flag) { $disabled_providers[] = $provider; }
       }
-
-      if ($flag) { $disabled_providers[] = $provider; }
-    }
   }else{
-    $active_providers = $all_providers;
-    $disabled_providers = array();
+      $active_providers = $all_providers;
+      $disabled_providers = array();
   }
 
   $retro = Utils::retroalimentacion($publickey,$privatekey,$live,$config);
@@ -114,15 +113,15 @@ function compropago_config_page(){
  * Registro de la pagina de configuracion
  */
 function compropago_add_admin_page(){
-  add_menu_page(
-    'ComproPago Config',
-    'ComproPago',
-    'manage_options',
-    'add-compropago',
-    'compropago_config_page',
-    plugins_url('templates/img/logo.png', __FILE__) , // custom icon
-    110  // position menu
-  );
+    add_menu_page(
+        'ComproPago Config',
+        'ComproPago',
+        'manage_options',
+        'add-compropago',
+        'compropago_config_page',
+        plugins_url('templates/img/logo.png', __FILE__) , // custom icon
+        110  // position menu
+    );
 }
 
 /**
@@ -146,14 +145,15 @@ function compropago_active(){
   $queries = TransactTables::sqlDropTables($dbprefix);
 
   foreach ($queries as $drop) {
-    dbDelta($drop);
+      dbDelta($drop);
   }
 
   $queries = TransactTables::sqlCreateTables($dbprefix);
 
   foreach ($queries as $create) {
-    if(!dbDelta($create))
-      throw new Exception('Unable to Create ComproPago Tables, module cant be installed');
+      if(!dbDelta($create)) {
+          throw new Exception('Unable to Create ComproPago Tables, module cant be installed');
+      }
   }
 }
 
@@ -164,52 +164,57 @@ register_activation_hook( __FILE__, 'compropago_active' );
 
 
 function compropago_init() {
-  if ( !class_exists( 'WC_Payment_Gateway' ) ) return;
-  /**
-   * Localisation
-   */
-  load_plugin_textdomain('compropago', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
+    if ( !class_exists( 'WC_Payment_Gateway' ) ) return;
 
-  /**
-   * Gateway class include
-   */
-  require_once 'wc-gateway-compropago.php';
+    /**
+     * Localisation
+     */
+    load_plugin_textdomain('compropago', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
 
-  /**
-   * Add the Gateway to WooCommerce
-   * @since 3.0.0
-   **/
-  function compropago_gateway($methods) {
-    $methods[] = 'WC_Gateway_Compropago';
+    /**
+     * Gateway class include
+     */
+    require_once 'wc-gateway-compropago.php';
 
-    wp_register_style( 'prefix-style-config', plugins_url('templates/css/foundation.css', __FILE__) );
-    wp_enqueue_style( 'prefix-style-config' );
+    /**
+     * Add the Gateway to WooCommerce
+     * @since 3.0.0
+     **/
+    function compropago_gateway($methods) {
+        $methods[] = 'WC_Gateway_Compropago';
 
-    return $methods;
-  }
+        wp_register_style( 'prefix-style-config', plugins_url('templates/css/foundation.css', __FILE__) );
+        wp_enqueue_style( 'prefix-style-config' );
 
-  add_filter('woocommerce_payment_gateways', 'compropago_gateway' );
-
-  function comp_receipt( $order_id ) {
-    global $wpdb;
-    $dbprefix=$wpdb->prefix;
-
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-
-    $order = new WC_Order( $order_id );
-
-    $compropagoData = null;
-    $compropagoOrder = $dbprefix . 'compropago_orders';
-
-    if($mylink = $wpdb->get_row( "SELECT * FROM {$compropagoOrder} WHERE storeOrderId = '{$order_id}'" )){
-      $receipt = file_get_contents(__DIR__."/templates/receipt.html");
-      $receipt = str_replace(':cpid:', $mylink->compropagoId, $receipt);
-
-      echo $receipt;
+        return $methods;
     }
-  }
 
-  add_action( 'woocommerce_thankyou', 'comp_receipt',1 );
+    add_filter('woocommerce_payment_gateways', 'compropago_gateway' );
+
+    function comp_receipt( $order_id ) {
+        global $wpdb;
+        $dbprefix=$wpdb->prefix;
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+        $order = new WC_Order( $order_id );
+
+        $compropagoData = null;
+        $compropagoOrder = $dbprefix . 'compropago_orders';
+
+        $mylink = $wpdb->get_row( "SELECT * FROM $compropagoOrder WHERE storeOrderId = '$order_id'");
+
+        if ($mylink) {
+            $receipt = file_get_contents(__DIR__."/templates/receipt.html");
+            $receipt = str_replace(':cpid:', $mylink->compropagoId, $receipt);
+
+            echo $receipt;
+        } else {
+            echo "Fallo al recuperar el link";
+        }
+    }
+
+    add_action('woocommerce_thankyou', 'comp_receipt', 1);
 }
 
 

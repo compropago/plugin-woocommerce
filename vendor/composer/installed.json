@@ -1,17 +1,17 @@
 [
     {
         "name": "compropago/php-sdk",
-        "version": "3.0.6",
-        "version_normalized": "3.0.6.0",
+        "version": "4.0.0.1",
+        "version_normalized": "4.0.0.1",
         "source": {
             "type": "git",
             "url": "https://github.com/compropago/compropago-php.git",
-            "reference": "1a1acafe2d965c8e0534b59f0db5a6af5a3a5e17"
+            "reference": "3cf55708be74694d39afa93b0f7e5b0a2f671592"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/1a1acafe2d965c8e0534b59f0db5a6af5a3a5e17",
-            "reference": "1a1acafe2d965c8e0534b59f0db5a6af5a3a5e17",
+            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/3cf55708be74694d39afa93b0f7e5b0a2f671592",
+            "reference": "3cf55708be74694d39afa93b0f7e5b0a2f671592",
             "shasum": ""
         },
         "require": {
@@ -20,7 +20,7 @@
         "require-dev": {
             "phpunit/phpunit": ">=4.8"
         },
-        "time": "2017-05-09T01:41:37+00:00",
+        "time": "2017-09-01T18:10:31+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

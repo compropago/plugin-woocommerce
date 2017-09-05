@@ -1,26 +1,7 @@
 <?php
-/**
- * Copyright 2015 Compropago.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/**
- * Compropago $Library
- * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
- */
 
 namespace CompropagoSdk\Extern;
+
 
 class TransactTables
 {
@@ -37,7 +18,6 @@ class TransactTables
             'DROP TABLE IF EXISTS `' . $prefix . 'compropago_webhook_transactions`'
         );
     }
-
     /**
      * SQL query for Creating ComproPago Tables
      * @return string[]
@@ -45,8 +25,8 @@ class TransactTables
      */
     public static function sqlCreateTables($prefix=null)
     {
-      return array(
-        'CREATE TABLE `' . $prefix . 'compropago_orders` (
+        return array(
+            'CREATE TABLE `' . $prefix . 'compropago_orders` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `date` int(11) NOT NULL,
           `modified` int(11) NOT NULL,
@@ -59,7 +39,7 @@ class TransactTables
           `ioOut` mediumtext,
           PRIMARY KEY (`id`), UNIQUE KEY (`compropagoId`)
           )ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;',
-        'CREATE TABLE `' . $prefix . 'compropago_transactions` (
+            'CREATE TABLE `' . $prefix . 'compropago_transactions` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `orderId` int(11) NOT NULL,
           `date` int(11) NOT NULL,
@@ -70,7 +50,7 @@ class TransactTables
           `ioOut` mediumtext,
           PRIMARY KEY (`id`)
           )ENGINE=MyISAM DEFAULT CHARSET=utf8  DEFAULT COLLATE utf8_general_ci  AUTO_INCREMENT=1 ;',
-        'CREATE TABLE `' . $prefix . 'compropago_webhook_transactions` (
+            'CREATE TABLE `' . $prefix . 'compropago_webhook_transactions` (
           `id` integer not null auto_increment,
           `webhookId` varchar(50) not null,
           `webhookUrl` varchar(300) not null,
