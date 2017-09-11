@@ -120,7 +120,7 @@ class ConfigController
     /**
      * Webhook option
      */
-    if(get_option('compropago_webhook')){
+    if (get_option('compropago_webhook')) {
       delete_option('compropago_webhook');
       add_option('compropago_webhook', $this->data['webhook']);
       $webhook = $client->api->createWebhook($this->data['webhook']);
@@ -135,7 +135,7 @@ class ConfigController
           'status' => $webhook->status
         )
       );
-    }else{
+    } else {
       delete_option('compropago_webhook');
       add_option('compropago_webhook', $this->data['webhook']);
 
@@ -145,32 +145,38 @@ class ConfigController
 
       $recordTime = time();
 
-      if(!empty($row_last->last)){
-        $sql = "SELECT * FROM {$wpdb->prefix}compropago_webhook_transactions WHERE id = {$row_last->last}";
+      try {
+          if (!empty($row_last->last)) {
+              $sql = "SELECT * FROM {$wpdb->prefix}compropago_webhook_transactions WHERE id = {$row_last->last}";
 
-        if($row = $wpdb->get_row($sql)){
-          $webhook = $client->api->updateWebhook($row->webhookId, $this->data['webhook']);
-          $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions', 
-            array(
-              'webhookId' => $webhook->id,
-              'webhookUrl' => $webhook->url,
-              'updated' => $recordTime,
-              'status' => $webhook->status
-            )
-          );
-        }else{
-          throw new Exception('Error al recuperar la ultima transaccion del webhook');
-        }
-      }else{
-        $webhook = $client->api->createWebhook($this->data['webhook']);
-        $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions', 
-          array(
-            'webhookId' => $webhook->id,
-            'webhookUrl' => $webhook->url,
-            'updated' => $recordTime,
-            'status' => $webhook->status
-          )
-        );
+              if ($row = $wpdb->get_row($sql)) {
+                  $webhook = $client->api->updateWebhook($row->webhookId, $this->data['webhook']);
+                  $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions',
+                      array(
+                          'webhookId' => $webhook->id,
+                          'webhookUrl' => $webhook->url,
+                          'updated' => $recordTime,
+                          'status' => $webhook->status
+                      )
+                  );
+              } else {
+                  throw new Exception('Error al recuperar la ultima transaccion del webhook');
+              }
+          } else {
+              $webhook = $client->api->createWebhook($this->data['webhook']);
+              $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions',
+                  array(
+                      'webhookId' => $webhook->id,
+                      'webhookUrl' => $webhook->url,
+                      'updated' => $recordTime,
+                      'status' => $webhook->status
+                  )
+              );
+          }
+      } catch (Exception $e) {
+          if ($e->getMessage() != 'Error: conflict.urls.create') {
+              throw new Exception($e);
+          }
       }
     }
 
