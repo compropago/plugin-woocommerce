@@ -152,7 +152,10 @@ class Service
      */
     public function createWebhook($url)
     {
-        $params = ['url' => $url];
+        $params = [
+            'url' => $url,
+            'webhookType' => 'secondary'
+        ];
 
         $response = Request::post($this->client->deployUri.'webhooks/stores/', $params, $this->getAuth());
         return Factory::getInstanceOf('Webhook', $response);
