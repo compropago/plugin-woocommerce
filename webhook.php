@@ -213,7 +213,7 @@ try{
 
 			case 'COMPROPAGO_EXPIRED':
 				$order->update_status('cancelled', __( 'ComproPago - Expired', 'compropago' ));
-				$new_status = 'cancellend';
+				$new_status = 'cancelled';
 			    break;
 
 			default:
