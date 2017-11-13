@@ -1,7 +1,7 @@
 # Plugin para WooCommerce 
 =================================================
 
-*Nota.-Este plugin sólo funcionará con cuentas de ComproPago generadas a partir de Agosto del 2017. Si tienes una cuenta creada anterior a esta fecha por favor utilizar la versión 4.1.0.2 del plugin.**
+**Nota.-Este plugin sólo funcionará con cuentas de ComproPago generadas a partir de Agosto del 2017. Si tienes una cuenta creada anterior a esta fecha por favor utilizar la versión 4.1.0.2 del plugin.**
 
 ## Descripción
 Este módulo permite la integración del servicio de ComproPago en tu eCommerce de WooCommerce. 
