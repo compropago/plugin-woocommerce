@@ -1,73 +1,57 @@
-Plugin para WooCommerce - ComproPago
-===================================
+# Plugin para WooCommerce 
+=================================================
+
+*Nota.-Este plugin sólo funcionará con cuentas de ComproPago generadas a partir de Agosto del 2017. Si tienes una cuenta creada anterior a esta fecha por favor utilizar la versión 4.1.0.2 del plugin.**
+
 ## Descripción
-Este modulo provee el servicio de ComproPago para poder generar intenciones de pago dentro de la plataforma WooCommerce. 
+Este módulo permite la integración del servicio de ComproPago en tu eCommerce de WooCommerce. 
 
-Con ComproPago puede recibir pagos en 7Eleven, Extra y muchas tiendas más en todo México.
+Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
 
-[Registrarse en ComproPago ] (https://compropago.com)
+[Registrarse en ComproPago ](https://compropago.com/)
 
+[Comisiones](https://www.compropago.com/comisiones/)
 
-## Ayuda y Soporte de ComproPago
+## Ayuda
 
 - [Centro de ayuda y soporte](https://compropago.com/ayuda-y-soporte)
-- [Solicitar Integración](https://compropago.com/integracion)
-- [Guía para Empezar a usar ComproPago](https://compropago.com/ayuda-y-soporte/como-comenzar-a-usar-compropago)
-- [Información de Contacto](https://compropago.com/contacto)
+- [Solicitar integración](https://compropago.com/integracion)
+- [Guía para empezar a usar ComproPago](https://compropago.com/ayuda-y-soporte/como-comenzar-a-usar-compropago)
+- [Información de contacto](https://compropago.com/contacto)
 
 ## Requerimientos
-* [WooCommerce 2.5.0 +] (https://www.woothemes.com/woocommerce/)
-* [WordPress 4.4.1 +] (https://wordpress.org/download/)
-* ComproPago PHP Sdk 1.0.x
+* [WooCommerce 2.5.x +](https://woocommerce.com/)
 * [PHP >= 5.4](http://www.php.net/)
 * [PHP JSON extension](http://php.net/manual/en/book.json.php)
 * [PHP cURL extension](http://php.net/manual/en/book.curl.php)
 
-## Instalación:
+## Instalación
 
-1. Descomprimir y subir el folder de los archivos del plugin hacia el folder “wp-content/plugins/“, o bien usando el instalador de plugins de Wordpress: Plugins -> Añadir nuevo.
-2. Activar el plugin.
-
-
-## ¿Cómo trabaja el modulo?
-Una vez que el cliente sabe que comprar y continua con el proceso de compra entrará a la opción de elegir metodo de pago justo aqui aparece la opción de pagar con ComproPago.
-
-Cuando la orden de compra es completada, el cliente inicia el proceso para generar su intención de pago, selecciona el establecimiento y recibe las instrucciones para realizar el pago.
-
-Una vez generada la intención de pago, dentro del panel de control de ComproPago la orden se muestra como "PENDIENTE" esto significa que el usuario esta por ir a hacer el deposito.
-
----
-
-## Configurar el plugin
-
-1. Navegar hacia: WooCommerce -> Settings -> Payment Gateways, elegir ComproPago llenar los campos Public_key and Private_key.
-
----
-
-## Sincronización con la notificación Webhook
-1. Ir al área de Webhooks en ComproPago https://compropago.com/panel/webhooks
-2. Introducir la dirección: [direcciondetusitio.com]/wp-content/plugins/compropago/webhook.php
-3. Dar click en el botón "Probar" y verificamos que el servidor de la tienda esta respondiendo, debera aparecer el mismo objeto que se envío. 
-
-Una vez completados estos pasos el proceso de instalación queda completado.
+Por favor revisar la siguiente [documentación](http://demo.compropago.com/list/plugins/woocommerce.php)
 
 ## Documentación
-### Documentación ComproPago Plugin WooCommerce
 
-### Documentación de ComproPago
-**[API de ComproPago] (https://compropago.com/documentacion/api)**
+**[API de ComproPago](https://compropago.com/documentacion/api)**
 
-ComproPago te ofrece un API tipo REST para integrar pagos en efectivo en tu comercio electrónico o tus aplicaciones.
+ComproPago te ofrece un API REST para integrar pagos en efectivo en tu comercio electrónico o aplicaciones.
 
 
-**[General] (https://compropago.com/documentacion)**
+**[General](https://compropago.com/documentacion)**
 
-Información de Comisiones y Horarios, como Transferir tu dinero y la Seguridad que proporciona ComproPAgo
+Información de comisiones y horarios, como transferir tu dinero y la seguridad que proporciona ComproPago.
 
+**[Otras formas de integración](https://compropago.com/soluciones/)**
+* [Botón de pago](https://compropago.com/documentacion/boton-pago)
+* [Librerías > sección SDK](http://demo.compropago.com/)
+* [Plugins > sección Plugins](http://demo.compropago.com/)
 
-**[Herramientas] (https://compropago.com/documentacion/boton-pago)**
-* Botón de pago
-* Modo de pruebas/activo
-* WebHooks
-* Librerías y Plugins
-* Shopify
+## Soporte
+
+En caso de tener alguna pregunta o requerir el apoyo técnico, por favor contactar al correo: **soporte@compropago.com**, proporcionando la siguiente información:
+
+- Nombre completo (Propietario de la cuenta).
+- Url del sitio web de la tienda.
+- Teléfono local y celular.
+- Correo electrónico del propietario de la cuenta.
+- Texto detallado de la duda o requerimiento.
+- En caso de presentar algún problema técnico, por favor enviar capturas de pantalla o evidencia para una respuesta más rápida.
