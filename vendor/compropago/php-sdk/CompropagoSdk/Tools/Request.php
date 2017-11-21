@@ -4,6 +4,15 @@ namespace CompropagoSdk\Tools;
 
 class Request
 {
+    /**
+     * Validates response from Request
+     * 
+     * @param string $response
+     * @return boolean
+     * @throws \Exception
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     private static function validateResponse($response)
     {
         if (!empty($response)) {
@@ -19,6 +28,16 @@ class Request
         }
     }
 
+    /**
+     * Execute Get request
+     * 
+     * @param string $url
+     * @param array $auth
+     * @param array $headers
+     * @return string
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public static function get($url, $auth=array(), $headers=array())
     {
         $http = new Http($url);
@@ -30,9 +49,19 @@ class Request
         self::validateResponse($res);
 
         return $res;
-
     }
 
+    /**
+     * Execute Post request
+     * 
+     * @param string $url
+     * @param array $data
+     * @param array $auth
+     * @param array $headers
+     * @return string
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public static function post($url, $data=array(), $auth=array(), $headers=array())
     {
         $http = new Http($url);
@@ -47,6 +76,17 @@ class Request
         return $res;
     }
 
+    /**
+     * Execute Put request
+     * 
+     * @param string $url
+     * @param array $data
+     * @param array $auth
+     * @param array $headers
+     * @return string
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public static function put($url, $data=array(), $auth=array(), $headers=array())
     {
         $http = new Http($url);
@@ -61,6 +101,17 @@ class Request
         return $res;
     }
 
+    /**
+     * Execute Delete request
+     * 
+     * @param string $url
+     * @param array $data
+     * @param array $auth
+     * @param array $headers
+     * @return string
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public static function delete($url, $data=array(), $auth=array(), $headers=array())
     {
         $http = new Http($url);

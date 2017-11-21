@@ -33,8 +33,8 @@ use CompropagoSdk\Tools\Validations;
 
 class Test extends \PHPUnit_Framework_TestCase
 {
-    private $publickey  = "pk_test_638e8b14112423a086";
-    private $privatekey = "sk_test_9c95e149614142822f";
+    private $publickey  = "pk_test_8781245a88240f9cf";
+    private $privatekey = "sk_test_56e31883637446b1b";
     private $mode = false;
     
     private $phonenumber = "5561463627";
@@ -51,12 +51,14 @@ class Test extends \PHPUnit_Framework_TestCase
     public function testCreateClient()
     {
         $res = false;
+        
         try {
             $client = new Client($this->publickey, $this->privatekey, $this->mode);
             $res = true;
         } catch(\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
+
         $this->assertTrue($res);
     }
 
@@ -95,7 +97,7 @@ class Test extends \PHPUnit_Framework_TestCase
             $client = new Client($this->publickey, $this->privatekey, $this->mode);
             $response = $client->api->listDefaultProviders();
 
-            $res = ($response[0] instanceof Provider && sizeof($response) == 18);
+            $res = ($response[0] instanceof Provider && sizeof($response) == 13);
         } catch (\Exception $e) {
             echo "====>>".$e->getMessage()."\n";
         }
