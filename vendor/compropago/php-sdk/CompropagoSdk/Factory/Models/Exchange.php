@@ -2,7 +2,6 @@
 
 namespace CompropagoSdk\Factory\Models;
 
-
 class Exchange
 {
     public $rate;

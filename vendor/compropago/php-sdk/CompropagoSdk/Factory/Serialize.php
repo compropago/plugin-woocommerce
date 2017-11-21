@@ -21,6 +21,14 @@ use CompropagoSdk\Factory\Models\Webhook;
 
 class Serialize
 {
+    /**
+     * Make CpOrderInfo instance
+     * 
+     * @param array $data
+     * @return CpOrderInfo
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public static function cpOrderInfo($data=array())
     {
         if (empty($data)) {
@@ -53,6 +61,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make Customer instance
+     * 
+     * @param array $data
+     * @return Customer
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function customer($data=array())
     {
         if (empty($data)) {
@@ -68,6 +84,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make EvalAuthInfo instance
+     * 
+     * @param array $data
+     * @return EvalAuthInfo
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function evalAuthInfo($data=array())
     {
         if (empty($data)) {
@@ -85,6 +109,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make FeeDetails instance
+     * 
+     * @param array $data
+     * @return FeeDetails
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function feeDetails($data=array())
     {
         if (empty($data)) {
@@ -105,6 +137,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make InstructionDetails instance
+     * 
+     * @param array $data
+     * @return InstructionDetails
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function instructionDetails($data=array())
     {
         if (empty($data)) {
@@ -129,6 +169,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make Instructions instance
+     * 
+     * @param array $data
+     * @return Instructions
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function instructions($data=array())
     {
         if (empty($data)) {
@@ -149,6 +197,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make NewOrderInfo instance
+     * 
+     * @param array $data
+     * @return NewOrderInfo
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function newOrderInfo($data=array())
     {
         if (empty($data)) {
@@ -172,6 +228,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make Exchange instance
+     * 
+     * @param array $data
+     * @return Exchange
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function exchange($data=array())
     {
         if (empty($data)) {
@@ -191,6 +255,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make OrderInfo instance
+     * 
+     * @param array $data
+     * @return OrderInfo
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function orderInfo($data=array())
     {
         if (empty($data)) {
@@ -208,6 +280,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make PlaceOrderInfo instance
+     * 
+     * @param array $data
+     * @return PlaceOrderInfo
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function placeOrderInfo($data=array())
     {
         if (empty($data)) {
@@ -223,15 +303,20 @@ class Serialize
                 empty($data['currency']) ? 'MXN' : $data['currency'],
                 empty($data['expiration_time']) ? null : $data['expiration_time'],
                 empty($data['image_url']) ? '': $data['image_url'],
-                empty($data['app_client_name']) ? 'php-sdk' : $data['app_client_name'],
-                empty($data['app_client_version']) ? Client::VERSION : $data['app_client_version'],
-                empty($data['latitude']) ? '' : $data['latitude'],
-                empty($data['longitude']) ? '' : $data['longitude'],
-                empty($data['cp']) ? '' : $data['cp']
+                empty($data['app_client_name']) ? 'phpsdk' : $data['app_client_name'],
+                empty($data['app_client_version']) ? Client::VERSION : $data['app_client_version']
             );
         }
     }
 
+    /**
+     * Make Provider instance
+     * 
+     * @param array $data
+     * @return Provider
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function provider($data=array())
     {
         if (empty($data)) {
@@ -249,11 +334,20 @@ class Serialize
             $obj->image_large = $data['image_large'];
             $obj->transaction_limit = $data['transaction_limit'];
             $obj->rank = $data['rank'];
+            $obj->commission = $data['commission'];
 
             return $obj;
         }
     }
 
+    /**
+     * Make SmsData instance
+     * 
+     * @param array $data
+     * @return SmsData
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function smsData($data=array())
     {
         if (empty($data)) {
@@ -267,6 +361,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make SmsInfo instance
+     * 
+     * @param array $data
+     * @return SmsInfo
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function smsInfo($data=array())
     {
         if (empty($data)) {
@@ -282,6 +384,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make SmsObject instance
+     * 
+     * @param array $data
+     * @return SmsObject
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function smsObject($data=array())
     {
         if (empty($data)) {
@@ -297,6 +407,14 @@ class Serialize
         }
     }
 
+    /**
+     * Make Webhook instance
+     * 
+     * @param array $data
+     * @return Webhook
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@fmail.com>
+     */
     public static function webhook($data=array())
     {
         if (empty($data)) {

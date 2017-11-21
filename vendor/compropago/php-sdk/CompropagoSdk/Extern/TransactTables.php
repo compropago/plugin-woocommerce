@@ -14,14 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * Compropago $Library
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
  */
-
 namespace CompropagoSdk\Extern;
-
 class TransactTables
 {
     /**
@@ -37,7 +34,6 @@ class TransactTables
             'DROP TABLE IF EXISTS `' . $prefix . 'compropago_webhook_transactions`'
         );
     }
-
     /**
      * SQL query for Creating ComproPago Tables
      * @return string[]

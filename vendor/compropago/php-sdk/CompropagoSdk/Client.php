@@ -4,7 +4,7 @@ namespace CompropagoSdk;
 
 class Client
 {
-    const VERSION="3.0.4";
+    const VERSION="3.0.6.1";
 
     const API_LIVE_URI='http://api.compropago.com/v1/';
     const API_SANDBOX_URI='http://api.compropago.com/v1/';

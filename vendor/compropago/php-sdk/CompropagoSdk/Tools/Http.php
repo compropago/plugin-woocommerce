@@ -10,11 +10,25 @@ class Http
     private $method;
     private $extra_headers;
 
+    /**
+     * Constructor
+     * 
+     * @param string $url
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function __construct($url)
     {
         $this->url = $url;
     }
 
+    /**
+     * Set HTTP Method for the request
+     * 
+     * @param string $method
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setMethod($method)
     {
         switch ($method) {
@@ -29,6 +43,13 @@ class Http
         }
     }
 
+    /**
+     * Set basic auth params for the request
+     * 
+     * @param array $auth
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setAuth(array $auth)
     {
         if (array_key_exists('user', $auth) && array_key_exists('pass', $auth)) {
@@ -38,6 +59,13 @@ class Http
         }
     }
 
+    /**
+     * Set json data for the request
+     * 
+     * @param array $data
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setData(array $data)
     {
         if (!empty($data)) {
@@ -45,6 +73,13 @@ class Http
         }
     }
 
+    /**
+     * Set request headers
+     * 
+     * @param array $headers
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function setExtraHeaders(array $headers)
     {
         if (!empty($headers)) {
@@ -52,6 +87,14 @@ class Http
         }
     }
 
+    /**
+     * Execute requesto from previous configuration
+     * 
+     * @return string
+     * @throws \Exception
+     * 
+     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+     */
     public function executeRequest()
     {
         $ch = curl_init($this->url);
