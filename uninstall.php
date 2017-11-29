@@ -17,4 +17,3 @@ delete_option('compropago_showlogo');
 delete_option('compropago_descripcion');
 delete_option('compropago_instrucciones');
 delete_option('compropago_provallowed');
-delete_option('compropago_glocation');

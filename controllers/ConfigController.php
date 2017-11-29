@@ -105,7 +105,7 @@ class ConfigController
             $this->data['privatekey'],
             $mode
         );
-        
+      
         /**
          * Webhook option
          */
@@ -113,7 +113,6 @@ class ConfigController
             if (get_option('compropago_webhook')) {
                 delete_option('compropago_webhook');
                 add_option('compropago_webhook', $this->data['webhook']);
-                
                 $webhook = $client->api->createWebhook($this->data['webhook']);
 
                 $recordTime = time();
@@ -135,7 +134,7 @@ class ConfigController
                 $row_last = $wpdb->get_row($last);
 
                 $recordTime = time();
-                
+
                 $webhook = $client->api->createWebhook($this->data['webhook']);
                 $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions',
                     [
