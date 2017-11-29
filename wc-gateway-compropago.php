@@ -3,6 +3,7 @@
  * @author Rolando Lucio <rolando@compropago.com>
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
  * @author Christian Aguirre <christian@compropago.com>
+ * @author Alfredo Gómez <alfredo@compropago.com>
  * @since 3.0.0
  */
 require_once __DIR__ . "/controllers/Utils.php";
@@ -13,7 +14,7 @@ use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="4.1.0.2";
+    const VERSION="4.2.0.0";
 
     private $compropagoConfig;
     private $client;
@@ -52,7 +53,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->descripcion   = get_option('compropago_descripcion');
         $this->instrucciones = get_option('compropago_instrucciones');
         $this->provallowed   = get_option('compropago_provallowed');
-        $this->glocation     = get_option('compropago_glocation') == 'si' ? true : false;
 
         //paso despues de selccion de gateway
         $this->has_fields	 = true;

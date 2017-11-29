@@ -3,13 +3,13 @@
 /**
  * @author Rolando Lucio <rolando@compropago.com>
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
+ * @author Alfredo Gómez <alfredo@compropago.com>
  * @since 3.0.0
  */
 
 $wpFiles= array(
 	__DIR__.'/../../../wp-load.php',
 );
-
 
 foreach($wpFiles as $wpFile){
     if (file_exists($wpFile)) {
@@ -23,7 +23,6 @@ foreach($wpFiles as $wpFile){
         ]));
     }
 }
-
 
 /**
  * Archivos de compropago
@@ -44,10 +43,7 @@ if(!$resp_webhook = Factory::getInstanceOf("CpOrderInfo",$request)){
     ]));
 }
 
-
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
-
 
 //Check if WooCommerce is active
 if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
@@ -58,9 +54,6 @@ if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', 
         'reference' => null
     ]));
 }
-
-
-
 
 //Compropago Plugin Active?
 if (!is_plugin_active( 'compropago/compropago.php' ) ){
@@ -83,15 +76,11 @@ if($config['enabled'] != 'yes'){
     ]));
 }
 
-
 $publickey     = get_option('compropago_publickey');
 $privatekey    = get_option('compropago_privatekey');
 $live          = get_option('compropago_live') == 'yes' ? true : false;
 
-
 $complete_order = get_option('compropago_completed_order');
-
-
 
 //keys set?
 if (empty($publickey) || empty($privatekey)){
@@ -103,14 +92,11 @@ if (empty($publickey) || empty($privatekey)){
     ]));
 }
 
-
 $compropagoConfig= array(
     'publickey'  => $publickey,
     'privatekey' => $privatekey,
     'live'       => $live
 );
-
-
 
 // consume sdk methods
 try{
@@ -142,8 +128,6 @@ if($resp_webhook->short_id == "000000"){
         'reference' => null
     ]));
 }
-
-
 
 try{
 	$response = $client->api->verifyOrder($resp_webhook->id);
@@ -207,8 +191,8 @@ try{
 			    break;
 
 			case 'COMPROPAGO_PENDING':
-                $order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
-                $new_status = 'pending';
+                $order->update_status(get_option('compropago_initial_state'), __( 'ComproPago - Pending Payment', 'compropago' ));
+                $new_status = get_option('compropago_initial_state');
 			    break;
 
 			case 'COMPROPAGO_EXPIRED':
