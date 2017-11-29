@@ -184,8 +184,8 @@ try{
                 }
 			    break;
 			case 'COMPROPAGO_PENDING':
-                $order->update_status('pending', __( 'ComproPago - Pending Payment', 'compropago' ));
-                $new_status = 'pending';
+                $order->update_status(get_option('compropago_initial_state'), __( 'ComproPago - Pending Payment', 'compropago' ));
+                $new_status = get_option('compropago_initial_state');
 			    break;
 			case 'COMPROPAGO_EXPIRED':
 				$order->update_status('cancelled', __( 'ComproPago - Expired', 'compropago' ));
