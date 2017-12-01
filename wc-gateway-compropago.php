@@ -14,7 +14,7 @@ use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="4.2.0.0";
+    const VERSION="4.2.0.1";
 
     private $compropagoConfig;
     private $client;
