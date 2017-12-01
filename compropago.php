@@ -42,7 +42,6 @@ function register_styles(){
   wp_enqueue_style( 'prefix-style' );
 }
 
-
 /**
  * Pagina de configuracion Compropago
  */
@@ -56,9 +55,9 @@ function compropago_config_page(){
 
   $def_webhook_url = plugins_url( 'webhook.php', __FILE__ );
 
-  $aux_live       = get_option( 'compropago_live' );
-  $aux_logo       = get_option( 'compropago_showlogo' );
-  $aux_webh       = get_option( 'compropago_webhook' );
+  $aux_live       = get_option('compropago_live');
+  $aux_logo       = get_option('compropago_showlogo');
+  $aux_webh       = get_option('compropago_webhook');
   $config         = get_option('woocommerce_compropago_settings');
   $publickey      = get_option('compropago_publickey');
   $privatekey     = get_option('compropago_privatekey');
@@ -71,7 +70,6 @@ function compropago_config_page(){
   $complete_order = get_option('compropago_completed_order');
   $initial_state  = get_option('compropago_initial_state');
   $debug          = get_option('compropago_debug');
-  $glocation      = get_option('compropago_glocation');
 
   $aux            = get_option('woocommerce_compropago_settings');
   $enabled        = $aux['enabled'] === 'yes' ? true : false;
@@ -129,8 +127,6 @@ function compropago_add_admin_page(){
  * Activacion de la nueva pagina de configuracion
  */
 add_action( 'admin_menu', 'compropago_add_admin_page' );
-
-
 
 /**
  * Rutina de instalacion para tabla de transacciones

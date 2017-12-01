@@ -13,7 +13,7 @@ use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="4.0.3.1";
+    const VERSION="4.1.0.3";
 
     private $compropagoConfig;
     private $client;
@@ -177,18 +177,15 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
               'image_url' => null,
               'app_client_name' => 'woocommerce',
               'app_client_version' => $woocommerce->version
-
             ];
 
 	        $ordercp = Factory::getInstanceOf('PlaceOrderInfo', $order_info);
-
+            
             $this->client = new Client(
                 $this->compropagoConfig['publickey'],
                 $this->compropagoConfig['privatekey'],
                 $this->compropagoConfig['live']
             );
-
-
             $compropagoResponse = $this->client->api->placeOrder($ordercp) ;
 
             if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||

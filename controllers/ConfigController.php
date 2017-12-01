@@ -189,9 +189,6 @@ class ConfigController
       ($this->data['live'] == 'yes'),
       get_option('woocommerce_compropago_settings')
     );
-
-    delete_option('compropago_glocation');
-    add_option('compropago_glocation', $this->data['glocation']);
   }
 }
 
