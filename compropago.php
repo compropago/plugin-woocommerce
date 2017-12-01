@@ -3,7 +3,7 @@
 Plugin Name: ComproPago
 Plugin URI: https://www.compropago.com/documentacion/plugins
 Description: Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
-Version: 4.1.0.2
+Version: 4.2.0.1
 Author: ComproPago
 Licence: Apache-2
 */
@@ -25,6 +25,7 @@ Licence: Apache-2
 /**
  * Compropago plugin-woocommerce
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
+ * @author Alfredo Gómez <alfredo@compropago.com>
  */
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/controllers/Utils.php";
@@ -56,9 +57,9 @@ function compropago_config_page(){
 
   $def_webhook_url = plugins_url( 'webhook.php', __FILE__ );
 
-  $aux_live       = get_option( 'compropago_live' );
-  $aux_logo       = get_option( 'compropago_showlogo' );
-  $aux_webh       = get_option( 'compropago_webhook' );
+  $aux_live       = get_option('compropago_live');
+  $aux_logo       = get_option('compropago_showlogo');
+  $aux_webh       = get_option('compropago_webhook');
   $config         = get_option('woocommerce_compropago_settings');
   $publickey      = get_option('compropago_publickey');
   $privatekey     = get_option('compropago_privatekey');

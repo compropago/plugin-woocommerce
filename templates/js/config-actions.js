@@ -37,7 +37,6 @@ $(function(){
             complete_order: $('#complete_order').val(),
             initial_state:  $('#intial_state').val(),
             debug:          $('#debug').is(':checked') ? 'yes' : 'no',
-            glocation:      $('#glocation').val()
         };
 
         console.log(data);
