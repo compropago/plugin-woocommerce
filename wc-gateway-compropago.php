@@ -317,7 +317,6 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
             $comprodata['showlogo']=$this->showlogo;
             $comprodata['description']=$this->descripcion;
             $comprodata['instrucciones']=$this->instrucciones;
-            $comprodata['glocation'] = $this->glocation;
             include __DIR__ . "/templates/providers-select.php";
         } catch (Exception $e) {
             wc_add_notice( __('Compropago error providers:', 'compropago') . $e->getMessage(), 'error' );
