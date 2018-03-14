@@ -71,8 +71,8 @@ class ConfigController
         /**
          * Showlogo option
          */
-        delete_option('compropago_showlogo');
-        add_option('compropago_showlogo', $this->data['showlogo']);
+        # delete_option('compropago_showlogo');
+        # add_option('compropago_showlogo', $this->data['showlogo']);
 
         /**
          * Title option

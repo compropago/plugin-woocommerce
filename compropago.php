@@ -3,30 +3,16 @@
 Plugin Name: ComproPago
 Plugin URI: https://www.compropago.com/documentacion/plugins
 Description: Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
-Version: 4.2.0.1
-Author: ComproPago
+Version: 4.2.1.0
+Author: <a href="https://compropago.com" target="_blank">ComproPago</a>
 Licence: Apache-2
 */
 /**
- * Copyright 2015 Compropago.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/**
- * Compropago plugin-woocommerce
  * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
  * @author Alfredo Gómez <alfredo@compropago.com>
  */
+
+
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/controllers/Utils.php";
 
@@ -58,14 +44,16 @@ function compropago_config_page(){
   $def_webhook_url = plugins_url( 'webhook.php', __FILE__ );
 
   $aux_live       = get_option('compropago_live');
-  $aux_logo       = get_option('compropago_showlogo');
+  # $aux_logo       = get_option('compropago_showlogo');
   $aux_webh       = get_option('compropago_webhook');
   $config         = get_option('woocommerce_compropago_settings');
   $publickey      = get_option('compropago_publickey');
   $privatekey     = get_option('compropago_privatekey');
+
   $live           = !empty($aux_live) ? ($aux_live == 'yes' ? true : false) : false;
-  $showlogo       = !empty($aux_logo) ? ($aux_logo == 'yes' ? true : false) : false;
+  # $showlogo       = !empty($aux_logo) ? ($aux_logo == 'yes' ? true : false) : false;
   $webhook        = !empty($aux_webh) ? $aux_webh : $def_webhook_url;
+
   $descripcion    = get_option('compropago_descripcion');
   $instrucciones  = get_option('compropago_instrucciones');
   $titulo         = get_option('compropago_title');
@@ -75,7 +63,7 @@ function compropago_config_page(){
 
   $aux            = get_option('woocommerce_compropago_settings');
   $enabled        = $aux['enabled'] === 'yes' ? true : false;
-  $client = new Client($publickey,$privatekey,$live);
+  $client         = new Client($publickey, $privatekey, $live);
 
   $all_providers = $client->api->listDefaultProviders();
   $provs_config = get_option( 'compropago_provallowed' );

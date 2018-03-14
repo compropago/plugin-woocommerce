@@ -6,6 +6,7 @@
  * @author Alfredo Gómez <alfredo@compropago.com>
  * @since 3.0.0
  */
+
 require_once __DIR__ . "/controllers/Utils.php";
 
 use CompropagoSdk\Client;
@@ -14,7 +15,7 @@ use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago extends WC_Payment_Gateway
 {
-    const VERSION="4.2.0.1";
+    const VERSION="4.2.1.0";
 
     private $compropagoConfig;
     private $client;
@@ -49,7 +50,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->publickey     = get_option('compropago_publickey');
         $this->privatekey    = get_option('compropago_privatekey');
         $this->live          = get_option('compropago_live') == 'yes' ? true : false;
-        $this->showlogo      = get_option('compropago_showlogo') == 'yes' ? true : false;
+        # $this->showlogo      = get_option('compropago_showlogo') == 'yes' ? true : false;
         $this->descripcion   = get_option('compropago_descripcion');
         $this->instrucciones = get_option('compropago_instrucciones');
         $this->provallowed   = get_option('compropago_provallowed');
@@ -279,19 +280,16 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 $this->compropagoConfig['live']
             );
 
-
             global $woocommerce;
+
             $cart_subtotal = $woocommerce->cart->get_displayed_subtotal();
 
             if(!$this->is_valid_for_use()){
                 echo( __('This payment method is not available.', 'compropago'));
                 return;
-                //die('IF s valid for use');
             }
 
-            $providers = [];
             $providers = $this->client->api->listProviders($cart_subtotal, get_option('woocommerce_currency'));
-
 
             if(empty($providers)){
               $providers=0;
@@ -320,7 +318,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                 }
             }
             
-            $comprodata['showlogo'] = $this->showlogo;
+            #$comprodata['showlogo'] = $this->showlogo;
             $comprodata['description'] = $this->descripcion;
             $comprodata['instrucciones'] = $this->instrucciones;
 
