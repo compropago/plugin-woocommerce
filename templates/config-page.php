@@ -1,25 +1,3 @@
-<?php
-/**
- * Copyright 2015 Compropago.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-/**
- * Compropago plugin-woocommerce
- * @author Eduardo Aguilar <eduardo.aguilar@compropago.com>
- */
-?>
-
 <section class="cpcontainer">
     <div class="row" id="top">
         <div class="large-12 columns">
@@ -40,55 +18,57 @@
     </div>
 
     <div class="row">
-        <div class="small-12 medium-3 large-3 columns">
-          <p>Activar método de pago</p>
-            <div class="switch small">
-              <input class="switch-input" type="checkbox" name="enabled" id="enabled" style="margin-top: 10px" <?php echo ($enabled === true) ? 'checked' : ''; ?>>
-              <label class="switch-paddle" for="enabled">
-                <span class="switch-active" aria-hidden="true">Si</span>
-                <span class="switch-inactive" aria-hidden="true">No</span>
-              </label>
+        <div class="small-12 columns">
+            <div class="text-center" style="width: 33%; float: left;">
+                <p>Activar método de pago</p>
+                <div class="switch small">
+                    <input class="switch-input" type="checkbox" name="enabled" id="enabled" style="margin-top: 10px" <?php echo ($enabled === true) ? 'checked' : ''; ?>>
+                    <label class="switch-paddle" for="enabled">
+                        <span class="switch-active" aria-hidden="true">Si</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="text-center" style="width: 33%; float: left;">
+                <p>Modo Activo</p>
+                <div class="switch small">
+                    <input class="switch-input" type="checkbox" name="live" id="live" style="margin-top: 10px" <?php echo ($live === true) ? 'checked' : ''; ?>>
+                    <label class="switch-paddle" for="live">
+                        <span class="switch-active" aria-hidden="true">Si</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                    </label>
+                </div>
+            </div>
+            <div class="text-center" style="width: 33%; float: left;">
+                <p>Debug</p>
+                <div class="switch small">
+                    <input class="switch-input" type="checkbox" name="debug" id="debug" style="margin-top: 10px" <?php echo ($debug === 'yes') ? 'checked' : ''; ?>>
+                    <label class="switch-paddle" for="debug">
+                        <span class="switch-active" aria-hidden="true">Si</span>
+                        <span class="switch-inactive" aria-hidden="true">No</span>
+                    </label>
+                </div>
             </div>
         </div>
 
-        <div class="small-12 medium-3 large-3 columns">
-          <p>Modo Activo</p>
-            <div class="switch small">
-              <input class="switch-input" type="checkbox" name="live" id="live" style="margin-top: 10px" <?php echo ($live === true) ? 'checked' : ''; ?>>
-              <label class="switch-paddle" for="live">
-                <span class="switch-active" aria-hidden="true">Si</span>
-                <span class="switch-inactive" aria-hidden="true">No</span>
-              </label>
-            </div>
-        </div>
-
+        <!--
         <div class="small-12 medium-3 large-3 columns">
           <p>Mostrar Logos</p>
           <div class="switch small">
-            <input class="switch-input" type="checkbox" name="showlogo" id="showlogo" style="margin-top: 10px" <?php echo ($showlogo === true) ? 'checked' : ''; ?>>
+            <input class="switch-input" type="checkbox" name="showlogo" id="showlogo" style="margin-top: 10px" <?php #echo ($showlogo === true) ? 'checked' : ''; ?>>
             <label class="switch-paddle" for="showlogo">
               <span class="switch-active" aria-hidden="true">Si</span>
               <span class="switch-inactive" aria-hidden="true">No</span>
             </label>
           </div>
         </div>
-
-        <div class="small-12 medium-3 large-1 columns">
-            <p>Debug</p>
-            <div class="switch small">
-              <input class="switch-input" type="checkbox" name="debug" id="debug" style="margin-top: 10px" <?php echo ($debug === 'yes') ? 'checked' : ''; ?>>
-              <label class="switch-paddle" for="debug">
-                <span class="switch-active" aria-hidden="true">Si</span>
-                <span class="switch-inactive" aria-hidden="true">No</span>
-              </label>
-            </div>
-        </div>
+        -->
     </div>
 
     <div class="row">
         <div class="large-12 columns">
             <label for="publickey">
-                Publickey
+                Llave Publica
                 <input type="text" name="publickey" id="publickey" placeholder="pk_live_xxxxxxxxxxxxxxx" value="<?php echo $publickey ?>">
             </label>
         </div>
@@ -97,7 +77,7 @@
     <div class="row">
         <div class="large-12 columns">
             <label for="privatekey">
-                Privatekey
+                Llave Privada
                 <input type="text" name="privatekey" id="privatekey" placeholder="sk_live_xxxxxxxxxxxxxxx" value="<?php echo $privatekey; ?>">
             </label>
         </div>
@@ -116,9 +96,9 @@
             <label for="prov-disabled">
                 Proveedores Deshabilitados
                 <select name="prov-disabled" id="prov-disabled" multiple>
-                    <?php foreach ($disabled_providers as $provider){
-                        echo "<option value='{$provider->internal_name}'>{$provider->name}</option>";
-                    } ?>
+                    <?php foreach ($disabled_providers as $provider) { ?>
+                        <?php echo "<option value='{$provider->internal_name}'>{$provider->name}</option>"; ?>
+                    <?php } ?>
                 </select>
             </label>
             <input type="button" value="Habilitar" id="agregar_proveedor" class="button primary expanded">
@@ -128,9 +108,9 @@
             <label for="prov-allowed">
                 Proveedores Habilitados
                 <select name="prov-allowed" id="prov-allowed" multiple>
-                    <?php foreach ($active_providers as $provider){
-                        echo "<option value='{$provider->internal_name}'>{$provider->name}</option>";
-                    } ?>
+                    <?php foreach ($active_providers as $provider) { ?>
+                        <?php echo "<option value='{$provider->internal_name}'>{$provider->name}</option>"; ?>
+                    <?php } ?>
                 </select>
             </label>
             <input type="button" value="Deshabilitar" id="quitar_proveedor" class="button primary expanded">
@@ -150,7 +130,7 @@
         <div class="large-12 columns">
             <label for="descripsion">
                 Descripcion
-                <input type="text" name="descripcion" id="descripsion" value="<?php echo $descripcion ? $descripcion : 'With ComproPago make your payment at OXXO, 7Eleven and more stores' ?>">
+                <input type="text" name="descripcion" id="descripsion" value="<?php echo $descripcion ? $descripcion : 'Con ComproPago, realiza tus pagos en Oxxo, 7Eleven y mas...' ?>">
             </label>
         </div>
     </div>
@@ -159,7 +139,7 @@
         <div class="large-12 columns">
             <label for="select-text">
                 Instrucciones
-                <input type="text" name="select-text" id="instrucciones" value="<?php echo $instrucciones ? $instrucciones : 'Select a Store'; ?>">
+                <input type="text" name="select-text" id="instrucciones" value="<?php echo $instrucciones ? $instrucciones : 'Selecciona el establecimiento donde deseas pagar'; ?>">
             </label>
         </div>
     </div>

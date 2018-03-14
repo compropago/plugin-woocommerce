@@ -28,7 +28,7 @@ $(function(){
             publickey:      $('#publickey').val(),
             privatekey:     $('#privatekey').val(),
             live:           $('#live').is(':checked') ? 'yes' : 'no',
-            showlogo:       $('#showlogo').is(':checked') ? 'yes' : 'no',
+            // showlogo:       $('#showlogo').is(':checked') ? 'yes' : 'no',
             webhook:        $('#webhook').val(),
             provallowed:    getProvidersAllowed(),
             descripcion:    $('#descripsion').val(),

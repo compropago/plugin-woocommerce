@@ -11,7 +11,7 @@ $wpFiles= array(
 	__DIR__.'/../../../wp-load.php',
 );
 
-foreach($wpFiles as $wpFile){
+foreach ($wpFiles as $wpFile) {
     if (file_exists($wpFile)) {
         include_once $wpFile;
     } else {
