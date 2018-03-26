@@ -49,7 +49,7 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
         $this->debug         = get_option('compropago_debug');
         $this->initialstate  = get_option('compropago_initial_state');
         $this->completeorder = get_option('compropago_completed_order');
-        $this->title 		 = "<img style='max-height: 35px;' src='https://compropago.com/plugins/logo.png' alt='ComproPago'> Pagos en efectivo";
+        $this->title 		 = "<img style='max-height: 1.5em; vertical-align:middle;' src='https://compropago.com/plugins/logo.png' alt='ComproPago'> Pagos en efectivo";
         $this->publickey     = get_option('compropago_publickey');
         $this->privatekey    = get_option('compropago_privatekey');
         $this->live          = get_option('compropago_live') == 'yes' ? true : false;
