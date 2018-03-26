@@ -151,8 +151,8 @@ function compropago_webhook() {
                 ]));
             }
 
-            $ioIn=base64_encode(serialize($orderInfo));
-            $ioOut=base64_encode(serialize($verifyInfo));
+            $ioIn = base64_encode(serialize($orderInfo));
+            $ioOut = base64_encode(serialize($verifyInfo));
 
             $wpdb->insert(
                 $wpdb->prefix . 'compropago_transactions',
