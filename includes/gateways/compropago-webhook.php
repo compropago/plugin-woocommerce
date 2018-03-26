@@ -157,13 +157,13 @@ function compropago_webhook() {
             $wpdb->insert(
                 $wpdb->prefix . 'compropago_transactions',
                 array(
-                    'orderId' 			    => $row->id,
-                    'date' 				    => $recordTime,
-                    'compropagoId'		    => $verifyInfo->id,
-                    'compropagoStatus'	    => $verifyInfo->type,
-                    'compropagoStatusLast'	=> $row->compropagoStatus,
-                    'ioIn' 				    => $ioIn,
-                    'ioOut' 			    => $ioOut
+                    'date' => $recordTime,
+                    'ioIn' => $ioIn,
+                    'ioOut' => $ioOut,
+                    'orderId' => $row->id,
+                    'compropagoId' => $verifyInfo->id,
+                    'compropagoStatus' => $verifyInfo->type,
+                    'compropagoStatusLast' => $row->compropagoStatus
                 )
             );
 
