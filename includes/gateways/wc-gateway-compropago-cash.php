@@ -7,15 +7,13 @@
  * @since 3.0.0
  */
 
-require_once __DIR__ . "/controllers/Utils.php";
-
 use CompropagoSdk\Client;
 use CompropagoSdk\Tools\Validations;
 use CompropagoSdk\Factory\Factory;
 
-class WC_Gateway_Compropago extends WC_Payment_Gateway
+class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 {
-    const VERSION="4.2.1.0";
+    const VERSION="4.3.0.0";
 
     private $compropagoConfig;
     private $client;
@@ -24,9 +22,11 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
     private $live;
     private $activeplugin;
     private $debug;
+    private $publickey;
+    private $privatekey;
 
     /**
-     * init compropago
+     * Gateway Constructor
      * @since 3.0.0
      */
     public function __construct()
@@ -36,7 +36,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->id                 = 'compropago';
         $this->has_fields         = true;
         $this->method_title       = 'ComproPago';
-        $this->method_description = __('<p>ComproPago allows you to accept payments at Mexico stores like OXXO, 7Eleven and More.</p>','compropago');
+        $this->method_description = __(
+            '<p>ComproPago allows you to accept payments at Mexico stores like OXXO, 7Eleven and More.</p>',
+            'compropago'
+        );
 
         $this->init_form_fields();
         $this->init_settings();
@@ -46,13 +49,10 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         $this->debug         = get_option('compropago_debug');
         $this->initialstate  = get_option('compropago_initial_state');
         $this->completeorder = get_option('compropago_completed_order');
-        $this->title 		 = get_option('compropago_title');
+        $this->title 		 = "<img style='max-height: 35px;' src='https://compropago.com/plugins/logo.png' alt='ComproPago'> Pagos en efectivo";
         $this->publickey     = get_option('compropago_publickey');
         $this->privatekey    = get_option('compropago_privatekey');
         $this->live          = get_option('compropago_live') == 'yes' ? true : false;
-        # $this->showlogo      = get_option('compropago_showlogo') == 'yes' ? true : false;
-        $this->descripcion   = get_option('compropago_descripcion');
-        $this->instrucciones = get_option('compropago_instrucciones');
         $this->provallowed   = get_option('compropago_provallowed');
 
         //paso despues de selccion de gateway
@@ -89,7 +89,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
      */
     private function feedBackCompropago()
     {
-    	$alert = file_get_contents(__DIR__."/templates/alert.html");
+    	$alert = file_get_contents(__DIR__ . "/../../templates/alert.html");
 
         $flagerror = Utils::retroalimentacion($this->publickey, $this->privatekey, $this->live, $this->settings);
 
@@ -129,8 +129,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         global $woocommerce;
 
         $this->compropagoConfig = array(
-            'publickey'  =>$this->publickey,
-            'privatekey' =>$this->privatekey,
+            'publickey'  => $this->publickey,
+            'privatekey' => $this->privatekey,
             'live'       => $this->live,
             'contained'  =>'plugin; cpwc '.self::VERSION.';woocommerce '.$woocommerce->version.'; wordpress '.$wp_version.';'
         );
@@ -156,6 +156,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
 
             global $woocommerce;
             global $wpdb;
+
             $order = new WC_Order( $order_id );
 
 
@@ -317,12 +318,8 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
                     $comprodata['providers'] = $filtered;
                 }
             }
-            
-            #$comprodata['showlogo'] = $this->showlogo;
-            $comprodata['description'] = $this->descripcion;
-            $comprodata['instrucciones'] = $this->instrucciones;
 
-            include __DIR__ . "/templates/providers-select.php";
+            include __DIR__ . "/../../templates/providers-select.php";
         } catch (Exception $e) {
             wc_add_notice( __('Compropago error providers:', 'compropago') . $e->getMessage(), 'error' );
             $this->log->add('compropago',$e->getMessage());
@@ -341,7 +338,7 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
      */
     public function validate_fields() {
         if(!isset($_POST['compropagoProvider']) || empty($_POST['compropagoProvider'])){
-            $this->orderProvider='SEVEN_ELEVEN';
+            wc_add_notice(__('Seleccione un establecimiento para realizar su pago', 'compropago'), 'error');
         }else{
             $this->orderProvider=$_POST['compropagoProvider'];
         }
@@ -381,3 +378,11 @@ class WC_Gateway_Compropago extends WC_Payment_Gateway
         }
     }
 }
+
+function cp_register_compropago_cash_method($methods) {
+    $methods[] = 'WC_Gateway_Compropago_Cash';
+    register_styles();
+    return $methods;
+}
+
+add_filter('woocommerce_payment_gateways', 'cp_register_compropago_cash_method');
