@@ -114,8 +114,8 @@
             <label for="intial_state">
                 Estatus inicial de la orden
                 <select name="initial_state" id="intial_state">
-                    <option value="on-hold" <?php echo $initial_state == 'on-hold' ? 'selected' : ''; ?>>On Hold</option>
-                    <option value="pending" <?php echo $initial_state == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                    <option value="pending">Pendiente de pago</option>
+                    <option value="on-hold">En espera</option>
                 </select>
             </label>
         </div>

@@ -50,6 +50,9 @@ function compropago_webhook() {
         $privatekey     = get_option('compropago_privatekey');
         $live           = get_option('compropago_live') == 'yes' ? true : false;
         $complete_order = get_option('compropago_completed_order');
+        $pending_status = get_option('compropago_initial_state');
+
+        die(json_encode(['status' => $pending_status]));
 
         if (empty($publickey) || empty($privatekey)){
             die(json_encode([
@@ -104,7 +107,7 @@ function compropago_webhook() {
             $order = new WC_Order($id_order);
 
             switch($verifyInfo->type){
-                case 'COMPROPAGO_SUCCESS':
+                case 'change.success':
                     if ($complete_order == 'fin') {
                         $order->payment_complete();
                     } else {
@@ -113,12 +116,12 @@ function compropago_webhook() {
                     }
                     break;
 
-                case 'COMPROPAGO_PENDING':
+                case 'change.pending':
                     $order->update_status(get_option('compropago_initial_state'), __( 'ComproPago - Pending Payment', 'compropago' ));
                     $new_status = get_option('compropago_initial_state');
                     break;
 
-                case 'COMPROPAGO_EXPIRED':
+                case 'change.expired':
                     $order->update_status('cancelled', __( 'ComproPago - Expired', 'compropago' ));
                     $new_status = 'cancelled';
                     break;
