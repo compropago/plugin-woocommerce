@@ -12,10 +12,6 @@ Licence: Apache-2
  * @author Alfredo Gómez <alfredo@compropago.com>
  */
 
-error_reporting(E_ALL);
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors',1);
-
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/controllers/Utils.php";
 
