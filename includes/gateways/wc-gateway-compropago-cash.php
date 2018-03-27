@@ -108,12 +108,14 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
      */
     public function init_form_fields()
     {
+        $page = get_site_url() . '/wp-admin/admin.php?page=compropago-config';
+
         $this->form_fields=array(
             'enabled' => array(
                 'title'			=> __( 'Enable/Disable', 'compropago' ),
                 'label' 		=> __( 'Enable Compropago', 'compropago' ),
                 'type' 			=> 'checkbox',
-                'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administracion de Wordpress desde <a href="./admin.php?page=add-compropago">AQUI</a>','compropago'),
+                'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administracion de Wordpress desde <a href="' . $page . '">AQUI</a>','compropago'),
                 'default' 		=> 'no'
             )
         );
