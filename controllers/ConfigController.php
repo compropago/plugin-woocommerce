@@ -1,4 +1,7 @@
 <?php
+/**
+ * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
+ */
 
 require_once __DIR__ . "/../../../../wp-load.php";
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -15,8 +18,6 @@ class ConfigController
     /**
      * ConfigController constructor.
      * @param array $data
-     *
-     * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
      */
     public function __construct($data)
     {
@@ -42,8 +43,6 @@ class ConfigController
 
     private function __init__()
     {
-        global $wpdb;
-
         /**
          * Active Plugin
          */
@@ -69,18 +68,6 @@ class ConfigController
         add_option('compropago_live', $this->data['live']);
 
         /**
-         * Showlogo option
-         */
-        # delete_option('compropago_showlogo');
-        # add_option('compropago_showlogo', $this->data['showlogo']);
-
-        /**
-         * Title option
-         */
-        delete_option('compropago_title');
-        add_option('compropago_title', $this->data['title']);
-
-        /**
          * Completed Order
          */
         delete_option('compropago_completed_order');
@@ -98,86 +85,29 @@ class ConfigController
         delete_option('compropago_debug');
         add_option('compropago_debug', $this->data['debug']);
 
-        $mode = ($this->data['live'] == 'yes') ? true : false;
 
-        $client = new Client(
-            $this->data['publickey'],
-            $this->data['privatekey'],
-            $mode
-        );
-      
-        /**
-         * Webhook option
-         */
         try {
-            if (get_option('compropago_webhook')) {
-                delete_option('compropago_webhook');
-                add_option('compropago_webhook', $this->data['webhook']);
-                $webhook = $client->api->createWebhook($this->data['webhook']);
+            $mode = ($this->data['live'] == 'yes') ? true : false;
 
-                $recordTime = time();
+            $client = new Client(
+                $this->data['publickey'],
+                $this->data['privatekey'],
+                $mode
+            );
 
-                $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions',
-                    [
-                        'webhookId' => $webhook->id,
-                        'webhookUrl' => $webhook->url,
-                        'updated' => $recordTime,
-                        'status' => $webhook->status
-                    ]
-                );
-            } else {
-                delete_option('compropago_webhook');
-                add_option('compropago_webhook', $this->data['webhook']);
+            $client->api->createWebhook($this->data['webhook']);
 
-                $last = "SELECT MAX(id) as 'last' FROM {$wpdb->prefix}compropago_webhook_transactions";
-
-                $row_last = $wpdb->get_row($last);
-
-                $recordTime = time();
-
-                $webhook = $client->api->createWebhook($this->data['webhook']);
-                $wpdb->insert($wpdb->prefix . 'compropago_webhook_transactions',
-                    [
-                        'webhookId' => $webhook->id,
-                        'webhookUrl' => $webhook->url,
-                        'updated' => $recordTime,
-                        'status' => $webhook->status
-                    ]
-                );
-
-            }
-        } catch (Exception $e) {
+            $this->retro = Utils::retroalimentacion(
+                $this->data['publickey'],
+                $this->data['privatekey'],
+                ($this->data['live'] == 'yes'),
+                get_option('woocommerce_compropago_settings')
+            );
+        } catch (\Exception $e) {
             if ($e->getMessage() != 'Error: conflict.urls.create') {
-                throw new Exception($e);
+                throw new \Exception($e);
             }
         }
-
-        /**
-         * Provallowed option
-         */
-        delete_option('compropago_provallowed');
-        add_option('compropago_provallowed', $this->data['provallowed']);
-
-        /**
-         * Descripcion option
-         */
-        delete_option('compropago_descripcion');
-        add_option('compropago_descripcion', $this->data['descripcion']);
-
-
-        /**
-         * instrucciones option
-         */
-        delete_option('compropago_instrucciones');
-        add_option('compropago_instrucciones', $this->data['instrucciones']);
-
-
-        $this->retro = Utils::retroalimentacion(
-            $this->data['publickey'],
-            $this->data['privatekey'],
-            ($this->data['live'] == 'yes'),
-            get_option('woocommerce_compropago_settings')
-        );
     }
 }
 

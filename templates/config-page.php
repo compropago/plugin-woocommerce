@@ -50,19 +50,6 @@
                 </div>
             </div>
         </div>
-
-        <!--
-        <div class="small-12 medium-3 large-3 columns">
-          <p>Mostrar Logos</p>
-          <div class="switch small">
-            <input class="switch-input" type="checkbox" name="showlogo" id="showlogo" style="margin-top: 10px" <?php #echo ($showlogo === true) ? 'checked' : ''; ?>>
-            <label class="switch-paddle" for="showlogo">
-              <span class="switch-active" aria-hidden="true">Si</span>
-              <span class="switch-inactive" aria-hidden="true">No</span>
-            </label>
-          </div>
-        </div>
-        -->
     </div>
 
     <div class="row">
@@ -79,14 +66,6 @@
             <label for="privatekey">
                 Llave Privada
                 <input type="text" name="privatekey" id="privatekey" placeholder="sk_live_xxxxxxxxxxxxxxx" value="<?php echo $privatekey; ?>">
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
-            <label for="webhook">
-                <input type="hidden" name="webhook" id="webhook" value="<?php echo $webhook; ?>">
             </label>
         </div>
     </div>
@@ -119,33 +98,6 @@
 
     <div class="row">
         <div class="large-12 columns">
-            <label for="title">
-                Titulo
-                <input type="text" name="title" id="title" value="<?php echo $titulo ? $titulo : 'ComproPago (OXXO, 7Eleven, etc.)'; ?>">
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
-            <label for="descripsion">
-                Descripcion
-                <input type="text" name="descripcion" id="descripsion" value="<?php echo $descripcion ? $descripcion : 'Con ComproPago, realiza tus pagos en Oxxo, 7Eleven y mas...' ?>">
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
-            <label for="select-text">
-                Instrucciones
-                <input type="text" name="select-text" id="instrucciones" value="<?php echo $instrucciones ? $instrucciones : 'Selecciona el establecimiento donde deseas pagar'; ?>">
-            </label>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="large-12 columns">
             <label for="complete_order">
                 Reduccion de Inventario
                 <select name="complete_order" id="complete_order">
@@ -162,8 +114,8 @@
             <label for="intial_state">
                 Estatus inicial de la orden
                 <select name="initial_state" id="intial_state">
-                    <option value="on-hold" <?php echo $initial_state == 'on-hold' ? 'selected' : ''; ?>>On Hold</option>
-                    <option value="pending" <?php echo $initial_state == 'pending' ? 'selected' : ''; ?>>Pending</option>
+                    <option value="pending" <?php echo $initial_state == 'pending' ? 'selected' : ''; ?>>Pendiente de pago</option>
+                    <option value="on-hold" <?php echo $initial_state == 'on-hold' ? 'selected' : ''; ?>>En espera</option>
                 </select>
             </label>
         </div>
@@ -174,6 +126,8 @@
             <input type="button" class="button primary expanded" value="Guardar configuracion" id="save-config-compropago">
         </div>
     </div>
+
+    <input type="hidden" name="webhook" id="webhook" value="<?php echo $webhook; ?>">
 </section>
 
 <section class="cp-block-login" id="loadig">

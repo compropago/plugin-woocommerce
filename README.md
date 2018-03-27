@@ -1,5 +1,4 @@
 # Plugin para WooCommerce 
-=================================================
 
 **Nota.-Este plugin sólo funcionará con cuentas de ComproPago generadas a partir de Agosto del 2017. Si tienes una cuenta creada anterior a esta fecha por favor utilizar la versión 4.1.0.2 del plugin.**
 
@@ -21,7 +20,7 @@ Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en tod
 
 ## Requerimientos
 * [WooCommerce 2.5.x +](https://woocommerce.com/)
-* [PHP >= 5.4 && <= 7.0.22](http://www.php.net/)
+* [PHP >= 5.6](http://www.php.net/)
 * [PHP JSON extension](http://php.net/manual/en/book.json.php)
 * [PHP cURL extension](http://php.net/manual/en/book.curl.php)
 

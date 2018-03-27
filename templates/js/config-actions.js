@@ -28,18 +28,12 @@ $(function(){
             publickey:      $('#publickey').val(),
             privatekey:     $('#privatekey').val(),
             live:           $('#live').is(':checked') ? 'yes' : 'no',
-            // showlogo:       $('#showlogo').is(':checked') ? 'yes' : 'no',
             webhook:        $('#webhook').val(),
             provallowed:    getProvidersAllowed(),
-            descripcion:    $('#descripsion').val(),
-            instrucciones:  $('#instrucciones').val(),
-            title:          $('#title').val(),
             complete_order: $('#complete_order').val(),
             initial_state:  $('#intial_state').val(),
             debug:          $('#debug').is(':checked') ? 'yes' : 'no',
         };
-
-        console.log(data);
 
         if(validateSendConfig(data)){
             $.ajax({
@@ -47,7 +41,6 @@ $(function(){
                 type: 'post',
                 data: data,
                 success: function(res){
-                    console.log(res);
                     if(res.error){
                         $("#display_error_config").removeClass('cpsuccess');
                         $("#display_error_config").addClass('cperror');
@@ -87,7 +80,6 @@ $(function(){
 
 /**
  * Get allow providers
- * 
  * @returns {string}
  */
 function getProvidersAllowed(){
@@ -115,35 +107,30 @@ function getProvidersAllowed(){
 }
 
 /**
- *
+ * Validate Compropago Keys not empty
  * @param data
  * @returns {boolean}
  */
 function validateSendConfig(data){
-    if(data.publickey != '' && data.privatekey != ''){
-        if(data.webhook != ''){
-            return true;
-        }else{
-            alert('El Webhook no debe de ser vacio.\nSi perdio la ruta por defecto recargue la pagina para obtenerlo' +
-                ' de nuevo o ingrese la ruta manualmente.');
-        }
-    }else{
+    if (data.publickey.length == 0 || data.privatekey.length == 0) {
         alert('Las llaves no deben de estar vacias');
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 /**
  * Display retro info
- * 
  * @param {any} retro 
  */
 function renderRetro(retro){
-    if(retro[0]){
-        $("#retro").html(retro[1]);
-        $("#retro").css('display', 'block');
-    }else{
-        $("#retro").css('display', 'none');
+    if (retro != null){
+        if(retro[0]){
+            $("#retro").html(retro[1]);
+            $("#retro").css('display', 'block');
+        }else{
+            $("#retro").css('display', 'none');
+        }
     }
 }
