@@ -125,7 +125,7 @@ function compropago_webhook() {
                     break;
 
                 default:
-                    $order->update_status('pending', __( 'ComproPago - On Hold', 'compropago' ));
+                    $order->update_status('pending', __( 'ComproPago - Pendig Payment', 'compropago' ));
                     $new_status = 'pending';
             }
 
