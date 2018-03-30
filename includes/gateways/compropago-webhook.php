@@ -104,7 +104,7 @@ function compropago_webhook() {
 
             $order = new WC_Order($id_order);
 
-            switch($verifyInfo->type){
+            switch ($verifyInfo->type) { 
                 case 'charge.success':
                     if ($complete_order == 'fin') {
                         $order->payment_complete();
