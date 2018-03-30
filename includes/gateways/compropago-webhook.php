@@ -105,7 +105,7 @@ function compropago_webhook() {
             $order = new WC_Order($id_order);
 
             switch($verifyInfo->type){
-                case 'change.success':
+                case 'charge.success':
                     if ($complete_order == 'fin') {
                         $order->payment_complete();
                     } else {
@@ -114,19 +114,19 @@ function compropago_webhook() {
                     }
                     break;
 
-                case 'change.pending':
+                case 'charge.pending':
                     $order->update_status($pending_status, __( 'ComproPago - Pending Payment', 'compropago' ));
                     $new_status = $pending_status;
                     break;
 
-                case 'change.expired':
+                case 'charge.expired':
                     $order->update_status('cancelled', __( 'ComproPago - Expired', 'compropago' ));
                     $new_status = 'cancelled';
                     break;
 
                 default:
-                    $order->update_status('on-hold', __( 'ComproPago - On Hold', 'compropago' ));
-                    $new_status = 'on-hold';
+                    $order->update_status('pending', __( 'ComproPago - On Hold', 'compropago' ));
+                    $new_status = 'pending';
             }
 
             if (!empty($new_status)) {
