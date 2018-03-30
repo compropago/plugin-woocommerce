@@ -52,8 +52,6 @@ function compropago_webhook() {
         $complete_order = get_option('compropago_completed_order');
         $pending_status = get_option('compropago_initial_state');
 
-        die(json_encode(['status' => $pending_status]));
-
         if (empty($publickey) || empty($privatekey)){
             die(json_encode([
                 'status' => 'error',
@@ -70,9 +68,9 @@ function compropago_webhook() {
         if($orderInfo->short_id == "000000"){
             die(json_encode([
                 'status' => 'success',
-                'message' => 'Test webhook - OK',
-                'short_id' => null,
-                'reference' => null
+                'message' => 'OK - TEST',
+                'short_id' => '000000',
+                'reference' => '0'
             ]));
         }
 
@@ -117,8 +115,8 @@ function compropago_webhook() {
                     break;
 
                 case 'change.pending':
-                    $order->update_status(get_option('compropago_initial_state'), __( 'ComproPago - Pending Payment', 'compropago' ));
-                    $new_status = get_option('compropago_initial_state');
+                    $order->update_status($pending_status, __( 'ComproPago - Pending Payment', 'compropago' ));
+                    $new_status = $pending_status;
                     break;
 
                 case 'change.expired':
