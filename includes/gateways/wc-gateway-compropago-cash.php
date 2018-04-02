@@ -81,7 +81,6 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
         }
 
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-
     }
 
     /**
@@ -121,7 +120,6 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
         );
     }
 
-
     /**
      * Set ComproPago config
      * @since 3.0.0
@@ -139,7 +137,6 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
         );
     }
 
-
     /**
      * handling payment and processing the order
      * @param $order_id
@@ -151,7 +148,6 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
     public function process_payment( $order_id )
     {
         try{
-
             if(!$this->is_valid_for_use()){
                 wc_add_notice( __('This payment method is not available.', 'compropago'),'error');
                 return false;
@@ -162,7 +158,6 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 
             $order = new WC_Order( $order_id );
 
-
             $orderItems = $order->get_items();
             $orderDetails='';
             $product_name = [];
@@ -170,8 +165,13 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
             foreach ($orderItems as $product){
                 $product_name[] = $product['name'] .' x '. $product['qty'];
             }
-            $product_list = implode( ' , ', $product_name );
-            $orderDetails .= $product_list;
+
+            $orderCurrency = $order->get_data()['currency'];
+
+            if (!$this->valiate_currency($orderCurrency)) {
+                wc_add_notice( __("Invalid Currency $orderCurrency. ComproPago Only allows MXN, USD, GBP or EUR as a currency.", 'compropago'), 'error' );
+                return false;
+            }
 
             $order_info = [
               'order_id' => $order_id,
@@ -180,11 +180,10 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
               'customer_name' => $order->billing_first_name . ' ' . $order->billing_last_name,
               'customer_email' => $order->billing_email,
               'payment_type' => $this->orderProvider,
-              'currency' => get_option('woocommerce_currency'),
+              'currency' => $orderCurrency,
               'image_url' => null,
               'app_client_name' => 'woocommerce',
               'app_client_version' => $woocommerce->version
-
             ];
 
 	        $ordercp = Factory::getInstanceOf('PlaceOrderInfo', $order_info);
@@ -195,15 +194,14 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                 $this->compropagoConfig['live']
             );
 
-
             $compropagoResponse = $this->client->api->placeOrder($ordercp) ;
 
-            if(!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
-                !$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")){
+            if (!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
+                !$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")) {
                 throw new Exception('ComproPago Tables Not Found');
             }
 
-            if($compropagoResponse->type != 'charge.pending'){
+            if ($compropagoResponse->type != 'charge.pending') {
                 $errMessage = 'ComproPago is not available - status not pending - '.$compropagoResponse->type;
                 throw new Exception($errMessage);
             }
@@ -217,15 +215,15 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
             $wpdb->insert(
                 $dbprefix . 'compropago_orders',
                 array(
-                    'date' 				=> $recordTime,
-                    'modified' 			=> $recordTime,
-                    'compropagoId'		=> $compropagoResponse->id,
-                    'compropagoStatus'	=> $compropagoResponse->type,
-                    'storeCartId'		=> $order_id,
-                    'storeOrderId'		=> $order_id,
-                    'storeExtra'		=> 'COMPROPAGO_PENDING',
-                    'ioIn' 				=> $ioIn,
-                    'ioOut' 			=> $ioOut
+                    'ioIn' => $ioIn,
+                    'date' => $recordTime,
+                    'ioOut' => $ioOut,
+                    'modified' => $recordTime,
+                    'storeExtra' => 'change.pending',
+                    'storeCartId' => $order_id,
+                    'storeOrderId' => $order_id,
+                    'compropagoId' => $compropagoResponse->id,
+                    'compropagoStatus' => $compropagoResponse->type
                 )
             );
 
@@ -233,29 +231,32 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
             $wpdb->insert(
                 $dbprefix . 'compropago_transactions',
                 array(
-                    'orderId' 			    => $idCompropagoOrder,
-                    'date' 				    => $recordTime,
-                    'compropagoId'		    => $compropagoResponse->id,
-                    'compropagoStatus'	    => $compropagoResponse->type,
-                    'compropagoStatusLast'	=> $compropagoResponse->type,
-                    'ioIn' 				    => $ioIn,
-                    'ioOut' 			    => $ioOut
+                    'ioIn' => $ioIn,
+                    'date' => $recordTime,
+                    'ioOut' => $ioOut,
+                    'orderId' => $idCompropagoOrder,
+                    'compropagoId' => $compropagoResponse->id,
+                    'compropagoStatus' => $compropagoResponse->type,
+                    'compropagoStatusLast' => $compropagoResponse->type
                 )
             );
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.','compropago'), 'success' );
         } catch (Exception $e) {
-            wc_add_notice( __('Compropago error place order:', 'compropago') . $e->getMessage(), 'error' );
+            wc_add_notice(__('Compropago error place order:', 'compropago') . $e->getMessage(), 'error');
             $this->log->add('compropago',$e->getMessage());
             return false;
         }
 
         // estatus en de la orden onhold, webhook actualizara a pending
-        $order->update_status($this->initialstate,
-        		($this->initialstate == 'pending') ?__( 'ComproPago - Pending Payment', 'compropago' )  :__( 'ComproPago - On Hold', 'compropago' ));
+        $order->update_status(
+            $this->initialstate,
+            ($this->initialstate == 'pending') ?
+                __( 'ComproPago - Pending Payment', 'compropago' ) :
+                __( 'ComproPago - On Hold', 'compropago' )
+        );
 
-        if($this->completeorder == 'init') {
-            // Reduce stock levels
+        if ($this->completeorder == 'init') {
             $order->reduce_order_stock();
         }
 
@@ -269,15 +270,12 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
         );
     }
 
-
     /**
      * Load store selector
-     * 
-     * @since 3.0.0
      */
     public function payment_fields()
     {
-        try{
+        try {
             $this->client = new Client(
                 $this->compropagoConfig['publickey'],
                 $this->compropagoConfig['privatekey'],
@@ -288,31 +286,30 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 
             $cart_subtotal = $woocommerce->cart->get_displayed_subtotal();
 
-            if(!$this->is_valid_for_use()){
-                echo( __('This payment method is not available.', 'compropago'));
+            if (!$this->is_valid_for_use()) {
+                echo(__('This payment method is not available.', 'compropago'));
                 return;
             }
 
             $providers = $this->client->api->listProviders($cart_subtotal, get_option('woocommerce_currency'));
 
-            if(empty($providers)){
-              $providers=0;
+            if (empty($providers)) {
+              $providers = 0;
             }
 
             $filtered = array();
 
-            if(empty($this->provallowed)){
-                $comprodata['providers']= $providers;
-            }else{
-                if($providers==0){
-                    $comprodata['providers']= $providers;
-                }else{
+            if (empty($this->provallowed)) {
+                $comprodata['providers'] = $providers;
+            } else {
+                if ($providers == 0) {
+                    $comprodata['providers'] = $providers;
+                } else {
                     $aux = explode(',',$this->provallowed);
 
-                    foreach ($providers as $provider){
-                        foreach ($aux as $internal){
-
-                            if($provider->internal_name == $internal){
+                    foreach ($providers as $provider) {
+                        foreach ($aux as $internal) {
+                            if ($provider->internal_name == $internal) {
                                 $filtered[] = $provider;
                             }
                         }
@@ -324,42 +321,36 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 
             include __DIR__ . "/../../templates/providers-select.php";
         } catch (Exception $e) {
-            wc_add_notice( __('Compropago error providers:', 'compropago') . $e->getMessage(), 'error' );
+            wc_add_notice(__('Compropago error providers:', 'compropago') . $e->getMessage(), 'error');
             $this->log->add('compropago',$e->getMessage());
             echo($e->getMessage());
         }
     }
 
-
     /**
      * Validate store selected
-     * 
      * @return true success
-     * @return null on ErrorException
-     * @throws WP exception
-     * @since 3.0.0
+     * @return boolean
+     * @throws WP_Exception
      */
     public function validate_fields() {
-        if(!isset($_POST['compropagoProvider']) || empty($_POST['compropagoProvider'])){
+        if (!isset($_POST['compropagoProvider']) || empty($_POST['compropagoProvider'])) {
             wc_add_notice(__('Seleccione un establecimiento para realizar su pago', 'compropago'), 'error');
-        }else{
+        } else {
             $this->orderProvider=$_POST['compropagoProvider'];
         }
+
         return true;
     }
 
-
     /**
      * Compropago Valid Use Validation
-     * 
      * @return boolean
-     * @since 3.0.0
      */
     public function is_valid_for_use() {
-        //solo acepta total en Pesos Mexicanos
         $currency = get_option('woocommerce_currency');
 
-        if($currency =='MXN' || $currency =='USD' || $currency =='EUR' || $currency == 'GBP'){
+        if ($this->valiate_currency($currency)) {
             try {
                 $this->client = new Client(
                     $this->compropagoConfig['publickey'],
@@ -371,14 +362,34 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 
                 return true;
             } catch (Exception $e) {
-                wc_add_notice( __('Compropago error is valid:', 'compropago') . $e->getMessage(), 'error' );
+                wc_add_notice(__('Compropago error is valid:', 'compropago') . $e->getMessage(), 'error');
                 $this->log->add('compropago',$e->getMessage());
                 return false;
             }
-        }else{
-
+        } else {
             return false;
         }
+    }
+
+    /**
+     * Validate if a currency is valid for ComproPago
+     * @param string $currency
+     * @return boolean
+     */
+    private function valiate_currency($currency= '')
+    {
+        $validCurrencies = [
+            'USD',
+            'MXN',
+            'GBP',
+            'EUR'
+        ];
+
+        if (in_array($currency, $validCurrencies)) {
+            return true;
+        }
+
+        return false;
     }
 }
 
