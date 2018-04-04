@@ -26,6 +26,7 @@ function sql_create_tables($prefix) {
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `date` int(11) NOT NULL,
           `modified` int(11) NOT NULL,
+          `type` varchar(50) NOT NULL,
           `compropagoId` varchar(50) NOT NULL,
           `compropagoStatus`varchar(50) NOT NULL,
           `storeCartId` varchar(255) NOT NULL,

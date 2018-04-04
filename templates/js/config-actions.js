@@ -1,5 +1,5 @@
 /**
- * Created by Arthur on 22/07/16.
+ * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 $(function(){
     $("#agregar_proveedor").click(function(){
@@ -23,8 +23,11 @@ $(function(){
     $("#save-config-compropago").click(function(){
         $("#loadig").fadeIn();
 
-        data = {
-            enabled:        $('#enabled').is(':checked') ? 'yes' : 'no',
+        var data = {
+            cash_enable:    $('#enable_cash').is(':checked') ? 'yes' : 'no',
+            spei_enable:    $('#enable_spei').is(':checked') ? 'yes' : 'no',
+            cash_title:     $('#cash_title').val(),
+            spei_title:     $('#spei_title').val(),
             publickey:      $('#publickey').val(),
             privatekey:     $('#privatekey').val(),
             live:           $('#live').is(':checked') ? 'yes' : 'no',
@@ -80,7 +83,7 @@ $(function(){
 
 /**
  * Get allow providers
- * @returns {string}
+ * @return {string}
  */
 function getProvidersAllowed(){
     active = '';
@@ -109,7 +112,7 @@ function getProvidersAllowed(){
 /**
  * Validate Compropago Keys not empty
  * @param data
- * @returns {boolean}
+ * @return {boolean}
  */
 function validateSendConfig(data){
     if (data.publickey.length == 0 || data.privatekey.length == 0) {
@@ -134,3 +137,25 @@ function renderRetro(retro){
         }
     }
 }
+
+/**
+ * Open a tab menu
+ * @param {Object} evt 
+ * @param {string} tabName 
+ */
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+} 

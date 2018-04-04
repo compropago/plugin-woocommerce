@@ -11,20 +11,22 @@ use CompropagoSdk\Client;
 function compropago_config_page(){
     register_styles();
 
-    wp_register_script( 'config-script', plugins_url('../templates/js/config-actions.js', __FILE__) );
-    wp_register_script( 'jquery_cp', plugins_url('../templates/js/jquery.js', __FILE__) );
-    wp_enqueue_script( 'jquery_cp' );
-    wp_enqueue_script( 'config-script' );
+    wp_register_script('config-script', plugins_url('../templates/js/config-actions.js', __FILE__));
+    wp_register_script('jquery_cp', plugins_url('../templates/js/jquery.js', __FILE__));
+    wp_enqueue_script('jquery_cp');
+    wp_enqueue_script('config-script');
 
     $webhook = get_site_url() . '/wp-json/compropago/webhook';
 
-    $aux_live       = get_option('compropago_live');
-    $config         = get_option('woocommerce_compropago_settings');
+    $cash_config = get_option('woocommerce_cpcash_settings');
+    $spei_config = get_option('woocommerce_cpspei_settings');
+
+    $cash_title     = !empty(get_option('compropago_cash_title')) ? get_option('compropago_cash_title') : 'Pago en efectivo';
+    $spei_title     = !empty(get_option('compropago_spei_title')) ? get_option('compropago_spei_title') : 'Transferencia SPEI';
+
     $publickey      = get_option('compropago_publickey');
     $privatekey     = get_option('compropago_privatekey');
-
-    $live           = !empty($aux_live) ? ($aux_live == 'yes' ? true : false) : false;
-
+    $live           = get_option('compropago_live') === 'yes';
     $descripcion    = get_option('compropago_descripcion');
     $instrucciones  = get_option('compropago_instrucciones');
     $titulo         = get_option('compropago_title');
@@ -32,12 +34,13 @@ function compropago_config_page(){
     $initial_state  = get_option('compropago_initial_state');
     $debug          = get_option('compropago_debug');
 
-    $aux            = get_option('woocommerce_compropago_settings');
-    $enabled        = $aux['enabled'] === 'yes' ? true : false;
-    $client         = new Client($publickey, $privatekey, $live);
+    $cash_enable    = $cash_config['enabled'] === 'yes';
+    $spei_enable    = $spei_config['enabled'] === 'yes';
+
+    $client = new Client($publickey, $privatekey, $live);
 
     $all_providers = $client->api->listDefaultProviders();
-    $provs_config = get_option( 'compropago_provallowed' );
+    $provs_config = get_option('compropago_provallowed');
     $flag_OXXO = false;
 
     if (!empty($provs_config)) {
@@ -63,7 +66,15 @@ function compropago_config_page(){
         $disabled_providers = array();
     }
 
-    $retro = Utils::retroalimentacion($publickey,$privatekey,$live,$config);
+    $retro = Utils::retroalimentacion(
+        $publickey,
+        $privatekey,
+        $live,
+        array(
+            'cash' => $cash_config,
+            'spei' => $spei_config
+        )
+    );
     $image_load = plugins_url('../templates/img/ajax-loader.gif', __FILE__);
 
     include __DIR__ . "/../templates/config-page.php";

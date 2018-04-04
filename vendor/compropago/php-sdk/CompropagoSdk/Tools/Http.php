@@ -106,6 +106,7 @@ class Http
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
 
         if (!empty($this->auth)) {
+
             curl_setopt($ch, CURLOPT_USERPWD, $this->auth);
         }
 

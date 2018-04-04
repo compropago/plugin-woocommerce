@@ -44,10 +44,28 @@ class ConfigController
     private function __init__()
     {
         /**
-         * Active Plugin
+         * Active Cash Payment
          */
-        delete_option('woocommerce_compropago_settings');
-        add_option('woocommerce_compropago_settings', array('enabled' => $this->data['enabled']));
+        delete_option('woocommerce_cpcash_settings');
+        add_option('woocommerce_cpcash_settings', array('enabled' => $this->data['cash_enable']));
+
+        /**
+         * Active Cash Payment
+         */
+        delete_option('woocommerce_cpspei_settings');
+        add_option('woocommerce_cpspei_settings', array('enabled' => $this->data['spei_enable']));
+
+        /**
+         * Cash Title
+         */
+        delete_option('compropago_cash_title');
+        add_option('compropago_cash_title', $this->data['cash_title']);
+
+        /**
+         * Spei Title
+         */
+        delete_option('compropago_spei_title');
+        add_option('compropago_spei_title', $this->data['spei_title']);
 
         /**
          * Publickey option
@@ -101,7 +119,10 @@ class ConfigController
                 $this->data['publickey'],
                 $this->data['privatekey'],
                 ($this->data['live'] == 'yes'),
-                get_option('woocommerce_compropago_settings')
+                array(
+                    'cash' => get_option('woocommerce_cpcash_settings'),
+                    'spei' => get_option('woocommerce_cpspei_settings')
+                )
             );
         } catch (\Exception $e) {
             if ($e->getMessage() != 'Error: conflict.urls.create') {
