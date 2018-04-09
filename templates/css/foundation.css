@@ -1377,16 +1377,26 @@ button {
   border-top: none;
 } 
 
-/** COMPROPAGO LABEL IMAGE
---------------------------------------------------- */
+/**
+ * COMPROPAGO LABEL IMAGE
+ * -------------------------------------------------- */
 
-label[for="payment_method_cpcash"]::after,
+label[for="payment_method_cpcash"]::after {
+  content: "";
+  display: inline-block;
+  height: 1em;
+  background: url('https://compropago.com/plugins/compropago-efectivo-v2.svg') no-repeat;
+  background-size: 100%;
+  width: 116px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
 label[for="payment_method_cpspei"]::after {
   content: "";
   display: inline-block;
-  height: 20px;
-  background: url('https://compropago.com/plugins/logo.png');
-  background-repeat: no-repeat;
+  height: 1em;
+  background: url('https://compropago.com/plugins/compropago-spei-v2.svg') no-repeat;
   background-size: 100%;
   width: 116px;
   margin-left: 5px;

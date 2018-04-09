@@ -10,23 +10,19 @@ require_once ABSPATH . 'wp-admin/includes/upgrade.php';
  * @param mixed $order_id
  */
 function cp_receipt($order_id) {
-    global $wpdb;
+    $order = new WC_Order($order_id);
 
-    $compropagoOrder = $wpdb->prefix . 'compropago_orders';
+    $compropagoId = $order->get_meta('compropago_id');
 
-    $query = "SELECT * FROM $compropagoOrder WHERE storeOrderId = '$order_id'";
-
-    $mylink = $wpdb->get_row($query);
-
-    if ($mylink) {
+    if (!empty($compropagoId)) {
         $template = __DIR__ . '/../../templates/receipt.html';
 
         $receipt = file_get_contents($template);
-        $receipt = str_replace(':cpid:', $mylink->compropagoId, $receipt);
+        $receipt = str_replace(':cpid:', $compropagoId, $receipt);
 
         echo $receipt;
     } else {
-        echo "Fallo al recuperar el link";
+        echo "Fallo al recuperar el recibo $compropagoId";
     }
 }
 

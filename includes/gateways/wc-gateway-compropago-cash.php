@@ -128,14 +128,8 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
     public function process_payment( $order_id )
     {
         global $woocommerce;
-        global $wpdb;
 
-        try{
-            if (!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
-                !$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")) {
-                throw new Exception('ComproPago Tables Not Found');
-            }
-
+        try {
             $order = new WC_Order( $order_id );
             $orderCurrency = $order->get_data()['currency'];
 
@@ -172,41 +166,9 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                 throw new Exception($errMessage);
             }
 
-            $dbprefix = $wpdb->prefix;
-
-            $recordTime = time();
-            $ioIn = base64_encode(serialize($compropagoResponse));
-            $ioOut = base64_encode(serialize($order));
-
-            $wpdb->insert(
-                $dbprefix . 'compropago_orders',
-                array(
-                    'ioIn' => $ioIn,
-                    'date' => $recordTime,
-                    'type' => 'CASH',
-                    'ioOut' => $ioOut,
-                    'modified' => $recordTime,
-                    'storeExtra' => 'change.pending',
-                    'storeCartId' => $order_id,
-                    'storeOrderId' => $order_id,
-                    'compropagoId' => $compropagoResponse->id,
-                    'compropagoStatus' => $compropagoResponse->type
-                )
-            );
-
-            $idCompropagoOrder = $wpdb->insert_id;
-            $wpdb->insert(
-                $dbprefix . 'compropago_transactions',
-                array(
-                    'ioIn' => $ioIn,
-                    'date' => $recordTime,
-                    'ioOut' => $ioOut,
-                    'orderId' => $idCompropagoOrder,
-                    'compropagoId' => $compropagoResponse->id,
-                    'compropagoStatus' => $compropagoResponse->type,
-                    'compropagoStatusLast' => $compropagoResponse->type
-                )
-            );
+            $order->add_meta_data('compropago_id', $compropagoResponse->id);
+            $order->add_meta_data('compropago_short_id', $compropagoResponse->short_id);
+            $order->add_meta_data('compropago_store', $this->orderProvider);
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.','compropago'), 'success' );
         } catch (Exception $e) {
@@ -359,7 +321,7 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 
 function cp_register_compropago_cash_method($methods) {
     $methods[] = 'WC_Gateway_Compropago_Cash';
-    register_styles();
+    cp_register_styles();
     return $methods;
 }
 

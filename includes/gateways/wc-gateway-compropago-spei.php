@@ -118,19 +118,13 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     public function process_payment($orderId)
     {
         global $woocommerce;
-        global $wpdb;
 
         try {
-            if (!$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_orders'") ||
-                !$wpdb->get_results("SHOW TABLES LIKE '".$wpdb->prefix ."compropago_transactions'")) {
-                throw new \Exception('ComproPago Tables Not Found');
-            }
-
             $order = new WC_Order($orderId);
             $currency = $order->get_data()['currency'];
 
             if (!$this->valiateCurrency($currency)) {
-                wc_add_notice( __("Invalid Currency $currency. ComproPago Only allows MXN, USD, GBP or EUR as a currency.", 'compropago'), 'error' );
+                wc_add_notice(__("Invalid Currency $currency. ComproPago Only allows MXN, USD, GBP or EUR as a currency.", 'compropago'), 'error');
                 return false;
             }
 
@@ -156,40 +150,9 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 
             $response = $this->speiRequest($orderInfo);
 
-            $recordTime = time();
-            $ioIn = base64_encode(serialize($response));
-            $ioOut = base64_encode(serialize($order));
-
-            $insert = $wpdb->insert(
-                $wpdb->prefix . 'compropago_orders',
-                array(
-                    'ioIn' => $ioIn,
-                    'date' => $recordTime,
-                    'type' => 'SPEI',
-                    'ioOut' => $ioOut,
-                    'modified' => $recordTime,
-                    'storeExtra' => 'change.pending',
-                    'storeCartId' => $orderId,
-                    'storeOrderId' => $orderId,
-                    'compropagoId' => $response->id,
-                    'compropagoStatus' => $response->status
-                )
-            );
-
-            $cpOrderId = $wpdb->insert_id;
-
-            $wpdb->insert(
-                $wpdb->prefix . 'compropago_transactions',
-                array(
-                    'ioIn' => $ioIn,
-                    'date' => $recordTime,
-                    'ioOut' => $ioOut,
-                    'orderId' => $cpOrderId,
-                    'compropagoId' => $response->id,
-                    'compropagoStatus' => $response->status,
-                    'compropagoStatusLast' => $response->status
-                )
-            );
+            $order->add_meta_data('compropago_id', $response->id);
+            $order->add_meta_data('compropago_short_id', $response->shortId);
+            $order->add_meta_data('compropago_store', 'SPEI');
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.', 'compropago'), 'success');
         } catch (\Exception $e) {
@@ -220,8 +183,9 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
      */
     public function payment_fields()
     {
-        echo 'Realiza una transferencia por SPEI para realiza tu pago.<br>';
-        echo 'Se te enviaran las instrucciones a tu correo junto con la clave bancaria para realizar tu deposito.';
+        echo 'Realiza tu pago a través de SPEI para cualquier banco, es muy rapido y sencillo.<br>
+              Crea la orden y recibiras las instrucciones a tu email para dar de alta la cuenta y realizar la 
+              transferencia desde tu banca en linea.';
     }
 
     /**
@@ -281,7 +245,7 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 
 function cp_register_compropago_spei_method($methods) {
     $methods[] = "WC_Gateway_Compropago_Spei";
-    register_styles();
+    cp_register_styles();
     return $methods;
 }
 
