@@ -1,5 +1,7 @@
 # Plugin para WooCommerce
 
+[![unstable](http://badges.github.io/stability-badges/dist/unstable.svg)](http://github.com/badges/stability-badges)
+
 ## Descripción
 
 Este módulo permite la integración del servicio de ComproPago en tu eCommerce de WooCommerce. 
