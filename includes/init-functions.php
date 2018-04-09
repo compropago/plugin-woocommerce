@@ -10,4 +10,5 @@ function compropago_init() {
 
     /* ========= Gateways includes ========= */
     include_once __DIR__ . '/gateways/wc-gateway-compropago-cash.php';
+    include_once __DIR__ . '/gateways/wc-gateway-compropago-spei.php';
 }

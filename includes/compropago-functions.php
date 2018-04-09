@@ -7,7 +7,7 @@
 /**
  * Estilos generales
  */
-function register_styles(){
+function cp_register_styles(){
     wp_register_style( 'prefix-style', plugins_url('../templates/css/foundation.css', __FILE__) );
     wp_enqueue_style( 'prefix-style' );
 }

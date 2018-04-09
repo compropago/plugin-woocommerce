@@ -18,9 +18,8 @@ class Utils
             'yes'
         );
 
-        if($config['enabled']=='yes'){
+        if($config['cash']['enabled'] == 'yes' || $config['spei']['enabled'] == 'yes'){
             if(!empty($publickey) && !empty($privatekey) ){
-
                 try{
                     $client = new Client(
                         $publickey,
@@ -47,12 +46,12 @@ class Utils
                             }else{
                                 if($live != $compropagoResponse->mode_key){
                                     // store Mode vs compropago Keys
-                                    $error[1] = 'ComproPago ALERT:Your Keys are for a different Mode.';
+                                    $error[1] = 'Your Keys are for a different Mode.';
                                     $error[0] = true;
                                 }else{
                                     if(!$compropagoResponse->mode_key && !$compropagoResponse->livemode){
                                         //can process orders but watch out, NOT live operations just testing
-                                        $error[1] = 'WARNING: ComproPago account is Running in TEST Mode, NO REAL OPERATIONS';
+                                        $error[1] = 'ComproPago account is Running in TEST Mode, NO REAL OPERATIONS';
                                         $error[0] = true;
                                     }
                                 }

@@ -6,28 +6,24 @@
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 /**
+ * Render the ComproPago Order
  * @param mixed $order_id
  */
-function comp_receipt( $order_id ) {
-    global $wpdb;
+function cp_receipt($order_id) {
+    $order = new WC_Order($order_id);
 
-    $compropagoData = null;
-    $compropagoOrder = $wpdb->prefix . 'compropago_orders';
+    $compropagoId = $order->get_meta('compropago_id');
 
-    $query = "SELECT * FROM $compropagoOrder WHERE storeOrderId = '$order_id'";
+    if (!empty($compropagoId)) {
+        $template = __DIR__ . '/../../templates/receipt.html';
 
-    $mylink = $wpdb->get_row($query);
-
-    if ($mylink) {
-        $receipt_template = __DIR__ . '/../../templates/receipt.html';
-
-        $receipt = file_get_contents($receipt_template);
-        $receipt = str_replace(':cpid:', $mylink->compropagoId, $receipt);
+        $receipt = file_get_contents($template);
+        $receipt = str_replace(':cpid:', $compropagoId, $receipt);
 
         echo $receipt;
     } else {
-        echo "Fallo al recuperar el link";
+        echo "Fallo al recuperar el recibo $compropagoId";
     }
 }
 
-add_action('woocommerce_thankyou', 'comp_receipt', 1);
+add_action('woocommerce_thankyou', 'cp_receipt', 1);

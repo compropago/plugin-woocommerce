@@ -12,7 +12,7 @@
         </select>
 
         <p class="active">
-            <a href="https://s3.amazonaws.com/compropago/documents/cnvb/corresponsales_bancarios.pdf"
+            <a href="https://compropago.com/legal/corresponsales_cnbv.pdf"
                target="_blank">
                 <small>
                     * Comisionistas <b>autorizados por la CNBV</b> como corresponsales bancarios
