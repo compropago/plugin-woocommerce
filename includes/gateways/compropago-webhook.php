@@ -5,6 +5,7 @@
 
 use CompropagoSdk\Factory\Factory;
 use CompropagoSdk\Client;
+use CompropagoSdk\Tools\Request;
 
 /**
  * Main webhook function
@@ -109,8 +110,35 @@ function cp_proccess_spei(WC_Order &$order, $request) {
         throw new \Exception($message);
     }
 
-    $verify = $request;
-    $status = $verify->type;
+    $url = 'https://ms-api.compropago.io/v2/orders/' . $request->id;
+    $auth = [
+        "user" => $privatekey,
+        "pass" => $publickey
+    ];
+
+    $response = Request::get($url, $auth);
+    $response = json_decode($response);
+
+    if ($response->code != 200) {
+        $message = "Can't verify order";
+        throw new \Exception($message);
+    }
+
+    $verify = $response->data;
+    $status = '';
+
+    switch ($verify->status) {
+        case 'PENDING':
+            $status = 'charge.pending';
+            break;
+        case 'ACCEPTED':
+            $status = 'charge.success';
+            break;
+        case 'EXPIRED':
+            $status = 'charge.expired';
+            break;
+    }
+
 
     cp_update_order_status($order, $status);
     $order->save();
