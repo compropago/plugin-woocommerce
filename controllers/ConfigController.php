@@ -133,9 +133,9 @@ class ConfigController
     }
 }
 
-if($_POST){
+if ($_POST) {
     new ConfigController($_POST);
-}else{
+} else {
     header("Content-Type: application/json");
 
     $json = [

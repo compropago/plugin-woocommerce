@@ -17,6 +17,9 @@ delete_option('compropago_publickey');
 delete_option('compropago_privatekey');
 delete_option('compropago_live');
 delete_option('compropago_provallowed');
+delete_option('compropago_debug');
+delete_option('compropago_initial_state');
+delete_option('compropago_completed_order');
 
-delete_option('compropago_cpcash_title');
-delete_option('compropago_cpspei_title');
+delete_option('compropago_cash_title');
+delete_option('compropago_spei_title');

@@ -37,7 +37,7 @@ function cp_config_page() {
     $titulo         = get_option('compropago_title');
     $complete_order = get_option('compropago_completed_order');
     $initial_state  = get_option('compropago_initial_state');
-    $debug          = get_option('compropago_debug');
+    $debug          = get_option('compropago_debug') === 'yes';
 
     $cash_enable    = $cash_config['enabled'] === 'yes';
     $spei_enable    = $spei_config['enabled'] === 'yes';
