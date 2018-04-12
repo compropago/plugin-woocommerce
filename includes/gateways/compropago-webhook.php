@@ -39,10 +39,10 @@ function cp_webhook() {
 
         switch ($order->get_payment_method()) {
             case 'cpcash':
-                cp_proccess_cash($order, $orderInfo);
+                cp_process_cash($order, $orderInfo);
                 break;
             case 'cpspei':
-                cp_proccess_spei($order, $orderInfo);
+                cp_process_spei($order, $orderInfo);
                 break;
             default:
                 $message = "Invalid payment method {$order->get_payment_method()}";
@@ -59,12 +59,12 @@ function cp_webhook() {
 }
 
 /**
- * Proccess cash orders
+ * Process cash orders
  * @param WC_Order $order
  * @param mixed $request
  * @throws Exception
  */
-function cp_proccess_cash(WC_Order &$order, $request) {
+function cp_process_cash(WC_Order &$order, $request) {
     $publickey = get_option('compropago_publickey');
     $privatekey = get_option('compropago_privatekey');
     $mode = get_option('compropago_live') === 'yes';
@@ -96,12 +96,12 @@ function cp_proccess_cash(WC_Order &$order, $request) {
 }
 
 /**
- * Proccess spei orders
+ * Process spei orders
  * @param WC_Order $order
  * @param mixed $request
  * @throws Exception
  */
-function cp_proccess_spei(WC_Order &$order, $request) {
+function cp_process_spei(WC_Order &$order, $request) {
     $publickey = get_option('compropago_publickey');
     $privatekey = get_option('compropago_privatekey');
 
@@ -110,21 +110,22 @@ function cp_proccess_spei(WC_Order &$order, $request) {
         throw new \Exception($message);
     }
 
-    $url = 'https://ms-api.compropago.io/v2/orders/' . $request->id;
+    $url = 'https://api.compropago.com/v2/orders/' . $request->id;
     $auth = [
         "user" => $privatekey,
         "pass" => $publickey
     ];
 
-    $response = Request::get($url, $auth);
-    $response = json_decode($response);
+    $response = Request::get($url, array(), $auth);
 
-    if ($response->code != 200) {
+    if ($response->statusCode != 200) {
         $message = "Can't verify order";
         throw new \Exception($message);
     }
 
-    $verify = $response->data;
+    $body = json_decode($response->body);
+
+    $verify = $body->data;
     $status = '';
 
     switch ($verify->status) {

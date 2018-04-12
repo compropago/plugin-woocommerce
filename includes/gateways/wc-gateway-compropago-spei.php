@@ -220,26 +220,27 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     /**
      * Create the SPEI order
      * @param array $data
-     * @return StdObject
+     * @return object
      * @throws \Exception
      */
     private function speiRequest($data)
     {
-        $url = 'https://ms-api.compropago.io/v2/orders';
+        $url = 'https://api.compropago.com/v2/orders';
 
         $auth = [
             "user" => $this->privateKey,
             "pass" => $this->publicKey
         ];
 
-        $response = Request::post($url, $data, $auth);
-        $response = json_decode($response);
+        $response = Request::post($url, $data, array(), $auth);
 
-        if ($response->status != 'success') {
-            throw new \Exception("SPEI Error #: {$response->message}");
+        if ($response->statusCode != 200) {
+            throw new \Exception("SPEI Error #: {$response->statusCode}");
         }
 
-        return $response->data;
+        $body = json_decode($response->body);
+
+        return $body->data;
     }
 }
 

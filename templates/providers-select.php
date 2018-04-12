@@ -1,11 +1,11 @@
-<section class="cpcontainer cpprovider-select">
+<section class="compropago">
     <p>
         <b>¿Dónde quieres pagar?*</b>
     </p>
 
     <?php if($comprodata["providers"] != 0){ ?>
 
-        <select name="compropagoProvider" title="Corresponsales">
+        <select name="compropagoProvider" title="Corresponsales" style="width: 100%">
             <?php foreach ($comprodata['providers'] as $provider){ ?>
                 <option value="<?php echo $provider->internal_name; ?>"> <?php echo $provider->name; ?> </option>
             <?php } ?>

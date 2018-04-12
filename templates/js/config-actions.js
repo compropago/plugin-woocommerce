@@ -4,6 +4,7 @@
 $(function(){
     $("#agregar_proveedor").click(function(){
         $("#prov-disabled option").each(function(){
+            console.log($(this).val());
             if($(this).is(':selected')){
                 $('#prov-allowed').append('<option value="'+$(this).val()+'">'+$(this).html()+'</option>');
                 $(this).remove();
@@ -45,11 +46,11 @@ $(function(){
                 data: data,
                 success: function(res){
                     if(res.error){
-                        $("#display_error_config").removeClass('cpsuccess');
-                        $("#display_error_config").addClass('cperror');
+                        $("#display_error_config").removeClass('update');
+                        $("#display_error_config").addClass('error');
                     }else{
-                        $("#display_error_config").removeClass('cperror');
-                        $("#display_error_config").addClass('cpsuccess');
+                        $("#display_error_config").removeClass('error');
+                        $("#display_error_config").addClass('notice-success');
                     }
 
                     $(document).scrollTop($("body").offset().top);
@@ -60,8 +61,8 @@ $(function(){
                     renderRetro(res.retro);
                 },
                 error: function(res){
-                    $("#display_error_config").removeClass('cperror');
-                    $("#display_error_config").addClass('cpsuccess');
+                    $("#display_error_config").removeClass('error');
+                    $("#display_error_config").addClass('update');
                     $(document).scrollTop($("body").offset().top);
                     $("#display_error_config").html(res);
                     $("#display_error_config").fadeIn();
@@ -151,11 +152,11 @@ function openTab(evt, tabName) {
         tabcontent[i].style.display = "none";
     }
 
-    tablinks = document.getElementsByClassName("tablinks");
+    tablinks = document.getElementsByClassName("nav-tab");
     for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+        tablinks[i].className = tablinks[i].className.replace(" nav-tab-active", "");
     }
 
     document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+    evt.currentTarget.className += " nav-tab-active";
 } 
