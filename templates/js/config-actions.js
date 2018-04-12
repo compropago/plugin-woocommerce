@@ -24,7 +24,7 @@ $(function(){
     $("#save-config-compropago").click(function(){
         $("#loadig").fadeIn();
 
-        var data = {
+        const data = {
             cash_enable:    $('#enable_cash').is(':checked') ? 'yes' : 'no',
             spei_enable:    $('#enable_spei').is(':checked') ? 'yes' : 'no',
             cash_title:     $('#cash_title').val(),
@@ -38,6 +38,8 @@ $(function(){
             initial_state:  $('#intial_state').val(),
             debug:          $('#debug').is(':checked') ? 'yes' : 'no',
         };
+
+        console.log(data);
 
         if(validateSendConfig(data)){
             $.ajax({
