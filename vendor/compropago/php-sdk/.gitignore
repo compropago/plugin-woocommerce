@@ -8,3 +8,4 @@ vendor
 phpunit.xml
 .idea/
 pruebas.php
+vendor/

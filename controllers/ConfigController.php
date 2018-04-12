@@ -125,8 +125,9 @@ class ConfigController
                 )
             );
         } catch (\Exception $e) {
-            if ($e->getMessage() != 'Error: conflict.urls.create') {
-                throw new \Exception($e);
+
+            if ($e->getMessage() != 'Request error: 409') {
+                throw new \Exception($e->getMessage());
             }
         }
     }

@@ -1,0 +1,7 @@
+<testsuites>
+    <testsuite name="unittest">
+        <directory>tests</directory>
+        <file>tests/Test.php</file>
+        <file>tests/TestRequest.php</file>
+    </testsuite>
+</testsuites>

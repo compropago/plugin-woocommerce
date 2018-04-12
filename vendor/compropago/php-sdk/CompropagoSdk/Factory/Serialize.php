@@ -307,18 +307,29 @@ class Serialize
         if (empty($data)) {
             return new PlaceOrderInfo(null, null, null, null, null);
         } else {
+            $customerPhone = empty($data['custome_phone']) ? null : $data['custome_phone'];
+            $paymentType = empty($data['payment_type']) ? 'OXXO' : $data['payment_type'];
+            $currency = empty($data['currency']) ? 'MXN' : $data['currency'];
+            $expirationTime = empty($data['expiration_time']) ? null : $data['expiration_time'];
+            $imageUrl = empty($data['image_url']) ? '': $data['image_url'];
+            $appClientName = empty($data['app_client_name']) ? 'phpsdk' : $data['app_client_name'];
+            $appClientVersion = empty($data['app_client_version']) ? Client::VERSION : $data['app_client_version'];
+            $extras =  empty($data['extras']) ? null : $data['extras'];
+
             return new PlaceOrderInfo(
                 $data['order_id'],
                 $data['order_name'],
                 $data['order_price'],
                 $data['customer_name'],
                 $data['customer_email'],
-                empty($data['payment_type']) ? 'OXXO' : $data['payment_type'],
-                empty($data['currency']) ? 'MXN' : $data['currency'],
-                empty($data['expiration_time']) ? null : $data['expiration_time'],
-                empty($data['image_url']) ? '': $data['image_url'],
-                empty($data['app_client_name']) ? 'php-sdk' : $data['app_client_name'],
-                empty($data['app_client_version']) ? Client::VERSION : $data['app_client_version']
+                $customerPhone,
+                $paymentType,
+                $currency,
+                $expirationTime,
+                $imageUrl,
+                $appClientName,
+                $appClientVersion,
+                $extras
             );
         }
     }

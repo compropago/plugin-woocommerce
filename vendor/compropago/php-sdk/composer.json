@@ -4,6 +4,7 @@
   "description": "PHP SDK for Compropago API",
   "keywords": ["pagos internet","payment gateway"],
   "homepage": "https://compropago.com/documentacion/librerias",
+  "version": "4.0.1.0",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -21,5 +22,8 @@
     "psr-4": {
       "CompropagoSdk\\": "CompropagoSdk"
     }
+  },
+  "scripts" : {
+    "test": "./vendor/bin/phpunit --configuration ./unittest.xml --testsuite unittest"
   }
 }

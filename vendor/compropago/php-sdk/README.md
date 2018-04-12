@@ -1,5 +1,7 @@
 # ComproPago PHP SDK
 
+[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges) 
+
 ## Descripción
 
 La librería de `ComproPago PHP SDK` le permite interactuar con el API de ComproPago en su aplicación.
@@ -50,29 +52,34 @@ O si o lo desea puede obtener el repositorio
 git clone https://github.com/compropago/compropago-php.git
 ```
 
-Despues debara de incluir en su proyecto el archivo `CompropagoSdk\UnitTest\autoload.php`, el cual le proporcionara
-el acceso a todas las clases del SDK.
+Despues debara de incluir en su proyecto el archivo `CompropagoSdk\Client.php`, el cual contiene la funcion
+**register_autoload** que cargara automaticamente todos los archivos del SDK.
+
 
 ```php
 <?php
-require_once 'CompropagoSdk/UnitTest/autoload.php';
+require_once 'path_to/CompropagoSdk/Client.php';
 
 use CompropagoSdk\Client;
+Client::register_autoload();
+
 use CompropagoSdk\Factory\Factory;
 ```
 
 ### Instalación pro Composer
 
 Puede descargar el SDK directamente desde el repositorio de composer con el siguiente comando:
+
 ```bash
 composer require compropago/php-sdk
 ```
 
 O si lo prefiere puede incluirlo directamente en su archivo composer.json
+
 ```json
 {
   "require": {
-    "compropago/php-sdk": "3.0.0"
+    "compropago/php-sdk": "*"
   }
 }
 ```
@@ -87,29 +94,6 @@ require 'vendor/autoload.php';
 use CompropagoSdk\Client;
 use CompropagoSdk\Factory\Factory;
 ```
-
-## Documentación
-
-### Documentación ComproPago PHP SDK
-
-### Documentación de ComproPago
-
-**[API de ComproPago](https://compropago.com/documentacion/api)**
-
-ComproPago te ofrece un API tipo REST para integrar pagos en efectivo en tu comercio electrónico o tus aplicaciones.
-
-**[General](https://compropago.com/documentacion)**
-
-Información de Comisiones y Horarios, como Transferir tu dinero y la Seguridad que proporciona ComproPAgo
-
-
-**[Herramientas](https://compropago.com/documentacion/boton-pago)**
-
-* Botón de pago
-* Modo de pruebas/activo
-* WebHooks
-* Librerías y Plugins
-* Shopify
 
 ## Guía básica de Uso
 
