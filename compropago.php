@@ -14,6 +14,7 @@ Licence: Apache-2
 
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/controllers/Utils.php";
+require_once __DIR__ . '/controllers/ConfigController.php';
 
 include_once __DIR__ . '/includes/compropago-functions.php';
 include_once __DIR__ . '/includes/config-functions.php';

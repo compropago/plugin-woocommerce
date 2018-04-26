@@ -22,7 +22,10 @@ class ConfigController
     public function __construct($data)
     {
         $this->data = $data;
+    }
 
+    public function save()
+    {
         try{
             $this->__init__();
             $this->response = [
@@ -30,19 +33,39 @@ class ConfigController
                 'message' => 'Se guardaron correctamente las configuraciones.',
                 'retro' => $this->retro
             ];
-        }catch(Exception $e){
+        } catch(\Exception $e) {
             $this->response = [
                 'error' => true,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ];
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($this->response);
+        return json_encode($this->response);
     }
 
+    /**
+     * Save al configuration for ComproPago Plugin
+     * @throws Exception
+     */
     private function __init__()
     {
+        $pattern = '/_live_/';
+        $mode = null;
+
+        $pk_mode = preg_match($pattern, $this->data['publickey']);
+        $sk_mode = preg_match($pattern, $this->data['privatekey']);
+
+        if (isset($this->data['live'])) {
+            $mode = $this->data['live'];
+        } else if ($sk_mode && $pk_mode) {
+            $mode = 'yes';
+        } elseif (!$sk_mode && !$pk_mode) {
+            $mode = 'no';
+        } else {
+            $message = 'Las llaves son de modos distintos';
+            throw new \Exception($message);
+        }
+
         /**
          * Active Cash Payment
          */
@@ -83,7 +106,7 @@ class ConfigController
          * Live option
          */
         delete_option('compropago_live');
-        add_option('compropago_live', $this->data['live']);
+        add_option('compropago_live', $mode);
 
         /**
          * Completed Order
@@ -105,27 +128,16 @@ class ConfigController
 
 
         try {
-            $mode = ($this->data['live'] == 'yes') ? true : false;
+            $live = $mode == 'yes' ? true : false;
 
             $client = new Client(
                 $this->data['publickey'],
                 $this->data['privatekey'],
-                $mode
+                $live
             );
 
             $client->api->createWebhook($this->data['webhook']);
-
-            $this->retro = Utils::retroalimentacion(
-                $this->data['publickey'],
-                $this->data['privatekey'],
-                ($this->data['live'] == 'yes'),
-                array(
-                    'cash' => get_option('woocommerce_cpcash_settings'),
-                    'spei' => get_option('woocommerce_cpspei_settings')
-                )
-            );
         } catch (\Exception $e) {
-
             if ($e->getMessage() != 'Request error: 409') {
                 throw new \Exception($e->getMessage());
             }
@@ -133,15 +145,18 @@ class ConfigController
     }
 }
 
-if ($_POST) {
-    new ConfigController($_POST);
-} else {
-    header("Content-Type: application/json");
-
-    $json = [
-        'error' => true,
-        'message' => 'Access denied'
-    ];
-
-    echo json_encode($json);
+function cp_config() {
+    $config = new ConfigController($_POST);
+    die($config->save());
 }
+
+add_action('rest_api_init', function () {
+    register_rest_route(
+        'compropago/',
+        'config',
+        array(
+            'methods' => 'POST',
+            'callback' => 'cp_config',
+        )
+    );
+});

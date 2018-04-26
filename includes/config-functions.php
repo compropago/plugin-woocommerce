@@ -16,16 +16,19 @@ function cp_config_page() {
     wp_enqueue_script('jquery_cp');
     wp_enqueue_script('config-script');
 
-    $webhook = get_site_url() . '/wp-json/compropago/webhook';
+    $baseUrl = get_site_url();
+
+    $webhook = $baseUrl . '/wp-json/compropago/webhook';
+    $configUrl = $baseUrl . '/wp-json/compropago/config';
 
     $cash_config = get_option('woocommerce_cpcash_settings');
     $spei_config = get_option('woocommerce_cpspei_settings');
 
-    $cash_title     = !empty(get_option('compropago_cash_title')) ?
+    $cash_title = !empty(get_option('compropago_cash_title')) ?
         get_option('compropago_cash_title') :
         'Pago en efectivo';
 
-    $spei_title     = !empty(get_option('compropago_spei_title')) ?
+    $spei_title = !empty(get_option('compropago_spei_title')) ?
         get_option('compropago_spei_title') :
         'Transferencia Bancaria';
 
@@ -44,7 +47,12 @@ function cp_config_page() {
 
     $client = new Client($publickey, $privatekey, $live);
 
-    $all_providers = $client->api->listDefaultProviders();
+    try {
+        $all_providers = $client->api->listDefaultProviders();
+    } catch (Exception $e) {
+        $all_providers = [];
+    }
+
     $provs_config = get_option('compropago_provallowed');
     $flag_OXXO = false;
 
@@ -89,6 +97,8 @@ function cp_add_admin_page() {
     $function = 'cp_config_page';
     $icon_url = plugins_url('../templates/img/logo.png', __FILE__);
     $position = 110;
+
+    cp_register_styles();
 
     add_menu_page(
         $page_title,
