@@ -1,6 +1,6 @@
 # Plugin para WooCommerce
 
-[![unstable](http://badges.github.io/stability-badges/dist/unstable.svg)](http://github.com/badges/stability-badges)
+![stability-stable](https://img.shields.io/badge/stability-stable-green.svg)
 
 ## Descripción
 
