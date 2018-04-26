@@ -42,40 +42,28 @@
   display: none;
 }
 
-/* Bloc Login
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/* Block Login
+-------------------------------------------------- */
 
-.cp-block-login {
-  position: absolute;
-  width: calc(100% - 6em);
-  height: calc(100% - 20em);
-  background: rgba(0, 0, 0, 0.5);
-  color: #fefefe;
-  top: 0;
-  padding: 10em 3em;
-  text-align: center;
+#loading {
   display: none;
 }
 
-.cp-block-login img {
-  margin-top: 10em;
-}
+/** Switch
+-------------------------------------------------- */
 
-/* Switch
-========================================================================== */
-
-.switch {
+.compropago .switch {
   position: relative;
   display: inline-block;
   width: 60px;
   height: 34px;
 }
 
-.switch input {
+.compropago .switch input {
   display: none;
 }
 
-.slider {
+.compropago .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -87,7 +75,7 @@
   transition: .4s;
 }
 
-.slider:before {
+.compropago .slider:before {
   position: absolute;
   content: "";
   height: 26px;
@@ -99,15 +87,15 @@
   transition: .4s;
 }
 
-input:checked+.slider {
+.compropago input:checked+.slider {
   background-color: #2196F3;
 }
 
-input:focus+.slider {
+.compropago input:focus+.slider {
   box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked+.slider:before {
+.compropago input:checked+.slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
@@ -115,18 +103,18 @@ input:checked+.slider:before {
 
 /* Rounded sliders */
 
-.slider.round {
+.compropago .slider.round {
   border-radius: 34px;
 }
 
-.slider.round:before {
+.compropago .slider.round:before {
   border-radius: 50%;
 }
 
 /** FINISH SWITCH
- ------------------------------------------- */
+-------------------------------------------------- */
 
-.cpcontainer select {
+.compropago select {
   height: 2.4375rem;
   padding: 0.5rem;
   border: 1px solid #cacaca;
@@ -147,19 +135,132 @@ input:checked+.slider:before {
   padding-right: 1.5rem;
 }
 
-.cpcontainer select:disabled {
+.compropago select:disabled {
   background-color: #e6e6e6;
   cursor: not-allowed;
 }
 
-.cpcontainer select::-ms-expand {
+.compropago select::-ms-expand {
   display: none;
 }
 
-.cpcontainer select[multiple] {
+.compropago select[multiple] {
   height: auto;
   background-image: none;
 }
+
+/** Modals
+-------------------------------------------------- */
+
+/* The Modal (background) */
+.cp-modal {
+  position: fixed;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  z-index: 100000;
+  display: none;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.cp-modal.active .cp-modal-dialog {
+  top: 10%;
+}
+
+.cp-modal .cp-modal-body {
+  border-bottom: 0;
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+.cp-modal .cp-modal-body > div {
+  margin-top: 10px;
+}
+
+.cp-modal .cp-modal-panel:not(.active) {
+  display: none;
+}
+
+.cp-modal .cp-modal-footer {
+  border-top: #eeeeee solid 1px;
+  text-align: right;
+}
+
+.cp-modal .cp-modal-dialog {
+  background: transparent;
+  position: absolute;
+  left: 50%;
+  margin-left: -298px;
+  padding-bottom: 30px;
+  top: -100%;
+  z-index: 100001;
+  width: 596px;
+}
+
+.cp-modal .cp-modal-body,
+.cp-modal .cp-modal-footer {
+  border: 0;
+  border-bottom-width: 0px;
+  border-bottom-style: none;
+  border-bottom-color: currentcolor;
+  background: #fefefe;
+  padding: 20px;
+}
+
+/* Modal Content */
+/*.compropago .modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: 0 auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 500px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+
+}
+
+/* Add Animation *
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button *
+.compropago .close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.compropago .close:hover,
+.compropago .close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.compropago .modal-header {
+  padding: 10px;
+  background-color: #cccccc;
+  color: white;
+}
+
+.compropago .modal-body {padding: 2px 16px;}
+
+.compropago .modal-footer {
+  padding: 10px;
+  background-color: #e5e5e5;
+  color: white;
+}*/
 
 
 /** COMPROPAGO LABEL IMAGE
@@ -185,4 +286,11 @@ label[for="payment_method_cpspei"]::after {
   width: 116px;
   margin-left: 5px;
   vertical-align: middle;
+}
+
+/** Style for icon in side nav
+-------------------------------------------------- */
+.toplevel_page_compropago-config img {
+  margin: 0 auto;
+  width: 20px;
 }

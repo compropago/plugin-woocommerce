@@ -5,32 +5,11 @@
         <a href="#" class="nav-tab" onclick="openTab(event, 'spei')">SPEI</a>
     </div>
 
-    <div class="error notice" style="padding:1em;display:<?php echo $retro[0] ? 'block' : 'none'; ?>" id="retro">
-        <?php echo $retro[1]; ?>
-    </div>
-    <div class="notice" id="display_error_config" style="padding:1em;display: none"></div>
+    <div class="notice" id="display_error_config" style="padding:1em; display: none;">asdasd</div>
 
     <div id="config" class="tabcontent" style="display: block;">
         <table class="form-table">
             <tbody>
-                <tr valign="top">
-                    <th class="titledesc" scope="row">Modo Activo</th>
-                    <td class="forminp forminp-text">
-                        <label class="switch">
-                            <input type="checkbox" name="live" id="live" <?php echo ($live === true) ? 'checked' : ''; ?>>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <th class="titledesc" scope="row">Debug</th>
-                    <td class="forminp forminp-text">
-                        <label class="switch">
-                            <input type="checkbox" name="debug" id="debug" <?php echo ($debug === true) ? 'checked' : ''; ?>>
-                            <span class="slider"></span>
-                        </label>
-                    </td>
-                </tr>
                 <tr valign="top">
                     <th class="titledesc" scope="row">Llave Publica</th>
                     <td class="forminp forminp-text">
@@ -60,6 +39,15 @@
                             <option value="pending" <?php echo $initial_state == 'pending' ? 'selected' : ''; ?>>Pendiente de pago</option>
                             <option value="on-hold" <?php echo $initial_state == 'on-hold' ? 'selected' : ''; ?>>En espera</option>
                         </select>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <th class="titledesc" scope="row">Debug</th>
+                    <td class="forminp forminp-text">
+                        <label class="switch">
+                            <input type="checkbox" name="debug" id="debug" <?php echo ($debug === true) ? 'checked' : ''; ?>>
+                            <span class="slider"></span>
+                        </label>
                     </td>
                 </tr>
             </tbody>
@@ -135,10 +123,38 @@
 
     <br>
 
-    <input type="button" class="button-primary" value="Guardar configuracion" id="save-config-compropago">
-    <input type="hidden" name="webhook" id="webhook" value="<?php echo $webhook; ?>">
+    <input type="button" class="button-primary" value="Guardar configuración" id="save-config-compropago">
+    <img id="loading" src="<?php echo $image_load; ?>" alt="Loading...">
+    <input type="hidden" id="webhook" value="<?php echo $webhook; ?>">
+    <input type="hidden" id="url-save" value="<?php echo $configUrl; ?>">
 </div>
 
-<section class="cp-block-login" id="loadig">
-    <img src="<?php echo $image_load; ?>" alt="Loading...">
-</section>
+<div class="compropago cp-modal active">
+    <div class="cp-modal-dialog">
+        <div class="cp-modal-body">
+            <div class="xl-modal-panel" data-panel-id="confirm"><p></p></div>
+            <div class="xl-modal-panel active" data-panel-id="reasons">
+                <h3><strong>Modo activo o modo pruebas:</strong></h3>
+                <p>Indica a que modo corresponden las llaves que actualmente estas configurando.</p>
+
+                <table class="form-table">
+                    <tbody>
+                    <tr valign="top">
+                        <th class="titledesc" scope="row">Modo Activo</th>
+                        <?php var_dump($live); ?>
+                        <td class="forminp forminp-text">
+                            <label class="switch">
+                                <input type="checkbox" id="live" <?php echo ($live === true) ? 'checked' : ''; ?>>
+                                <span class="slider"></span>
+                            </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="cp-modal-footer">
+            <input type="button" class="button-primary" value="Guardar" id="save-all">
+        </div>
+    </div>
+</div>

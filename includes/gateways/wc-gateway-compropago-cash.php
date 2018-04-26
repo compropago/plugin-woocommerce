@@ -8,7 +8,6 @@
  */
 
 use CompropagoSdk\Client;
-use CompropagoSdk\Tools\Validations;
 use CompropagoSdk\Factory\Factory;
 
 class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
@@ -283,8 +282,6 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                     $this->compropagoConfig['privatekey'],
                     $this->compropagoConfig['live']
                 );
-
-                Validations::validateGateway($this->client);
 
                 return true;
             } catch (Exception $e) {
