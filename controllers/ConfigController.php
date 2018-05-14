@@ -126,6 +126,11 @@ class ConfigController
         delete_option('compropago_debug');
         add_option('compropago_debug', $this->data['debug']);
 
+        /**
+         * Active providers
+         */
+        delete_option('compropago_provallowed');
+        add_option('compropago_provallowed', $this->data['provallowed']);
 
         try {
             $live = $mode == 'yes' ? true : false;

@@ -141,7 +141,6 @@
                     <tbody>
                     <tr valign="top">
                         <th class="titledesc" scope="row">Modo Activo</th>
-                        <?php var_dump($live); ?>
                         <td class="forminp forminp-text">
                             <label class="switch">
                                 <input type="checkbox" id="live" <?php echo ($live === true) ? 'checked' : ''; ?>>
