@@ -165,9 +165,23 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                 throw new Exception($errMessage);
             }
 
-            $order->add_meta_data('compropago_id', $compropagoResponse->id);
-            $order->add_meta_data('compropago_short_id', $compropagoResponse->short_id);
-            $order->add_meta_data('compropago_store', $this->orderProvider);
+            if (empty($order->get_meta('compropago_id'))) {
+                $order->add_meta_data('compropago_id', $compropagoResponse->id);
+            } else {
+                $order->update_meta_data('compropago_id', $compropagoResponse->id);
+            }
+
+            if (empty($order->get_meta('compropago_short_id'))) {
+                $order->add_meta_data('compropago_short_id', $compropagoResponse->short_id);
+            } else {
+                $order->update_meta_data('compropago_short_id', $compropagoResponse->short_id);
+            }
+
+            if (empty($order->get_meta('compropago_store'))) {
+                $order->add_meta_data('compropago_store', $this->orderProvider);
+            } else {
+                $order->update_meta_data('compropago_store', $this->orderProvider);
+            }
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.','compropago'), 'success' );
         } catch (Exception $e) {

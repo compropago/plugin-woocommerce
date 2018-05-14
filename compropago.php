@@ -3,7 +3,7 @@
 Plugin Name: ComproPago
 Plugin URI: https://www.compropago.com/documentacion/plugins
 Description: Con ComproPago puedes recibir pagos en OXXO, 7Eleven y muchas tiendas más en México.
-Version: 4.4.0.1
+Version: 4.4.0.2
 Author: <a href="https://compropago.com" target="_blank">ComproPago</a>
 Licence: Apache-2
 */
@@ -31,9 +31,8 @@ add_action( 'admin_menu', 'cp_add_admin_page' );
  * Registro de rutina de activacion
  */
 register_activation_hook( __FILE__, function() {
-    return ;
+    return;
 });
-
 
 /**
  * Main function registration for payment gateways

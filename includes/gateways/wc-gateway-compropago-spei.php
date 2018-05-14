@@ -150,9 +150,23 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 
             $response = $this->speiRequest($orderInfo);
 
-            $order->add_meta_data('compropago_id', $response->id);
-            $order->add_meta_data('compropago_short_id', $response->shortId);
-            $order->add_meta_data('compropago_store', 'SPEI');
+            if (empty($order->get_meta('compropago_id'))) {
+                $order->add_meta_data('compropago_id', $response->id);
+            } else {
+                $order->update_meta_data('compropago_id', $response->id);
+            }
+
+            if (empty($order->get_meta('compropago_short_id'))) {
+                $order->add_meta_data('compropago_short_id', $response->shortId);
+            } else {
+                $order->update_meta_data('compropago_short_id', $response->shortId);
+            }
+
+            if (empty($order->get_meta('compropago_store'))) {
+                $order->add_meta_data('compropago_store', 'SPEI');
+            } else {
+                $order->update_meta_data('compropago_store', 'SPEI');
+            }
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.', 'compropago'), 'success');
         } catch (\Exception $e) {
