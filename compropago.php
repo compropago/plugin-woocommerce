@@ -31,9 +31,8 @@ add_action( 'admin_menu', 'cp_add_admin_page' );
  * Registro de rutina de activacion
  */
 register_activation_hook( __FILE__, function() {
-    return ;
+    return;
 });
-
 
 /**
  * Main function registration for payment gateways
