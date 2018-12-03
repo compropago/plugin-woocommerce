@@ -3,14 +3,15 @@
  * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 
-use CompropagoSdk\Client;
+use CompropagoSdk\Resources\Payments\Cash;
+
 
 /**
- * Pagina de configuracion Compropago
+ * Pagina de configuracion Compropag
  */
 function cp_config_page() {
-    cp_register_styles();
 
+    cp_register_styles();
     wp_register_script('config-script', plugins_url('../templates/js/config-actions.js', __FILE__));
     wp_register_script('jquery_cp', plugins_url('../templates/js/jquery.js', __FILE__));
     wp_enqueue_script('jquery_cp');
@@ -24,14 +25,15 @@ function cp_config_page() {
     $cash_config = get_option('woocommerce_cpcash_settings');
     $spei_config = get_option('woocommerce_cpspei_settings');
 
-    $cash_title = !empty(get_option('compropago_cash_title')) ?
-        get_option('compropago_cash_title') :
-        'Pago en efectivo';
+    $cash_title = !empty(get_option('compropago_cash_title'))
+        ? get_option('compropago_cash_title')
+        : __('Pago en efectivo');
 
-    $spei_title = !empty(get_option('compropago_spei_title')) ?
-        get_option('compropago_spei_title') :
-        'Transferencia Bancaria';
+    $spei_title = !empty(get_option('compropago_spei_title'))
+        ? get_option('compropago_spei_title')
+        : 'Transferencia Bancaria';
 
+    $webhook_id     = get_option('compropago_webhook_id');
     $publickey      = get_option('compropago_publickey');
     $privatekey     = get_option('compropago_privatekey');
     $live           = get_option('compropago_live') === 'yes';
@@ -45,10 +47,8 @@ function cp_config_page() {
     $cash_enable    = $cash_config['enabled'] === 'yes';
     $spei_enable    = $spei_config['enabled'] === 'yes';
 
-    $client = new Client($publickey, $privatekey, $live);
-
     try {
-        $all_providers = $client->api->listDefaultProviders();
+        $all_providers = (new Cash)->getDefaultProviders();
     } catch (Exception $e) {
         $all_providers = [];
     }
@@ -65,14 +65,14 @@ function cp_config_page() {
             $flag = true;
 
             foreach ($allowed as $value) {
-                if ($value == $provider->internal_name) {
+                if ($value == $provider['internal_name']) {
                     $active_providers[] = $provider;
                     $flag = false;
                     break;
                 }
             }
 
-            if ($flag) { $disabled_providers[] = $provider; }
+            if ($flag) $disabled_providers[] = $provider;
         }
     } else {
         $active_providers = $all_providers;
@@ -90,7 +90,7 @@ function cp_config_page() {
  * Registro de la pagina de configuracion
  */
 function cp_add_admin_page() {
-    $page_title = 'ComproPago Config';
+    $page_title = 'ComproPago Conf';
     $menu_title = 'ComproPago';
     $capanility = 'manage_options';
     $menu_slug = 'compropago-config';

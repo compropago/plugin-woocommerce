@@ -7,7 +7,9 @@
 
         <select name="compropagoProvider" title="Corresponsales" style="width: 100%">
             <?php foreach ($comprodata['providers'] as $provider){ ?>
-                <option value="<?php echo $provider->internal_name; ?>"> <?php echo $provider->name; ?> </option>
+                <option value="<?php echo $provider['internal_name']; ?>">
+                    <?php echo $provider['name']; ?>
+                </option>
             <?php } ?>
         </select>
 
@@ -19,5 +21,7 @@
                 </small>
             </a>
         </p>
-    <?php } else { echo( __('Temporalmente fuera de servicio.', 'compropago')); }?>
+    <?php } else {
+        echo( __('Temporalmente fuera de servicio.', 'compropago'));
+    } ?>
 </section>

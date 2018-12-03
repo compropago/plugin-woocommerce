@@ -3,9 +3,8 @@
  * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 
-use CompropagoSdk\Factory\Factory;
-use CompropagoSdk\Client;
-use CompropagoSdk\Tools\Request;
+ use CompropagoSdk\Resources\Payments\Cash;
+ use CompropagoSdk\Resources\Payments\Spei;
 
 /**
  * Main webhook function
@@ -44,6 +43,10 @@ function cp_webhook() {
             case 'cpspei':
                 cp_process_spei($order, $orderInfo);
                 break;
+            case 'crypto':
+
+                break;
+
             default:
                 $message = "Invalid payment method {$order->get_payment_method()}";
                 throw new \Exception($message);
@@ -79,9 +82,9 @@ function cp_process_cash(WC_Order &$order, $request) {
         throw new \Exception($message);
     }
 
-    $client = new Client($publickey, $privatekey, $mode);
-
-    $verify = $client->api->verifyOrder($request->id);
+    # Verify cash order
+    $objCash = (new Cash)->withKeys( $publickey, $privatekey );
+    $verify = $objCash->verfyOrder( $request->id );
     $status = $verify->type;
 
     cp_update_order_status($order, $status);
@@ -110,25 +113,12 @@ function cp_process_spei(WC_Order &$order, $request) {
         throw new \Exception($message);
     }
 
-    $url = 'https://api.compropago.com/v2/orders/' . $request->id;
-    $auth = [
-        "user" => $privatekey,
-        "pass" => $publickey
-    ];
+    # Verify SPEI order
+    $objSpei = (new Spei)->withKeys($publickey, $privatekey);
+    $verify = $objSpei->verifyOrder( $request->id );
+    $status = $verify->status;
 
-    $response = Request::get($url, array(), $auth);
-
-    if ($response->statusCode != 200) {
-        $message = "Can't verify order";
-        throw new \Exception($message);
-    }
-
-    $body = json_decode($response->body);
-
-    $verify = $body->data;
-    $status = '';
-
-    switch ($verify->status) {
+    switch ($status) {
         case 'PENDING':
             $status = 'charge.pending';
             break;
@@ -168,33 +158,37 @@ function cp_update_order_status(WC_Order &$order, $status) {
             if ($complete_order == 'fin') {
                 $order->payment_complete();
             } else {
-                if (!array_key_exists('wc-processing', $orderStatuses)) {
-                    $new_status = 'processing';
-                } else {
-                    $new_status = 'wc-processing';
-                }
+                $new_status = !array_key_exists('wc-processing', $orderStatuses)
+                    ? 'processing'
+                    : 'wc-processing';
 
-                $order->update_status($new_status, __( 'ComproPago - Payment Confirmed', 'compropago' ));
+                $order->update_status(
+                    $new_status,
+                    __( 'ComproPago - Payment Confirmed', 'compropago' )
+                );
             }
             break;
         case 'charge.pending':
-            $order->update_status($pending_status, __( 'ComproPago - Pending Payment', 'compropago' ));
+            $order->update_status(
+                $pending_status,
+                __( 'ComproPago - Pending Payment', 'compropago' )
+            );
             break;
         case 'charge.expired':
-            if (!array_key_exists('wc-cancelled', $orderStatuses)) {
-                $new_status = 'cancelled';
-            } else {
-                $new_status = 'wc-cancelled';
-            }
+            $new_status = !array_key_exists('wc-cancelled', $orderStatuses)
+                ? 'cancelled'
+                : 'wc-cancelled';
 
-            $order->update_status($new_status, __( 'ComproPago - Expired', 'compropago' ));
+            $order->update_status(
+                $new_status,
+                __( 'ComproPago - Expired', 'compropago' )
+            );
             break;
         default:
             $message = 'Invalid status ' . $status;
             throw new \Exception($message);
     }
 }
-
 
 add_action('rest_api_init', function () {
     register_rest_route(
