@@ -1,10 +1,10 @@
 {
   "name": "compropago/php-sdk",
   "type": "library",
-  "description": "PHP SDK for Compropago API",
+  "description": "PHP SDK for ComproPago API",
   "keywords": ["pagos internet","payment gateway"],
-  "homepage": "https://compropago.com/documentacion/librerias",
-  "version": "4.0.1.0",
+  "homepage": "https://github.com/compropago/compropago-php",
+  "version": "5.0.0.0",
   "license": "Apache-2.0",
   "authors": [
     {
@@ -13,17 +13,24 @@
     }
   ],
   "require": {
-    "php": ">=5.4"
+    "php": ">=5.6",
+    "rmccue/requests": "^1.7"
   },
   "require-dev":{
-    "phpunit/phpunit": ">=4.8"
+    "phpunit/phpunit": ">=4.8",
+    "squizlabs/php_codesniffer": "^3.3"
   },
   "autoload": {
     "psr-4": {
-      "CompropagoSdk\\": "CompropagoSdk"
+      "CompropagoSdk\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+        "Tests\\": "tests"
     }
   },
   "scripts" : {
-    "test": "./vendor/bin/phpunit --configuration ./unittest.xml --testsuite unittest"
+    "test": "./vendor/bin/phpunit --coverage-clover=coverage.xml"
   }
 }

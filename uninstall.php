@@ -23,3 +23,4 @@ delete_option('compropago_completed_order');
 
 delete_option('compropago_cash_title');
 delete_option('compropago_spei_title');
+delete_option('compropago_webhook_id');

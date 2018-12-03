@@ -3,7 +3,8 @@
  * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 
- use CompropagoSdk\Tools\Request;
+use CompropagoSdk\Resources\Payments\Spei;
+
 
 class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 {
@@ -16,6 +17,7 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     private $logger;
     private $initialstate;
     private $completeorder;
+    private $spei;
     
     /**
      * WC_Gateway_Compropago_Spei Constructor
@@ -55,7 +57,7 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
                 'title'			=> __( 'Enable/Disable', 'compropago' ),
                 'label' 		=> __( 'Enable ComproPago SPEI', 'compropago' ),
                 'type' 			=> 'checkbox',
-                'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administracion de Wordpress desde <a href="' . $page . '">AQUI</a>','compropago'),
+                'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administración de Wordpress desde <a href="' . $page . '">AQUI</a>','compropago'),
                 'default' 		=> 'no'
             )
         );
@@ -66,8 +68,6 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
      */
     private function initConfig()
     {
-        $this->init_settings();
-
         $this->title = get_option('compropago_spei_title');
         $this->debug = get_option('compropago_debug') == 'yes';
         $this->publicKey = get_option('compropago_publickey');
@@ -128,9 +128,7 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
                 return false;
             }
 
-            $clientName = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
-
-            $orderInfo = [
+            $order_info = [
                 "product" => [
                     "id" => "$orderId",
                     "price" => floatval($order->get_total()),
@@ -139,7 +137,7 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
                     "currency" => $currency
                 ],
                 "customer" => [
-                    "name" => $clientName,
+                    "name" => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
                     "email" => $order->get_billing_email(),
                     "phone" => $order->get_billing_phone()
                 ],
@@ -148,18 +146,22 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
                 ]
             ];
 
-            $response = $this->speiRequest($orderInfo);
+            $this->spei = (new Spei)->withKeys(
+                $this->publicKey,
+                $this->privateKey
+            );
+            $cpResponse = $this->spei->createOrder($order_info)['data'];
 
             if (empty($order->get_meta('compropago_id'))) {
-                $order->add_meta_data('compropago_id', $response->id);
+                $order->add_meta_data('compropago_id', $cpResponse['id']);
             } else {
-                $order->update_meta_data('compropago_id', $response->id);
+                $order->update_meta_data('compropago_id', $cpResponse['id']);
             }
 
             if (empty($order->get_meta('compropago_short_id'))) {
-                $order->add_meta_data('compropago_short_id', $response->shortId);
+                $order->add_meta_data('compropago_short_id', $cpResponse['shortId']);
             } else {
-                $order->update_meta_data('compropago_short_id', $response->shortId);
+                $order->update_meta_data('compropago_short_id', $cpResponse['shortId']);
             }
 
             if (empty($order->get_meta('compropago_store'))) {
@@ -170,8 +172,18 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.', 'compropago'), 'success');
         } catch (\Exception $e) {
-            wc_add_notice(__('Compropago error place order:', 'compropago') . $e->getMessage(), 'error');
-            $this->log('compropago', $e->getMessage());
+            $message = $e->getMessage();
+            if ( $error =  json_decode(str_replace('Request Error [400]: ', '', $message) ) )
+            {
+                $message = $error->message;
+                foreach ($error->errors as $e) $message .= "<br/>".$e->$message;
+            }
+
+            wc_add_notice(
+                __('Compropago error place order:<br/>', 'compropago') . $message,
+                'error'
+            );
+            $this->log('compropago', $message);
             return false;
         }
 
@@ -229,32 +241,6 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
         }
 
         return false;
-    }
-
-    /**
-     * Create the SPEI order
-     * @param array $data
-     * @return object
-     * @throws \Exception
-     */
-    private function speiRequest($data)
-    {
-        $url = 'https://api.compropago.com/v2/orders';
-
-        $auth = [
-            "user" => $this->privateKey,
-            "pass" => $this->publicKey
-        ];
-
-        $response = Request::post($url, $data, array(), $auth);
-
-        if ($response->statusCode != 200) {
-            throw new \Exception("SPEI Error #: {$response->statusCode}");
-        }
-
-        $body = json_decode($response->body);
-
-        return $body->data;
     }
 }
 

@@ -1,31 +1,33 @@
 [
     {
         "name": "compropago/php-sdk",
-        "version": "4.0.1.0",
-        "version_normalized": "4.0.1.0",
+        "version": "5.0.0.0",
+        "version_normalized": "5.0.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/compropago/compropago-php.git",
-            "reference": "c00e771e881f2c2d01c4777e7dd39982fe2d8a8a"
+            "reference": "2a81b6dd12a83e985236476637b0df8c9fd63ebc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/c00e771e881f2c2d01c4777e7dd39982fe2d8a8a",
-            "reference": "c00e771e881f2c2d01c4777e7dd39982fe2d8a8a",
+            "url": "https://api.github.com/repos/compropago/compropago-php/zipball/2a81b6dd12a83e985236476637b0df8c9fd63ebc",
+            "reference": "2a81b6dd12a83e985236476637b0df8c9fd63ebc",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.4"
+            "php": ">=5.6",
+            "rmccue/requests": "^1.7"
         },
         "require-dev": {
-            "phpunit/phpunit": ">=4.8"
+            "phpunit/phpunit": ">=4.8",
+            "squizlabs/php_codesniffer": "^3.3"
         },
-        "time": "2018-04-11T23:04:59+00:00",
+        "time": "2018-11-30T00:15:56+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "CompropagoSdk\\": "CompropagoSdk"
+                "CompropagoSdk\\": "src"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -38,11 +40,62 @@
                 "email": "eduardo.aguilar@compropago.com"
             }
         ],
-        "description": "PHP SDK for Compropago API",
-        "homepage": "https://compropago.com/documentacion/librerias",
+        "description": "PHP SDK for ComproPago API",
+        "homepage": "https://github.com/compropago/compropago-php",
         "keywords": [
             "pagos internet",
             "payment gateway"
+        ]
+    },
+    {
+        "name": "rmccue/requests",
+        "version": "v1.7.0",
+        "version_normalized": "1.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/rmccue/Requests.git",
+            "reference": "87932f52ffad70504d93f04f15690cf16a089546"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/rmccue/Requests/zipball/87932f52ffad70504d93f04f15690cf16a089546",
+            "reference": "87932f52ffad70504d93f04f15690cf16a089546",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2"
+        },
+        "require-dev": {
+            "requests/test-server": "dev-master"
+        },
+        "time": "2016-10-13T00:11:37+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Requests": "library/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "ISC"
+        ],
+        "authors": [
+            {
+                "name": "Ryan McCue",
+                "homepage": "http://ryanmccue.info"
+            }
+        ],
+        "description": "A HTTP library written in PHP, for human beings.",
+        "homepage": "http://github.com/rmccue/Requests",
+        "keywords": [
+            "curl",
+            "fsockopen",
+            "http",
+            "idna",
+            "ipv6",
+            "iri",
+            "sockets"
         ]
     }
 ]

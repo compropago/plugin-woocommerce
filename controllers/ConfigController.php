@@ -7,7 +7,7 @@ require_once __DIR__ . "/../../../../wp-load.php";
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use CompropagoSdk\Client;
+use CompropagoSdk\Resources\Webhook;
 
 class ConfigController
 {
@@ -26,7 +26,7 @@ class ConfigController
 
     public function save()
     {
-        try{
+        try {
             $this->__init__();
             $this->response = [
                 'error' => false,
@@ -62,7 +62,7 @@ class ConfigController
         } elseif (!$sk_mode && !$pk_mode) {
             $mode = 'no';
         } else {
-            $message = 'Las llaves son de modos distintos';
+            $message = 'Las llaves escritas pertenecen a modos distintos';
             throw new \Exception($message);
         }
 
@@ -132,16 +132,29 @@ class ConfigController
         delete_option('compropago_provallowed');
         add_option('compropago_provallowed', $this->data['provallowed']);
 
-        try {
-            $live = $mode == 'yes' ? true : false;
+        $live = $mode == 'yes' ? true : false;
 
-            $client = new Client(
+        try {
+            $objWebhook = (new Webhook)->withKeys(
                 $this->data['publickey'],
-                $this->data['privatekey'],
-                $live
+                $this->data['privatekey']
             );
 
-            $client->api->createWebhook($this->data['webhook']);
+            $webhook_id = get_option('compropago_webhook_id');
+            if ($webhook_id) {
+                # Delete old webhook
+                $objWebhook->delete($webhook_id);
+            }
+
+            # Create webhook
+            $this->response = $objWebhook->create( $this->data['webhook'] );
+
+            /**
+             * Webhook Id
+             */
+            delete_option('compropago_webhook_id');
+            add_option('compropago_webhook_id', $this->response['id']);
+
         } catch (\Exception $e) {
             if ($e->getMessage() != 'Request error: 409') {
                 throw new \Exception($e->getMessage());

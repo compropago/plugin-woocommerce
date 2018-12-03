@@ -5,6 +5,7 @@
 
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
+
 /**
  * Render the ComproPago Order
  * @param mixed $order_id
@@ -22,7 +23,7 @@ function cp_receipt($order_id) {
 
         echo $receipt;
     } else {
-        echo "Fallo al recuperar el recibo $compropagoId";
+        echo "<div class=\"woocommerce-error\">Fallo al recuperar el recibo {$compropagoId}</div>";
     }
 }
 

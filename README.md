@@ -7,8 +7,8 @@
 Este módulo permite la integración del servicio de ComproPago en tu eCommerce de WooCommerce. 
 Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
 
-[Registrarse en ComproPago](https://compropago.com/)
-[Comisiones](https://www.compropago.com/comisiones/)
+- [Registrarse en ComproPago](https://compropago.com/)
+- [Comisiones](https://www.compropago.com/comisiones/)
 
 ## Ayuda
 
@@ -27,7 +27,7 @@ Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en tod
 
 ## Instalación
 
-Por favor revisar la siguiente [documentación](http://demo.compropago.com/list/plugins/woocommerce.php)
+Por favor revisar la siguiente [documentación](http://demo.compropago.com/list/plugins/woocommerce.php).
 
 ## Documentación
 
