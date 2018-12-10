@@ -1,6 +1,7 @@
 {
     "require": {
         "php": ">=5.6",
-        "compropago/php-sdk": "5.0.0.0"
+        "compropago/php-sdk": "5.0.0.1",
+        "rmccue/requests": ">=1.0"
     }
 }
