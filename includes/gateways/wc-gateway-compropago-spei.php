@@ -8,7 +8,7 @@ use CompropagoSdk\Resources\Payments\Spei;
 
 class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 {
-    const VERSION = '1.0.0.0';
+    const VERSION = '2.0.0.0';
     const GATEWAY_ID = 'cpspei';
 
     private $debug;
@@ -24,20 +24,23 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
      */
     public function __construct()
     {
-        $this->id = self::GATEWAY_ID;
-        $this->has_fields = true;
-        $this->method_title = 'ComproPago SPEI';
+        global $woocommerce;
+
+        $this->id			= self::GATEWAY_ID;
+        $this->has_fields	= true;
+        $this->method_title	= 'ComproPago SPEI';
 
         $this->method_description = __(
             '<p>Accept SPEI transfers for your orders.</p>',
             'compropago'
         );
 
+        # Init Wordpress settings for plugin
+        $this->init_settings();
         $this->initConfig();
 
-        if (is_admin()) {
-            $this->initFormFields();
-        }
+        if (is_admin()) $this->initFormFields();
+        
 
         add_action(
             'woocommerce_update_options_payment_gateways_' . $this->id, 
@@ -69,7 +72,7 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     private function initConfig()
     {
         $this->title = get_option('compropago_spei_title');
-        $this->debug = get_option('compropago_debug') == 'yes';
+        $this->debug = get_option('compropago_debug');
         $this->publicKey = get_option('compropago_publickey');
         $this->privateKey = get_option('compropago_privatekey');
         $this->initialstate = get_option('compropago_initial_state');
@@ -119,7 +122,8 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     {
         global $woocommerce;
 
-        try {
+        try
+        {
             $order = new WC_Order($orderId);
             $currency = $order->get_data()['currency'];
 
@@ -171,19 +175,25 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
             }
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.', 'compropago'), 'success');
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            if ( $error =  json_decode(str_replace('Request Error [400]: ', '', $message) ) )
-            {
-                $message = $error->message;
-                foreach ($error->errors as $e) $message .= "<br/>".$e->$message;
-            }
+        }
+        catch (\Exception $e)
+        {
+            $errors = [
+                'ComproPago: Request Error [409]: ',
+                'Request Error [422]: ',
+                'Request Error [200]: ',
+                'Request Error [400]: '
+            ];
+            $message = json_decode(str_replace($errors, '', $e->getMessage()), true);
+            $message = isset($message['message'])
+                ? $message['message']
+                : $e->getMessage();
 
             wc_add_notice(
-                __('Compropago error place order:<br/>', 'compropago') . $message,
+                __('Compropago error place order:<br/>' . $message, 'compropago'),
                 'error'
             );
-            $this->log('compropago', $message);
+
             return false;
         }
 
