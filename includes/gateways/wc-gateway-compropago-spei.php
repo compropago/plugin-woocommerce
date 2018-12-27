@@ -254,7 +254,8 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     }
 }
 
-function cp_register_compropago_spei_method($methods) {
+function cp_register_compropago_spei_method($methods)
+{
     $methods[] = "WC_Gateway_Compropago_Spei";
     cp_register_styles();
     return $methods;

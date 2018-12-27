@@ -11,7 +11,7 @@ use CompropagoSdk\Resources\Payments\Cash;
 
 class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 {
-    const VERSION = "5.0.0.1";
+    const VERSION = "5.0.0.2";
     const GATEWAY_ID = 'cpcash';
 
     private $compropagoConfig;
@@ -157,8 +157,7 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
             );
             $cpResponse = $this->cash->createOrder($order_info);
 
-            if ($cpResponse['type'] != 'charge.pending')
-            {
+            if ($cpResponse['type'] != 'charge.pending') {
                 $errMessage = __("API Error, comuniquese con soporte@compropago.com para realizar actualización del API");
                 throw new Exception($errMessage);
             }
@@ -181,7 +180,10 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                 $order->update_meta_data('compropago_store', $this->orderProvider);
             }
 
-            wc_add_notice(__('Su orden de pago en ComproPago está lista.', 'compropago'), 'success' );
+            wc_add_notice(
+                __('Su orden de pago en ComproPago está lista.', 'compropago'),
+                'success'
+            );
         }
         catch (Exception $e)
         {
@@ -238,8 +240,8 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 
             $providers = $this->cash->getProviders();
 
-            if (empty($providers)) {
-              $providers = 0;
+            if ( empty($providers) ) {
+                $providers = 0;
             }
 
             $filtered = array();

@@ -10,9 +10,9 @@ require_once ABSPATH . 'wp-admin/includes/upgrade.php';
  * Render the ComproPago Order
  * @param mixed $order_id
  */
-function cp_receipt($order_id) {
+function cp_receipt($order_id)
+{
     $order = new WC_Order($order_id);
-
     $compropagoId = $order->get_meta('compropago_id');
 
     if (!empty($compropagoId)) {
