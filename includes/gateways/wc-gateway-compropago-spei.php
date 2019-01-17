@@ -8,7 +8,7 @@ use CompropagoSdk\Resources\Payments\Spei;
 
 class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 {
-    const VERSION = '2.0.0.0';
+    const VERSION = '2.0.0.3';
     const GATEWAY_ID = 'cpspei';
 
     private $debug;
@@ -56,13 +56,13 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
         $page = get_site_url() . '/wp-admin/admin.php?page=compropago-config';
 
         $this->form_fields=array(
-            'enabled' => array(
+            'enabled' => [
                 'title'			=> __( 'Enable/Disable', 'compropago' ),
                 'label' 		=> __( 'Enable ComproPago SPEI', 'compropago' ),
                 'type' 			=> 'checkbox',
                 'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administración de Wordpress desde <a href="' . $page . '">AQUI</a>','compropago'),
                 'default' 		=> 'no'
-            )
+            ]
         );
     }
 
@@ -71,12 +71,12 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
      */
     private function initConfig()
     {
-        $this->title = get_option('compropago_spei_title');
-        $this->debug = get_option('compropago_debug');
-        $this->publicKey = get_option('compropago_publickey');
-        $this->privateKey = get_option('compropago_privatekey');
-        $this->initialstate = get_option('compropago_initial_state');
-        $this->completeorder = get_option('compropago_completed_order');
+        $this->title            = get_option('compropago_spei_title');
+        $this->debug            = get_option('compropago_debug');
+        $this->publicKey        = get_option('compropago_publickey');
+        $this->privateKey       = get_option('compropago_privatekey');
+        $this->initialstate     = get_option('compropago_initial_state');
+        $this->completeorder    = get_option('compropago_completed_order');
 
         $this->initLogger();
     }
@@ -134,20 +134,23 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 
             $order_info = [
                 "product" => [
-                    "id" => "$orderId",
-                    "price" => floatval($order->get_total()),
-                    "name" => "No. Orden: $orderId",
-                    "url" => "",
-                    "currency" => $currency
+                    "id"        => "$orderId",
+                    "price"     => floatval($order->get_total()),
+                    "name"      => "No. Orden: $orderId",
+                    "url"       => "",
+                    "currency"  => $currency
                 ],
                 "customer" => [
-                    "name" => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-                    "email" => $order->get_billing_email(),
-                    "phone" => $order->get_billing_phone()
+                    "name"      => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+                    "email"     => $order->get_billing_email(),
+                    "phone"     => $order->get_billing_phone()
                 ],
                 "payment" =>  [
                     "type" => "SPEI"
-                ]
+                ],
+                # TODO: Test this
+                'app_client_name'       => 'woocommerce_' . $woocommerce->version,
+                'app_client_version'    => $this::VERSION
             ];
 
             $this->spei = (new Spei)->withKeys(

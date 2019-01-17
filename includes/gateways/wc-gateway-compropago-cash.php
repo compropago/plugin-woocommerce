@@ -11,7 +11,7 @@ use CompropagoSdk\Resources\Payments\Cash;
 
 class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 {
-    const VERSION = "5.0.0.2";
+    const VERSION = "5.0.0.3";
     const GATEWAY_ID = 'cpcash';
 
     private $compropagoConfig;
@@ -147,8 +147,8 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                 'payment_type'          => $this->orderProvider,
                 'currency'              => $orderCurrency,
                 'image_url'             => null,
-                'app_client_name'       => 'woocommerce',
-                'app_client_version'    => $woocommerce->version
+                'app_client_name'       => 'woocommerce_' . $woocommerce->version,
+                'app_client_version'    => $this::VERSION
             ];
 
             $this->cash = (new Cash)->withKeys(

@@ -12,18 +12,15 @@ require_once ABSPATH . 'wp-admin/includes/upgrade.php';
  */
 function cp_receipt($order_id)
 {
-    $order = new WC_Order($order_id);
-    $compropagoId = $order->get_meta('compropago_id');
+    $order          = new WC_Order($order_id);
+    $compropagoId   = $order->get_meta('compropago_id');
 
     if (!empty($compropagoId)) {
-        $template = __DIR__ . '/../../templates/receipt.html';
-
-        $receipt = file_get_contents($template);
-        $receipt = str_replace(':cpid:', $compropagoId, $receipt);
+        $template   = __DIR__ . '/../../templates/receipt.html';
+        $receipt    = file_get_contents( $template) ;
+        $receipt    = str_replace(':cpid:', $compropagoId, $receipt);
 
         echo $receipt;
-    } else {
-        echo "<div class=\"woocommerce-error\">Fallo al recuperar el recibo {$compropagoId}</div>";
     }
 }
 
