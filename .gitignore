@@ -11,3 +11,5 @@
 composer.lock
 dev-notes
 phpunit.xml
+vendor/*
+compropago.zip
