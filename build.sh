@@ -1,17 +1,21 @@
+#!/bin/bash
+
 if [ -f compropago.zip ]; then
-    echo Delete old file
+    echo -e "\033[1;31mDeleting old file\033[0m"
     rm compropago.zip
 fi
 
-echo Remove .DS_Store files
-find . -name ".DS_Store" -delete
-
-if [ -f compropago.zip ]; then
-    echo
+# Dependencies
+if [ -f vendor/autoload.php ]; then
+    echo "Composer status:" && composer status
 else
-    echo Install requirements
     composer install
 fi
 
-echo "Building tgz module for Magento"
+echo -e "\033[1;33mRemove .DS_Store files\033[0m"
+find . -name ".DS_Store" -delete
+
+echo -e "\033[1;32mBuilding zip plugin for WooCommerce\033[0m"
 zip -r compropago.zip . -x "*.git*" "*.idea*" ".DS_Store" "build.sh"
+
+read -n 1 -s -r -p "Press any key to continue..."
