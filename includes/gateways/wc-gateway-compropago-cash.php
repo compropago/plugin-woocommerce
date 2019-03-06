@@ -11,7 +11,7 @@ use CompropagoSdk\Resources\Payments\Cash;
 
 class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 {
-    const VERSION = "5.0.0.3";
+    const VERSION = "5.0.0.2";
     const GATEWAY_ID = 'cpcash';
 
     private $compropagoConfig;

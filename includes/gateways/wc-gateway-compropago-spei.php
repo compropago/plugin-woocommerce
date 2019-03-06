@@ -8,7 +8,7 @@ use CompropagoSdk\Resources\Payments\Spei;
 
 class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 {
-    const VERSION = '2.0.0.3';
+    const VERSION = '2.0.0.2';
     const GATEWAY_ID = 'cpspei';
 
     private $debug;
