@@ -36,8 +36,7 @@ function cp_webhook()
 
         $order = new WC_Order($orderInfo['order_info']['order_id']);
 
-        switch ($order->get_payment_method())
-        {
+        switch ($order->get_payment_method()) {
             case 'cpcash':
                 cp_process_cash($order, $orderInfo);
                 break;
@@ -75,14 +74,12 @@ function cp_process_cash(WC_Order &$order, $request)
     $privatekey = get_option('compropago_privatekey');
     $mode = get_option('compropago_live') === 'yes';
 
-    if (empty($publickey) || empty($privatekey))
-    {
+    if (empty($publickey) || empty($privatekey)) {
         $message = 'Invalid plugin credentials';
         throw new \Exception($message);
     }
 
-    if ($order->get_meta('compropago_id') != $request['id'])
-    {
+    if ($order->get_meta('compropago_id') != $request['id']) {
         $message = 'The order is not from this store';
         throw new \Exception($message);
     }
@@ -113,8 +110,7 @@ function cp_process_spei(WC_Order &$order, $request)
     $publickey = get_option('compropago_publickey');
     $privatekey = get_option('compropago_privatekey');
 
-    if (empty($publickey) || empty($privatekey))
-    {
+    if (empty($publickey) || empty($privatekey)) {
         $message = 'Invalid plugin credentials';
         throw new \Exception($message);
     }
@@ -160,11 +156,9 @@ function cp_update_order_status(WC_Order &$order, $status)
     $complete_order = get_option('compropago_completed_order');
     $pending_status = get_option('compropago_initial_state');
 
-    switch ($status)
-    {
+    switch ($status) {
         case 'charge.success':
-            if ($complete_order == 'fin')
-            {
+            if ($complete_order == 'fin') {
                 $order->payment_complete();
             }
             else
