@@ -27,7 +27,7 @@ Con ComproPago puede recibir pagos vía SPEI y en efectivo.
 
 ## Instalación
 
-Por favor revisar la siguiente [documentación](http://demo.compropago.com/list/plugins/woocommerce.php).
+Por favor revisar la siguiente [documentación](http://demo.compropago.com/plugins/woocommerce).
 
 ## Documentación
 
