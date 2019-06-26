@@ -3,7 +3,7 @@
  * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 
-require_once __DIR__ . "/../../../../wp-load.php";
+require_once ABSPATH . "wp-load.php";
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
 require_once __DIR__ . "/../vendor/autoload.php";
 
@@ -31,7 +31,7 @@ class ConfigController
             $this->__init__();
             $this->response = [
                 'error'     => false,
-                'message'   => 'Se guardaron correctamente las configuraciones.',
+                'message'   => __('Se guardaron correctamente las configuraciones.'),
                 'retro'     => $this->retro
             ];
         } catch(\Exception $e) {
@@ -63,7 +63,7 @@ class ConfigController
         } elseif (!$sk_mode && !$pk_mode) {
             $mode = 'no';
         } else {
-            $message = 'Las llaves escritas pertenecen a modos distintos';
+            $message = __('Las llaves escritas pertenecen a modos distintos');
             throw new \Exception($message);
         }
 

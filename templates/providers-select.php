@@ -1,6 +1,6 @@
 <section class="compropago">
     <p>
-        <b>¿Dónde quieres pagar?*</b>
+        <b><?php echo __('¿Dónde quieres pagar?*'); ?></b>
     </p>
 
     <?php if($comprodata["providers"] != 0){ ?>
@@ -17,7 +17,7 @@
             <a href="https://compropago.com/legal/corresponsales_cnbv.pdf"
                target="_blank">
                 <small>
-                    * Comisionistas <b>autorizados por la CNBV</b> como corresponsales bancarios
+                    <?php echo __('* Comisionistas <b>autorizados por la CNBV</b> como corresponsales bancarios'); ?>
                 </small>
             </a>
         </p>

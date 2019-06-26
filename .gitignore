@@ -11,5 +11,6 @@
 composer.lock
 dev-notes
 phpunit.xml
+languages/*
 vendor/*
 compropago.zip
