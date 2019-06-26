@@ -1,23 +1,28 @@
-# Plugin para WooCommerce
+Plugin para WooCommerce
+=======================
 
 ![stability-stable](https://img.shields.io/badge/stability-stable-green.svg)
 
-## Descripción
+![WooCommerce](http://demo.compropago.com/img/ecommerce/logos/woocommerce.jpg)
 
-Este módulo permite la integración del servicio de ComproPago en tu eCommerce de WooCommerce. 
-Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.
+Este módulo permite la integración del servicio de ComproPago en tu eCommerce de WooCommerce.
+Con ComproPago puede recibir pagos por medio de transferencia electronica (SPEI) y mediante
+efectivo en 7Eleven, Coppel, y muchas tiendas más en todo México.
 
 - [Registrarse en ComproPago](https://compropago.com/)
 - [Comisiones](https://www.compropago.com/comisiones/)
 
-## Ayuda
+Contenidos
+----------
 
-- [Centro de ayuda y soporte](https://compropago.com/ayuda-y-soporte)
-- [Solicitar integración](https://compropago.com/integracion)
-- [Guía para empezar a usar ComproPago](https://compropago.com/ayuda-y-soporte/como-comenzar-a-usar-compropago)
-- [Información de contacto](https://compropago.com/contacto)
+- [Requerimientos](#requerimientos)
+- [Instalación](#instalación)
+- [Documentación](#documentación)
+- [Ayuda](#ayuda)
+- [Soporte](#soporte)
 
-## Requerimientos
+Requerimientos
+--------------
 
 - [WooCommerce 2.5.x +](https://woocommerce.com/)
 - [Wordpress >= 4.4](https://es-mx.wordpress.org/)
@@ -25,11 +30,13 @@ Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en tod
 - [PHP JSON extension](http://php.net/manual/en/book.json.php)
 - [PHP cURL extension](http://php.net/manual/en/book.curl.php)
 
-## Instalación
+Instalación
+-----------
 
 Por favor revisar la siguiente [documentación](http://demo.compropago.com/list/plugins/woocommerce.php).
 
-## Documentación
+Documentación
+-------------
 
 **[API de ComproPago](https://compropago.com/documentacion/api)**
 
@@ -45,13 +52,24 @@ Información de comisiones y horarios, como transferir tu dinero y la seguridad 
 - [Librerías > sección SDK](http://demo.compropago.com/)
 - [Plugins > sección Plugins](http://demo.compropago.com/)
 
-## Soporte
+Ayuda
+-----
 
-En caso de tener alguna pregunta o requerir el apoyo técnico, por favor contactar al correo: **soporte@compropago.com**, proporcionando la siguiente información:
+- [Centro de ayuda y soporte](https://compropago.com/ayuda-y-soporte)
+- [Solicitar integración](https://compropago.com/integracion)
+- [Guía para empezar a usar ComproPago](https://compropago.com/ayuda-y-soporte/como-comenzar-a-usar-compropago)
+- [Información de contacto](https://compropago.com/contacto)
+
+Soporte
+-------
+
+En caso de tener alguna pregunta o requerir el apoyo técnico, por favor contactar al
+correo: **<soporte@compropago.com>**, proporcionando la siguiente información:
 
 - Nombre completo (Propietario de la cuenta).
 - Url del sitio web de la tienda.
 - Teléfono local y celular.
 - Correo electrónico del propietario de la cuenta.
 - Texto detallado de la duda o requerimiento.
-- En caso de presentar algún problema técnico, por favor enviar capturas de pantalla o evidencia para una respuesta más rápida.
+- En caso de presentar algún problema técnico, por favor enviar capturas de pantalla o
+evidencia para una respuesta más rápida.
