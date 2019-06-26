@@ -2,7 +2,7 @@
   "name": "compropago/woocommerce",
   "description": "Este módulo permite la integración del servicio ComproPago en tu eCommerce de Woocommerce. Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.",
   "homepage": "https://www.compropago.com",
-  "license": "Apache-2.0",
+  "license": "GPL-3.0-or-later",
   "readme": "README.md",
   "type": "woocommerce-plugin",
   "version": "5.0.0.3",
@@ -55,14 +55,19 @@
   },
   "scripts": {
       "build": [
+        "composer clean",
         "composer install",
         "composer pot",
-        "./build.sh"
+        "rm -rf vendor",
+        "composer install --no-dev",
+        "zip -r compropago.zip . -x \"*.git*\" \"*.idea*\" \".DS_Store\" \"build.sh\"",
+        "composer install"
       ],
       "clean": [
         "rm -rf vendor",
         "rm -rf languages",
-        "rm -f compropago.zip"
+        "rm -f compropago.zip",
+        "find . -name '.DS_Store' -delete"
       ],
       "pot": "./vendor/wp-cli/wp-cli/bin/wp i18n make-pot . languages/compropago.pot"
   },

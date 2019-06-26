@@ -5,7 +5,7 @@ Plugin URI: http://demo.compropago.com/plugins/woocommerce
 Description: Con ComproPago puede recibir pagos vía SPEI y en efectivo.
 Version: 5.0.0.3
 Author: <a href="https://compropago.com" target="_blank">ComproPago</a>
-Licence: Apache-2
+Licence: GPL-3.0-or-later
 */
 
 /**
