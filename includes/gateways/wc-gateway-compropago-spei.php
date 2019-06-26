@@ -8,7 +8,7 @@ use CompropagoSdk\Resources\Payments\Spei;
 
 class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 {
-    const VERSION = '1.0.0.0';
+    const VERSION = '2.0.0.2';
     const GATEWAY_ID = 'cpspei';
 
     private $debug;
@@ -24,20 +24,23 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
      */
     public function __construct()
     {
-        $this->id = self::GATEWAY_ID;
-        $this->has_fields = true;
-        $this->method_title = 'ComproPago SPEI';
+        global $woocommerce;
+
+        $this->id			= self::GATEWAY_ID;
+        $this->has_fields	= true;
+        $this->method_title	= 'ComproPago SPEI';
 
         $this->method_description = __(
             '<p>Accept SPEI transfers for your orders.</p>',
             'compropago'
         );
 
+        # Init Wordpress settings for plugin
+        $this->init_settings();
         $this->initConfig();
 
-        if (is_admin()) {
-            $this->initFormFields();
-        }
+        if (is_admin()) $this->initFormFields();
+        
 
         add_action(
             'woocommerce_update_options_payment_gateways_' . $this->id, 
@@ -53,13 +56,13 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
         $page = get_site_url() . '/wp-admin/admin.php?page=compropago-config';
 
         $this->form_fields=array(
-            'enabled' => array(
+            'enabled' => [
                 'title'			=> __( 'Enable/Disable', 'compropago' ),
                 'label' 		=> __( 'Enable ComproPago SPEI', 'compropago' ),
                 'type' 			=> 'checkbox',
                 'description'	=> __('Para confirgurar ComproPago dirigete a su panel en el menu de administración de Wordpress desde <a href="' . $page . '">AQUI</a>','compropago'),
                 'default' 		=> 'no'
-            )
+            ]
         );
     }
 
@@ -68,12 +71,12 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
      */
     private function initConfig()
     {
-        $this->title = get_option('compropago_spei_title');
-        $this->debug = get_option('compropago_debug') == 'yes';
-        $this->publicKey = get_option('compropago_publickey');
-        $this->privateKey = get_option('compropago_privatekey');
-        $this->initialstate = get_option('compropago_initial_state');
-        $this->completeorder = get_option('compropago_completed_order');
+        $this->title            = get_option('compropago_spei_title');
+        $this->debug            = get_option('compropago_debug');
+        $this->publicKey        = get_option('compropago_publickey');
+        $this->privateKey       = get_option('compropago_privatekey');
+        $this->initialstate     = get_option('compropago_initial_state');
+        $this->completeorder    = get_option('compropago_completed_order');
 
         $this->initLogger();
     }
@@ -119,7 +122,8 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     {
         global $woocommerce;
 
-        try {
+        try
+        {
             $order = new WC_Order($orderId);
             $currency = $order->get_data()['currency'];
 
@@ -130,20 +134,23 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
 
             $order_info = [
                 "product" => [
-                    "id" => "$orderId",
-                    "price" => floatval($order->get_total()),
-                    "name" => "No. Orden: $orderId",
-                    "url" => "",
-                    "currency" => $currency
+                    "id"        => "$orderId",
+                    "price"     => floatval($order->get_total()),
+                    "name"      => "No. Orden: $orderId",
+                    "url"       => "",
+                    "currency"  => $currency
                 ],
                 "customer" => [
-                    "name" => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-                    "email" => $order->get_billing_email(),
-                    "phone" => $order->get_billing_phone()
+                    "name"      => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+                    "email"     => $order->get_billing_email(),
+                    "phone"     => $order->get_billing_phone()
                 ],
                 "payment" =>  [
                     "type" => "SPEI"
-                ]
+                ],
+                # TODO: Test this
+                'app_client_name'       => 'woocommerce_' . $woocommerce->version,
+                'app_client_version'    => $this::VERSION
             ];
 
             $this->spei = (new Spei)->withKeys(
@@ -171,19 +178,25 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
             }
 
             wc_add_notice(__('Su orden de pago en ComproPago está lista.', 'compropago'), 'success');
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            if ( $error =  json_decode(str_replace('Request Error [400]: ', '', $message) ) )
-            {
-                $message = $error->message;
-                foreach ($error->errors as $e) $message .= "<br/>".$e->$message;
-            }
+        }
+        catch (\Exception $e)
+        {
+            $errors = [
+                'ComproPago: Request Error [409]: ',
+                'Request Error [422]: ',
+                'Request Error [200]: ',
+                'Request Error [400]: '
+            ];
+            $message = json_decode(str_replace($errors, '', $e->getMessage()), true);
+            $message = isset($message['message'])
+                ? $message['message']
+                : $e->getMessage();
 
             wc_add_notice(
-                __('Compropago error place order:<br/>', 'compropago') . $message,
+                __('Compropago error place order:<br/>' . $message, 'compropago'),
                 'error'
             );
-            $this->log('compropago', $message);
+
             return false;
         }
 
@@ -244,7 +257,8 @@ class WC_Gateway_Compropago_Spei extends WC_Payment_Gateway
     }
 }
 
-function cp_register_compropago_spei_method($methods) {
+function cp_register_compropago_spei_method($methods)
+{
     $methods[] = "WC_Gateway_Compropago_Spei";
     cp_register_styles();
     return $methods;

@@ -1,16 +1,16 @@
 .DS_Store
-
 /.DS_Store
 
 *.swp
 *.swo
 *~
 .buildpath
+.idea
 .project
 .settings
 composer.lock
 dev-notes
-.DS_Store
 phpunit.xml
-.idea
-
+languages/*
+vendor/*
+compropago.zip

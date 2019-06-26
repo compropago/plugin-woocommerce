@@ -9,8 +9,8 @@ use CompropagoSdk\Resources\Payments\Cash;
 /**
  * Pagina de configuracion Compropag
  */
-function cp_config_page() {
-
+function cp_config_page()
+{
     cp_register_styles();
     wp_register_script('config-script', plugins_url('../templates/js/config-actions.js', __FILE__));
     wp_register_script('jquery_cp', plugins_url('../templates/js/jquery.js', __FILE__));
@@ -89,7 +89,8 @@ function cp_config_page() {
 /**
  * Registro de la pagina de configuracion
  */
-function cp_add_admin_page() {
+function cp_add_admin_page()
+{
     $page_title = 'ComproPago Conf';
     $menu_title = 'ComproPago';
     $capanility = 'manage_options';

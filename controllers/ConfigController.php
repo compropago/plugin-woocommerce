@@ -3,11 +3,12 @@
  * @author Eduardo Aguilar <dante.aguilar41@gmail.com>
  */
 
-require_once __DIR__ . "/../../../../wp-load.php";
+require_once ABSPATH . "wp-load.php";
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use CompropagoSdk\Resources\Webhook;
+
 
 class ConfigController
 {
@@ -29,9 +30,9 @@ class ConfigController
         try {
             $this->__init__();
             $this->response = [
-                'error' => false,
-                'message' => 'Se guardaron correctamente las configuraciones.',
-                'retro' => $this->retro
+                'error'     => false,
+                'message'   => __('Se guardaron correctamente las configuraciones.'),
+                'retro'     => $this->retro
             ];
         } catch(\Exception $e) {
             $this->response = [
@@ -62,7 +63,7 @@ class ConfigController
         } elseif (!$sk_mode && !$pk_mode) {
             $mode = 'no';
         } else {
-            $message = 'Las llaves escritas pertenecen a modos distintos';
+            $message = __('Las llaves escritas pertenecen a modos distintos');
             throw new \Exception($message);
         }
 
@@ -73,7 +74,7 @@ class ConfigController
         add_option('woocommerce_cpcash_settings', array('enabled' => $this->data['cash_enable']));
 
         /**
-         * Active Cash Payment
+         * Active SPEI Payment
          */
         delete_option('woocommerce_cpspei_settings');
         add_option('woocommerce_cpspei_settings', array('enabled' => $this->data['spei_enable']));
@@ -154,16 +155,23 @@ class ConfigController
              */
             delete_option('compropago_webhook_id');
             add_option('compropago_webhook_id', $this->response['id']);
-
         } catch (\Exception $e) {
-            if ($e->getMessage() != 'Request error: 409') {
-                throw new \Exception($e->getMessage());
+            $errors = [
+                'ComproPago: Request Error [409]: ',
+            ];
+            $message = json_decode(str_replace($errors, '', $e->getMessage()), true);
+            
+            # Ignore Webhook registered
+            if ( isset($message['code']) && $message['code']==409 )
+            {
+                $this->messageManager->addError("ComproPago: {$message}");
             }
         }
     }
 }
 
-function cp_config() {
+function cp_config()
+{
     $config = new ConfigController($_POST);
     die($config->save());
 }

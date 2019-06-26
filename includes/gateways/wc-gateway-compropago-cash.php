@@ -11,7 +11,7 @@ use CompropagoSdk\Resources\Payments\Cash;
 
 class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 {
-    const VERSION = "4.3.1.0";
+    const VERSION = "5.0.0.2";
     const GATEWAY_ID = 'cpcash';
 
     private $compropagoConfig;
@@ -32,9 +32,9 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
     {
         global $woocommerce;
 
-        $this->id = self::GATEWAY_ID;
-        $this->has_fields = true;
-        $this->method_title = 'ComproPago Efectivo';
+        $this->id			= self::GATEWAY_ID;
+        $this->has_fields	= true;
+        $this->method_title	= 'ComproPago Efectivo';
 
         $this->method_description = __(
             '<p>Accept payments at Mexico stores like OXXO, 7Eleven and More.</p>',
@@ -142,13 +142,13 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                 'order_id'              => $order_id,
                 'order_name'            => 'No. orden: '.$order_id,
                 'order_price'           => $order->get_total(),
-                'customer_name'         => $order->billing_first_name . ' ' . $order->billing_last_name,
-                'customer_email'        => $order->billing_email,
+                'customer_name'         => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+                'customer_email'        => $order->get_billing_email(),
                 'payment_type'          => $this->orderProvider,
                 'currency'              => $orderCurrency,
                 'image_url'             => null,
-                'app_client_name'       => 'woocommerce',
-                'app_client_version'    => $woocommerce->version
+                'app_client_name'       => 'woocommerce_' . $woocommerce->version,
+                'app_client_version'    => $this::VERSION
             ];
 
             $this->cash = (new Cash)->withKeys(
@@ -158,7 +158,7 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
             $cpResponse = $this->cash->createOrder($order_info);
 
             if ($cpResponse['type'] != 'charge.pending') {
-                $errMessage = __("ComproPago is not available - status not pending - {$cpResponse['type']}");
+                $errMessage = __("API Error, comuniquese con soporte@compropago.com para realizar actualización del API");
                 throw new Exception($errMessage);
             }
 
@@ -180,19 +180,28 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
                 $order->update_meta_data('compropago_store', $this->orderProvider);
             }
 
-            wc_add_notice(__('Su orden de pago en ComproPago está lista.', 'compropago'), 'success' );
-        } catch (Exception $e) {
-            $message = $e->getMessage();
-            if ( $error =  json_decode(str_replace('Request Error [200]: ', '', $message) ) )
-            {
-                $message = $error->message;
-            }
+            wc_add_notice(
+                __('Su orden de pago en ComproPago está lista.', 'compropago'),
+                'success'
+            );
+        }
+        catch (Exception $e)
+        {
+            $errors = [
+                'ComproPago: Request Error [409]: ',
+                'Request Error [200]: ',
+                'Request Error [400]: '
+            ];
+            $message = json_decode(str_replace($errors, '', $e->getMessage()), true);
+            $message = isset($message['message'])
+                ? $message['message']
+                : $e->getMessage();
 
             wc_add_notice(
-                __('Compropago error place order:<br/>', 'compropago') . $message,
+                __('Compropago error place order:<br/>' . $message, 'compropago'),
                 'error'
             );
-            $this->log->add('compropago', $message);
+
             return false;
         }
 
@@ -231,8 +240,8 @@ class WC_Gateway_Compropago_Cash extends WC_Payment_Gateway
 
             $providers = $this->cash->getProviders();
 
-            if (empty($providers)) {
-              $providers = 0;
+            if ( empty($providers) ) {
+                $providers = 0;
             }
 
             $filtered = array();

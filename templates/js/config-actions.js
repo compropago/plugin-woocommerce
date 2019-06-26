@@ -4,7 +4,8 @@
 
 const modal = $('.cp-modal');
 
-window.onclick = function(event) {
+window.onclick = function(event)
+{
     const aux = document.querySelector('.cp-modal');
     if (event.target === aux) {
         modal.fadeOut();
@@ -56,8 +57,8 @@ function saveConfig(live = 'no') {
         tr_privatekey = $('#privatekey').parent().parent();
 
     const data = {
-        cash_enable:    $('#enable_cash').is(':checked') ? 'yes' : 'no',
-        spei_enable:    $('#enable_spei').is(':checked') ? 'yes' : 'no',
+        cash_enable:	$('#enable_cash').is(':checked') ? 'yes' : 'no',
+        spei_enable:	$('#enable_spei').is(':checked') ? 'yes' : 'no',
         cash_title:     $('#cash_title').val(),
         spei_title:     $('#spei_title').val(),
         publickey:      $('#publickey').val(),
@@ -66,15 +67,15 @@ function saveConfig(live = 'no') {
         provallowed:    getProvidersAllowed(),
         complete_order: $('#complete_order').val(),
         initial_state:  $('#intial_state').val(),
-        debug:          $('#debug').is(':checked') ? 'yes' : 'no',
+        debug:          'no',
     };
 
     loadImage.fadeIn();
 
     if (live !== 'no') data.live = live;
 
-    if (validateSendConfig(data)) {
-
+    if (validateSendConfig(data))
+    {
         tr_publickey.removeClass('form-invalid');
         tr_privatekey.removeClass('form-invalid');
 
@@ -82,13 +83,15 @@ function saveConfig(live = 'no') {
             url: $('#url-save').val(),
             type: 'post',
             data: data,
-            success: function(json) {
+            success: function(json)
+            {
                 showMessage(
                     json.message,
                     (json.error ? 'error' : 'success')
                 );
             },
-            error: function(res) {
+            error: function(res)
+            {
                 let json = res.responseJSON;
                 let message = ( json && json.hasOwnProperty('message') )
                     ? json.message
@@ -114,11 +117,13 @@ function saveConfig(live = 'no') {
 function getProvidersAllowed() {
     var active = [];
 
-    $('#prov-allowed option').each(function() {
+    $('#prov-allowed option').each(function()
+    {
         active.push( $(this).val() );
     });
 
-    if (active.length === 0) {
+    if (active.length === 0)
+    {
         $('#prov-disabled option').each(function() {
             active.push( $(this).val() );
         });
@@ -132,8 +137,10 @@ function getProvidersAllowed() {
  * @param {Object} data
  * @return {boolean}
  */
-function validateSendConfig(data) {
-    if (data.publickey.length === 0 || data.privatekey.length === 0) {
+function validateSendConfig(data)
+{
+    if (data.publickey.length === 0 || data.privatekey.length === 0)
+    {
         showMessage("Las llaves no deben de estar vacías", 'error');
         return false;
     }
@@ -146,16 +153,19 @@ function validateSendConfig(data) {
  * @param {Object} evt 
  * @param {string} tabName 
  */
-function openTab(evt, tabName) {
+function openTab(evt, tabName)
+{
     var i, tabcontent, tablinks;
 
     tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
+    for (i = 0; i < tabcontent.length; i++)
+    {
         tabcontent[i].style.display = "none";
     }
 
     tablinks = document.getElementsByClassName("nav-tab");
-    for (i = 0; i < tablinks.length; i++) {
+    for (i = 0; i < tablinks.length; i++)
+    {
         tablinks[i].className = tablinks[i].className.replace(" nav-tab-active", "");
     }
 
@@ -168,7 +178,8 @@ function openTab(evt, tabName) {
  * @param {string} message 
  * @param {string} type 
  */
-function showMessage(message, type) {
+function showMessage(message, type)
+{
     let
         error_obj = $('#display_error_config'),
         error_class = error_obj.attr("class").split(' ');

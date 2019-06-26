@@ -4,9 +4,11 @@
  */
 
 
-function compropago_init() {
-
-    if ( !class_exists( 'WC_Payment_Gateway' ) ) return;
+function compropago_init()
+{
+    if ( !class_exists( 'WC_Payment_Gateway' ) ) {
+        return;
+    }
 
     load_plugin_textdomain(
         'compropago',
@@ -17,5 +19,5 @@ function compropago_init() {
     /* ========= Gateways includes ========= */
     include_once __DIR__ . '/gateways/wc-gateway-compropago-cash.php';
     include_once __DIR__ . '/gateways/wc-gateway-compropago-spei.php';
-    //include_once __DIR__ . '/gateways/wc-gateway-compropago-cryp.php';
+
 }

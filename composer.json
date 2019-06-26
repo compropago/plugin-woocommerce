@@ -1,6 +1,80 @@
 {
-    "require": {
-        "php": ">=5.6",
-        "compropago/php-sdk": "5.0.0.0"
-    }
+  "name": "compropago/woocommerce",
+  "description": "Este módulo permite la integración del servicio ComproPago en tu eCommerce de Woocommerce. Con ComproPago puede recibir pagos en OXXO, 7Eleven y muchas tiendas más en todo México.",
+  "homepage": "https://www.compropago.com",
+  "license": "Apache-2.0",
+  "readme": "README.md",
+  "type": "woocommerce-plugin",
+  "version": "5.0.0.3",
+  "authors": [
+      {
+          "name": "Rodrigo Ayala",
+          "email": "rodrigo@compropago.com"
+      },
+      {
+        "name": "Eduardo Aguilar",
+        "email": "dante.aguilar41@gmail.com"
+      },
+      {
+        "name": "Rolando Lucio",
+        "email": "rolando@compropago.com"
+      },
+      {
+        "name": "Rolando Lucio",
+        "email": "rolando@compropago.com"
+      },
+      {
+        "name": "Christian Aguirre",
+        "email": "christian@compropago.com"
+      },
+      {
+        "name": "Alfredo Gómez",
+        "email": "alfredo@compropago.com"
+      },
+      {
+        "name": "José Beltrán",
+        "email": "j.beltran@live.com"
+      }
+  ],
+  "config": {
+    "optimize-autoloader": true
+  },
+  "keywords": [
+    "pagos internet",
+    "payment gateway",
+    "woocommerce",
+    "compropago",
+    "cash",
+    "spei"
+  ],
+  "require": {
+    "compropago/php-sdk": "5.0.0.0"
+  },
+  "require-dev": {
+    "wp-cli/wp-cli-bundle": "^2.1"
+  },
+  "scripts": {
+      "build": [
+        "composer install",
+        "composer pot",
+        "./build.sh"
+      ],
+      "clean": [
+        "rm -rf vendor",
+        "rm -rf languages",
+        "rm -f compropago.zip"
+      ],
+      "pot": "./vendor/wp-cli/wp-cli/bin/wp i18n make-pot . languages/compropago.pot"
+  },
+  "scripts-descriptions": {
+      "build": "Generate file for Wordpress plugin",
+      "clean": "Remove vendor, build and translations",
+      "pot": "Create a POT file for the WordPress plugin/theme in the current directory"
+  },
+  "support": {
+    "docs": "http://demo.compropago.com/plugins/woocommerce",
+    "email": "soporte@compropago.com",
+    "issues": "https://github.com/compropago/plugin-woocommerce/issues",
+    "source": "https://github.com/compropago/plugin-woocommerce.git"
+  }
 }
