@@ -64,7 +64,7 @@
         "composer install"
       ],
       "clean": [
-      "rm -rf vendor",
+        "rm -rf vendor",
         "rm -rf languages",
         "rm -f compropago.zip",
         "find . -name '.DS_Store' -delete"
